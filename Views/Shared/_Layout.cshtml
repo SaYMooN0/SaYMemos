@@ -4,16 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <script src="https://unpkg.com/htmx.org"></script>
 </head>
 <body>
-    <header class="layout-header">
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <header class="header">
+        <a asp-controller="Memos" asp-action="Index">Memos</a>
+        <a asp-controller="NewMemo" asp-action="Index">New Memo</a>
+        <a asp-controller="Account" asp-action="Index">Account</a>
+    </header> 
+    <div class="main-content">
+        @RenderBody()
     </div>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

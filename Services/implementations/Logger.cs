@@ -23,6 +23,8 @@
         public void CriticalError(string message) => Log(message, "CRITICAL");
 
         public void Error(string message) => Log(message, "ERROR");
+        public void Error(string message, Exception ex) =>
+            Log($"{message}\nException: {ex.Message}\nStack trace: {ex.StackTrace}", "ERROR");
 
         public void Info(string message) => Log(message, "INFO");
 
@@ -40,5 +42,7 @@
         }
 
         private string CurentTime() => DateTime.Now.ToString("yyyy-MM-dd-H-mm-ss");
+
+
     }
 }
