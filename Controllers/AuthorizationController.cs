@@ -8,5 +8,10 @@ namespace SaYMemos.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult LogIn(IFormCollection form)
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,28 @@
+﻿@model RegistrationForm
+@{
+    ViewData["Title"] = "Registration - Memo";
+}
+
+
+
+<form class="registration-form" method="post" asp-action="SignUp" asp-controller="Registration" hx-swap="outerHTML">
+    <p class="input-line">
+        Email:
+        <input type="text" name="Email" class="input" value="@Model.Email" />
+    </p>
+    <p class="input-line">
+        Password:
+        <input type="password" name="Password" class="input" value="@Model.Password" />
+    </p>
+    <p class="input-line">
+        Repeat Password:
+        <input type="password" name="RepeatedPassword" class="input" value="@Model.RepeatedPassword" />
+    </p>
+    <p class="input-line">
+        Nickname:
+        <input type="text" name="Nickname" class="input" value="@Model.Nickname" />
+    </p>
+    <p class="error-line">@Model.ErrorLine</p>
+    <input type="submit" value="Sign up" class="signup-button" />
+    <a asp-controller="Authorization" asp-action="Index">Already have an account?</a>
+</form>

@@ -1,0 +1,10 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Confirm Email - Memo";
+}
+<form class="registration-form" method="post" asp-action="ConfirmEmail" asp-asp-controller="Registration" hx-target="this" hx-swap="outerHTML">
+    <h1 class="registration-code-label">Registration Code:</h1>
+    <input type="text" name="code" class="code-input" required />
+    <p class="error-line">@Model</p>
+    <input type="submit" class="signup-button" value="Confirm"/>
+</form>

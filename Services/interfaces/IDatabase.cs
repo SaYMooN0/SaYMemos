@@ -2,6 +2,6 @@
 {
     public interface IDatabase
     {
-        public bool TryOpenConnection();
+        public bool IsEmailTaken(string email);
     }
 }
