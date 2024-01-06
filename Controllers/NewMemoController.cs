@@ -7,7 +7,6 @@ namespace SaYMemos.Controllers
         public IActionResult Index()
         {
             if (this.GetUserIdFromIdentity() == -1)
-                //return RedirectToAction("index", "registration");
                 return Unauthorized();
             return View();
         }

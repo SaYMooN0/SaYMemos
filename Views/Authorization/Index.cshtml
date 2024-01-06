@@ -1,4 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Authorization - Memo";
 }
-<a asp-controller="Registration" asp-action="Index">Don't have an account?</a>
+@model AuthorizationForm
+
+
+<form class="authorization-form" method="post" asp-action="LogIn" asp-controller="Authorization" hx-swap="outerHTML">
+    <p class="input-line">
+        Email:
+        <input type="text" name="Email" class="input" value="@Model.Email" />
+    </p>
+    <p class="input-line">
+        Password:
+        <input type="password" name="Password" class="input" value="@Model.Password" />
+    </p>
+    <p class="error-line">@Model.ErrorLine</p>
+    <input type="submit" value="Login" class="login-button" />
+    <a asp-controller="Registration" asp-action="Index">Don't have an account?</a>
+</form>

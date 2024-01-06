@@ -33,6 +33,9 @@ namespace SaYMemos.Models.data.entities.users
                 UserLinksId = userLinksId
             };
         }
+        public override string ToString()=>
+            $"ID: {Id}, Nickname: {Nickname}";
+        public void UpdateLastLoginDate()=> LastLoginDate= DateTime.UtcNow;
     }
 
 }

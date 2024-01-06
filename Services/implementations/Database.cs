@@ -73,10 +73,30 @@ namespace SaYMemos.Services.implementations
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            _logger.Info("New user added " + user);
             return user.Id;
         }
         public async Task<UserToConfirm?> GetUserToConfirmById(long id)
             => await _context.UsersToConfirm.FindAsync(id);
+        public async Task<string?> GetPasswordHashForEmail(string email) =>
+            await _context.LoginInfos.Where(li => li.Login == email).Select(li => li.PasswordHash).FirstOrDefaultAsync();
+
+        public async Task<long?> GetUserIdByEmail(string email)=>
+            await _context.Users
+                .Where(u => u.LoginInfo.Login == email)
+                .Select(u => u.Id)
+                .FirstOrDefaultAsync();
+        public async Task UpdateLastLoginDateForUser(long id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user is not null)
+            {
+                user.UpdateLastLoginDate();
+                await _context.SaveChangesAsync();
+            }
+        }
+
 
     }
 }

@@ -21,6 +21,8 @@ namespace SaYMemos.Controllers
         }
         public IActionResult Index()
         {
+            if (this.GetUserIdFromIdentity() != -1)
+                return RedirectToAction("index", "account");
             return View(new RegistrationForm());
         }
         [HttpPost]
@@ -85,10 +87,10 @@ namespace SaYMemos.Controllers
 
             try
             {
-                long newUserId = await _db.AddNewConfirmedUser(userToConfirm);
+                long newId = await _db.AddNewConfirmedUser(userToConfirm);
                 await this.RemoveConfirmationIdIdentity();
-                await this.SetUserIdIdentity(newUserId);
-
+                await this.SetUserIdIdentity(newId);
+                await _db.DeleteUserFromConfirmAsync(userId);
                 return RedirectToAction("Index", "Account");
             }
             catch (Exception ex)

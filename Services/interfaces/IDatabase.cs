@@ -11,5 +11,8 @@ namespace SaYMemos.Services.interfaces
         public Task<bool> IsUserToConfirmExistsAsync(long id, string confirmationCode);
         public Task<long> AddNewConfirmedUser(UserToConfirm user);
         public Task<UserToConfirm?> GetUserToConfirmById(long id);
+        public Task<string?> GetPasswordHashForEmail(string email);
+        public Task<long?> GetUserIdByEmail(string email);
+        public Task UpdateLastLoginDateForUser(long id);
     }
 }
