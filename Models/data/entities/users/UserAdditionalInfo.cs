@@ -2,13 +2,15 @@
 
 namespace SaYMemos.Models.data.entities.users
 {
-    public class UserAdditionalInfo
+    public record UserAdditionalInfo(
+        [property: Key] long Id,
+        string FullName,
+        DateTime RegistrationDate,
+        string AdditionalInfo,
+        string Hobbies
+    )
     {
-        [Key]
-        public long Id { get; init; }
-        public string FullName { get; private set; }
-        public DateTime RegistrationDate { get; init; }
-        public string AdditionalInfo { get; private set; }
-        public string Hobbies { get; private set; }
+        public static UserAdditionalInfo Default() => new UserAdditionalInfo(0, string.Empty, DateTime.UtcNow, string.Empty, string.Empty);
     }
+
 }

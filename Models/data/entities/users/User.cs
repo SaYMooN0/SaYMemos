@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Sockets;
 
 namespace SaYMemos.Models.data.entities.users
 {
@@ -19,5 +20,19 @@ namespace SaYMemos.Models.data.entities.users
         public virtual UserAdditionalInfo AdditionalInfo { get; set; }
         public virtual LoginInfo LoginInfo { get; set; }
         public virtual UserLinks UserLinks { get; set; }
+        public static User CreateNewUser(string nickname, long loginInfoId, long additionalInfoId, long userLinksId)
+        {
+            return new User
+            {
+                Nickname = nickname,
+                IsAccountPrivate=false,
+                LastLoginDate = DateTime.UtcNow,
+                IsLastLoginDatePrivate = false,
+                LoginInfoId = loginInfoId,
+                AdditionalInfoId = additionalInfoId,
+                UserLinksId = userLinksId
+            };
+        }
     }
+
 }

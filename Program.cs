@@ -1,9 +1,11 @@
 using dotenv.net;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using SaYMemos.Services.implementations;
+using SaYMemos.Services.interfaces;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static void Main(string[] args)  
     {
         var builder = WebApplication.CreateBuilder(args);
         if (!TryConfigureServices(builder))
@@ -11,6 +13,7 @@ internal class Program
 
         var app = builder.Build();
 
+        app.UseStatusCodePagesWithRedirects("/authorization?statusCode={0}");
         ConfigureMiddleware(app);
 
         app.Run();
@@ -19,6 +22,15 @@ internal class Program
     private static bool TryConfigureServices(WebApplicationBuilder builder)
     {
         builder.Services.AddControllersWithViews();
+
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        })
+        .AddCookie(options => { options.LoginPath = "/authorization"; });
 
         var logger = new Logger();
         builder.Services.AddSingleton<SaYMemos.Services.interfaces.ILogger, Logger>(provider => logger);
@@ -59,7 +71,7 @@ internal class Program
         }
 
         Database db = new(dbConnectionString, logger);
-        builder.Services.AddSingleton<SaYMemos.Services.interfaces.IDatabase, Database>(provider => db);
+        builder.Services.AddSingleton<IDatabase, Database>(provider => db);
         return true;
     }
 
@@ -75,22 +87,20 @@ internal class Program
         }
 
         EmailService emailService = new(smtpHost, smtpUser, smtpPassword, smtpPort, logger);
-        builder.Services.AddSingleton<SaYMemos.Services.interfaces.IEmailService, EmailService>(provider => emailService);
+        builder.Services.AddSingleton<IEmailService, EmailService>(provider => emailService);
         return true;
     }
 
     private static bool TryConfigureEncryption(IDictionary<string, string> envVars, Logger logger, WebApplicationBuilder builder)
     {
-        if (!TryGetEnvVar(envVars, "ID_ENCRYPTION", out string idEncKey) ||
-            !TryGetEnvVar(envVars, "CONFIRMATION_ENCRYPTION", out string confirmationEncKey) ||
-            !TryGetEnvVar(envVars, "PASSWORD_ENCRYPTION", out string passwordEncKey))
+        if (!TryGetEnvVar(envVars, "PASSWORD_ENCRYPTION", out string passwordEncKey))
         {
             logger.CriticalError("Encryption keys are not fully set in .env file");
             return false;
         }
 
-        Encryptor encryptor = new(logger, idEncKey, confirmationEncKey, passwordEncKey);
-        builder.Services.AddSingleton<Encryptor>(provider => encryptor);
+        Encryptor encryptor = new(passwordEncKey, logger);
+        builder.Services.AddSingleton<IEncryptor, Encryptor>(provider => encryptor);
 
         return true;
     }
@@ -114,7 +124,7 @@ internal class Program
             name: "default",
             pattern: "{controller=Memos}/{action=Index}/{id?}");
     }
-    private static bool TryGetEnvVar(IDictionary<string, string> envVars, string key, out string value)=>
+    private static bool TryGetEnvVar(IDictionary<string, string> envVars, string key, out string value) =>
         envVars.TryGetValue(key, out value) && !string.IsNullOrWhiteSpace(value);
 
 
