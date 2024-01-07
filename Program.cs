@@ -23,7 +23,6 @@ internal class Program
     {
         builder.Services.AddControllersWithViews();
 
-
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -93,18 +92,19 @@ internal class Program
 
     private static bool TryConfigureEncryption(IDictionary<string, string> envVars, Logger logger, WebApplicationBuilder builder)
     {
-        if (!TryGetEnvVar(envVars, "PASSWORD_ENCRYPTION", out string passwordEncKey))
+        if (!TryGetEnvVar(envVars, "ID_ENCRYPTION", out string idEncKey) ||
+            !TryGetEnvVar(envVars, "CONFIRMATION_ENCRYPTION", out string confirmationEncKey) ||
+            !TryGetEnvVar(envVars, "PASSWORD_ENCRYPTION", out string passwordEncKey))
         {
             logger.CriticalError("Encryption keys are not fully set in .env file");
             return false;
         }
 
-        Encryptor encryptor = new(passwordEncKey, logger);
+        Encryptor encryptor = new(idEncKey, confirmationEncKey, passwordEncKey);
         builder.Services.AddSingleton<IEncryptor, Encryptor>(provider => encryptor);
 
         return true;
     }
-
     private static void ConfigureMiddleware(WebApplication app)
     {
         if (!app.Environment.IsDevelopment())

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SaYMemos.Controllers.Helpers;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Services.interfaces;
@@ -10,18 +11,18 @@ namespace SaYMemos.Controllers
     {
         IDatabase _db { get; init; }
         ILogger _logger { get; init; }
-        IEncryptor _encryptor { get; init; }
+        IEncryptor _enc { get; init; }
         IEmailService _emailService { get; init; }
         public RegistrationController(IDatabase db, ILogger logger, IEncryptor encryptor, IEmailService emailService)
         {
             _db = db;
             _logger = logger;
-            _encryptor = encryptor;
+            _enc = encryptor;
             _emailService = emailService;
         }
         public IActionResult Index()
         {
-            if (this.GetUserIdFromIdentity() != -1)
+            if (this.GetUserId(_enc.DecryptId) != -1)
                 return RedirectToAction("index", "account");
             return View(new RegistrationForm());
         }
@@ -45,12 +46,12 @@ namespace SaYMemos.Controllers
         private async Task<IActionResult> EmailConfirmation(RegistrationForm data)
         {
             string code = GenerateConfirmationCode();
-            var user = UserToConfirm.FromRegistrationForm(data, _encryptor.EncryptPassword, code);
+            var user = UserToConfirm.FromRegistrationForm(data, _enc.EncryptPassword, code);
             long confirmationId = -1;
             try
             {
                 confirmationId=await _db.AddUserToConfirmAsync(user);
-                await this.SetConfirmationIdIdentity(confirmationId);
+                this.SetConfirmationId(confirmationId, _enc.EncryptConfirmationId);
 
                 if (!_emailService.TrySendConfirmationCode( data.Email,code))
                     throw new Exception("Couldn't send email with confirmation code");
@@ -74,7 +75,7 @@ namespace SaYMemos.Controllers
             if (string.IsNullOrWhiteSpace(code))
                 return PartialView(EmailConfirmationView, "Fill code input");
 
-            long userId = this.GetConfirmationIdFromIdentity();
+            long userId = this.GetConfirmationId(_enc.DecryptConfirmationId);
             if (userId == -1)
                 return PartialView(EmailConfirmationView, RegistrationError);
 
@@ -88,8 +89,8 @@ namespace SaYMemos.Controllers
             try
             {
                 long newId = await _db.AddNewConfirmedUser(userToConfirm);
-                await this.RemoveConfirmationIdIdentity();
-                await this.SetUserIdIdentity(newId);
+                HttpContext.Response.RemoveConfirmationIdCookies();
+                this.SetUserId(newId, _enc.EncryptId);
                 await _db.DeleteUserFromConfirmAsync(userId);
                 return RedirectToAction("Index", "Account");
             }

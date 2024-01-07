@@ -1,60 +1,99 @@
 ﻿using SaYMemos.Services.interfaces;
-using System;
-using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 namespace SaYMemos.Services.implementations
 {
     public class Encryptor : IEncryptor
     {
-        private readonly byte[] _key;
-        private readonly ILogger _logger;
-        public Encryptor(string passwordEncKey, ILogger logger)
+        private const int KeySize = 16;
+
+        private readonly byte[] _idEncKey, _confirmationEncKey, _passwordEncKey;
+
+        public Encryptor(string idEncKey, string confirmationEncKey, string passwordEncKey)
         {
-            using var sha256 = SHA256.Create();
-            _key = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwordEncKey));
-            _logger = logger;
+            _idEncKey = Generate16ByteKey(idEncKey);
+            _confirmationEncKey = Generate16ByteKey(confirmationEncKey);
+            _passwordEncKey = Generate16ByteKey(passwordEncKey);
         }
 
-        public string EncryptPassword(string password)
+        public string EncryptPassword(string password) =>
+           Encrypt(_passwordEncKey, password);
+
+        public string DecryptPassword(string encryptedPassword) =>
+            Decrypt(_passwordEncKey, encryptedPassword);
+
+        public string EncryptId(string id) =>
+            Encrypt(_idEncKey, id);
+
+        public string DecryptId(string encryptedId) =>
+            Decrypt(_idEncKey, encryptedId);
+
+        public string EncryptConfirmationId(string confirmationId) =>
+            Encrypt(_confirmationEncKey, confirmationId);
+
+        public string DecryptConfirmationId(string encryptedConfirmationId) =>
+            Decrypt(_confirmationEncKey, encryptedConfirmationId);
+
+        private byte[] Generate16ByteKey(string key)
         {
-            using var aes = Aes.Create();
-            aes.Key = _key;
-            aes.GenerateIV();
-            var iv = aes.IV;
-            using var encryptor = aes.CreateEncryptor(aes.Key, iv);
-            using var memoryStream = new MemoryStream();
-            using var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write);
-            using (var streamWriter = new StreamWriter(cryptoStream))
+            var keyBytes = Encoding.UTF8.GetBytes(key);
+            Array.Resize(ref keyBytes, KeySize);
+            return keyBytes;
+        }
+
+        private string Encrypt(byte[] key, string text)
+        {
+            using (var aes = Aes.Create())
             {
-                streamWriter.Write(password);
-            }
-            var encryptedContent = memoryStream.ToArray();
-            var result = new byte[iv.Length + encryptedContent.Length];
-            Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
-            Buffer.BlockCopy(encryptedContent, 0, result, iv.Length, encryptedContent.Length);
+                aes.Key = key;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
 
-            return Convert.ToBase64String(result);
+                using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+                using (var memoryStream = new MemoryStream())
+                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                {
+                    using (var writer = new StreamWriter(cryptoStream))
+                    {
+                        writer.Write(text);
+                    }
+
+                    var iv = aes.IV;
+                    var encrypted = memoryStream.ToArray();
+                    var result = new byte[iv.Length + encrypted.Length];
+                    Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+                    Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
+
+                    return Convert.ToBase64String(result);
+                }
+            }
         }
 
-        public string DecryptPassword(string encryptedPassword)
+        private string Decrypt(byte[] key, string encryptedText)
         {
-            var fullCipher = Convert.FromBase64String(encryptedPassword);
-            using var aes = Aes.Create();
-            aes.Key = _key;
-            var iv = new byte[aes.BlockSize / 8];
-            var cipher = new byte[fullCipher.Length - iv.Length];
+            var fullCipher = Convert.FromBase64String(encryptedText);
+            var iv = new byte[KeySize];
+            var cipher = new byte[fullCipher.Length - 16];
+
             Buffer.BlockCopy(fullCipher, 0, iv, 0, iv.Length);
             Buffer.BlockCopy(fullCipher, iv.Length, cipher, 0, cipher.Length);
-            aes.IV = iv;
-            using var decryptor = aes.CreateDecryptor(aes.Key, iv);
-            using var memoryStream = new MemoryStream(cipher);
-            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-            using var streamReader = new StreamReader(cryptoStream);
-            return streamReader.ReadToEnd();
+
+            using (var aes = Aes.Create())
+            {
+                aes.Key = key;
+                aes.IV = iv;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+                using (var memoryStream = new MemoryStream(cipher))
+                using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                using (var reader = new StreamReader(cryptoStream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
         }
     }
 }
-    

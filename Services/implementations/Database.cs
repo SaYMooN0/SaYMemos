@@ -19,6 +19,7 @@ namespace SaYMemos.Services.implementations
             optionsBuilder.UseNpgsql(_connectionString);
 
             _context = new MemoDbContext(optionsBuilder.Options);
+            _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
         }
 

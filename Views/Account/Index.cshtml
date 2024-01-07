@@ -2,4 +2,5 @@
     ViewData["Title"] = "Account - Memo";
 }
 <h1>Account page</h1>
-<button>Log out</button>
+<button hx-post="/account/logout" hx-trigger="click" hx-redirect="/authorization">Log out</button>
+
