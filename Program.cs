@@ -5,7 +5,7 @@ using SaYMemos.Services.interfaces;
 
 internal class Program
 {
-    private static void Main(string[] args)  
+    private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         if (!TryConfigureServices(builder))
@@ -31,7 +31,7 @@ internal class Program
         })
         .AddCookie(options => { options.LoginPath = "/authorization"; });
 
-        var logger = new Logger();
+        Logger logger = new();
         builder.Services.AddSingleton<SaYMemos.Services.interfaces.ILogger, Logger>(provider => logger);
 
         if (!LoadEnvironmentVariables(out var envVars, logger))
@@ -39,7 +39,8 @@ internal class Program
 
         if (!TryConfigureDatabase(envVars, logger, builder) ||
             !TryConfigureEmailService(envVars, logger, builder) ||
-            !TryConfigureEncryption(envVars, logger, builder))
+            !TryConfigureEncryption(envVars, logger, builder) ||
+            !TryConfigureImageStorage(logger, builder))
         {
             return false;
         }
@@ -103,6 +104,13 @@ internal class Program
         Encryptor encryptor = new(idEncKey, confirmationEncKey, passwordEncKey);
         builder.Services.AddSingleton<IEncryptor, Encryptor>(provider => encryptor);
 
+        return true;
+    }
+
+    private static bool TryConfigureImageStorage(Logger logger, WebApplicationBuilder builder)
+    {
+        ImageStorageService imageStorageService = new(logger);
+        builder.Services.AddSingleton<IImageStorageService, ImageStorageService>(provider => imageStorageService);
         return true;
     }
     private static void ConfigureMiddleware(WebApplication app)

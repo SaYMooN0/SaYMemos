@@ -8,6 +8,7 @@ namespace SaYMemos.Models.data.entities.users
         [Key]
         public long Id { get; init; }
         public string Nickname { get; private set; }
+        public string ProfilePicturePath { get; private set; } = string.Empty;
         public bool IsAccountPrivate { get; private set; }
         public bool IsLastLoginDatePrivate { get; private set; }
         public DateTime LastLoginDate { get; private set; }
@@ -25,7 +26,8 @@ namespace SaYMemos.Models.data.entities.users
             return new User
             {
                 Nickname = nickname,
-                IsAccountPrivate=false,
+                ProfilePicturePath="",
+                IsAccountPrivate =false,
                 LastLoginDate = DateTime.UtcNow,
                 IsLastLoginDatePrivate = false,
                 LoginInfoId = loginInfoId,

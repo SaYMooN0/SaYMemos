@@ -19,7 +19,6 @@ namespace SaYMemos.Services.implementations
             optionsBuilder.UseNpgsql(_connectionString);
 
             _context = new MemoDbContext(optionsBuilder.Options);
-            _context.Database.EnsureDeleted();
             _context.Database.EnsureCreated();
         }
 
@@ -97,7 +96,7 @@ namespace SaYMemos.Services.implementations
                 await _context.SaveChangesAsync();
             }
         }
-
-
+        public async Task<User?> GetUserByIdAsync(long id) =>
+            await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
 }

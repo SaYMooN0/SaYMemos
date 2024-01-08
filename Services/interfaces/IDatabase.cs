@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SaYMemos.Models.data.entities.users;
+﻿using SaYMemos.Models.data.entities.users;
 
 namespace SaYMemos.Services.interfaces
 {
@@ -14,5 +13,6 @@ namespace SaYMemos.Services.interfaces
         public Task<string?> GetPasswordHashForEmail(string email);
         public Task<long?> GetUserIdByEmail(string email);
         public Task UpdateLastLoginDateForUser(long id);
+        public Task<User?> GetUserByIdAsync(long id);
     }
 }
