@@ -16,6 +16,7 @@ public class MemoDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<LoginInfo>().HasKey(x => x.Id);
         modelBuilder.Entity<User>().HasKey(x => x.Id);
         modelBuilder.Entity<UserLinks>().HasKey(x => x.Id);

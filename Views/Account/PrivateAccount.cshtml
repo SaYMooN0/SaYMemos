@@ -1,4 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Memo User";
 }
-<h1>Private account</h1>
+@model PrivateAccountViewModel
+
+<h1>@Json.Serialize(Model)</h1>
+@* <div class="profile-header">
+    <div class="profile-picture">Profile Picture</div>
+    <div class="nickname">Nickname</div>
+    <div class="last-time-online">Last Time On</div>
+</div>
+<div class="memos">
+    Memos
+</div> *@

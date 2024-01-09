@@ -13,6 +13,7 @@ namespace SaYMemos.Models.data.entities.users
     )
     {
         static public UserLinks Default() => new UserLinks(0, string.Empty, string.Empty, string.Empty, string.Empty);
+        public UserLinks Copy()=> new UserLinks(Id, GithubLink, TelegramLink, YoutubeLink, DiscordLink);
     }
 
 }

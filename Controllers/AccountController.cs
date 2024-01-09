@@ -4,6 +4,7 @@ using ILogger = SaYMemos.Services.interfaces.ILogger;
 using SaYMemos.Controllers.Helpers;
 using System.Net;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.view_models.account;
 
 namespace SaYMemos.Controllers
 {
@@ -30,20 +31,16 @@ namespace SaYMemos.Controllers
             User? user = await _db.GetUserByIdAsync(userId.Value);
             if (user is null)
             {
-                return View(viewName:"UnknownAccount");
+                return View(viewName: "UnknownAccount");
             }
 
             return user.IsAccountPrivate ? PrivateAccountView(user) : PublicAccountView(user);
         }
 
-        private IActionResult PrivateAccountView(User user)
-        {
-            return View(viewName: "PrivateAccount");
-        }
-        private IActionResult PublicAccountView(User user)
-        {
-            return View(viewName: "PublicAccount");
-        }
+        private IActionResult PrivateAccountView(User user) =>
+            View(viewName: "PrivateAccount", PrivateAccountViewModel.FromUser(user));
+        private IActionResult PublicAccountView(User user) =>
+            View(viewName: "PublicAccount", PublicAccountViewModel.FromUser(user));
         [HttpPost]
         public async Task<IActionResult> LogoutAsync()
         {
@@ -57,6 +54,6 @@ namespace SaYMemos.Controllers
             Response.Headers["HX-Redirect"] = "/authorization";
             return Ok();
         }
-       
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿@{
     ViewData["Title"] = "Memo User";
 }
-<h1>Public account</h1>
+@model PublicAccountViewModel
+<h1>@Json.Serialize(Model)</h1>

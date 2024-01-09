@@ -1,0 +1,28 @@
+﻿.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 2px solid red;
+}
+
+.profile-picture {
+    border: 3px solid red;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.nickname, .last-time-on {
+    flex-grow: 1;
+}
+
+.memos {
+    background-color: #555;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid red;
+}

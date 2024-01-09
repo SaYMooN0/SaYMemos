@@ -17,6 +17,7 @@ namespace SaYMemos.Services.implementations
 
             var optionsBuilder = new DbContextOptionsBuilder<MemoDbContext>();
             optionsBuilder.UseNpgsql(_connectionString);
+            optionsBuilder.UseLazyLoadingProxies();
 
             _context = new MemoDbContext(optionsBuilder.Options);
             _context.Database.EnsureCreated();
@@ -40,7 +41,6 @@ namespace SaYMemos.Services.implementations
             await _context.SaveChangesAsync();
             return existingUser?.Id ?? user.Id;
         }
-
 
         public async Task DeleteUserFromConfirmAsync(long id)
         {

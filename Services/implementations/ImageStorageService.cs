@@ -9,6 +9,7 @@ public class ImageStorageService : IImageStorageService
     private const string
         ImageFolder= "images",
         ProfilePicturesFolder = "pp";
+    private string DefaultImage=> Path.Combine(ImageFolder, "default.jpg");
 
     public ImageStorageService(ILogger logger)
     {
@@ -17,15 +18,24 @@ public class ImageStorageService : IImageStorageService
     }
     
 
-    public async Task<string> SaveProfilePictureAsync(IFormFile profilePicture)
+    public string SaveProfilePicture(IFormFile profilePicture)
     {
         EnsureProfilePicturesFolderCreated();
-        return await SaveImageAsync(profilePicture, ProfilePicturesFolder);
+        return SaveImage(profilePicture, ProfilePicturesFolder);
     }
+
+
+    public FileStream GetImage(string filePath)
+    {
+        var fullPath = Path.Combine(ImageFolder, filePath);
+        if (File.Exists(fullPath))
+            return new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+
+        return new FileStream(DefaultImage, FileMode.Open, FileAccess.Read);
+    }
+
     private void EnsureProfilePicturesFolderCreated() =>
         EnsureFolderCreated(Path.Combine(ImageFolder, ProfilePicturesFolder));
-
-
     private void EnsureFolderCreated(string folderPath)
     {
         try
@@ -39,7 +49,7 @@ public class ImageStorageService : IImageStorageService
             throw;
         }
     }
-    private async Task<string> SaveImageAsync(IFormFile file, string? specifiedFolder = null)
+    private string SaveImage(IFormFile file, string? specifiedFolder = null)
     {
         string filePath;
         if (specifiedFolder is null)
@@ -49,7 +59,7 @@ public class ImageStorageService : IImageStorageService
 
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
-            await file.CopyToAsync(fileStream);
+            file.CopyTo(fileStream);
         }
         return filePath;
     }

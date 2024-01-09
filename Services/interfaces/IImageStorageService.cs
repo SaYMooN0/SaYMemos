@@ -2,6 +2,7 @@
 {
     public interface IImageStorageService
     {
-        public Task<string> SaveProfilePictureAsync(IFormFile file);
+        string SaveProfilePicture(IFormFile file);
+        public FileStream GetImage(string filePath);
     }
 }

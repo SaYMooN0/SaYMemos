@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Sockets;
-
 namespace SaYMemos.Models.data.entities.users
 {
     public class User
@@ -12,11 +10,11 @@ namespace SaYMemos.Models.data.entities.users
         public bool IsAccountPrivate { get; private set; }
         public bool IsLastLoginDatePrivate { get; private set; }
         public DateTime LastLoginDate { get; private set; }
+        public bool AreLinksPrivate { get; private set; }
 
+        public long UserLinksId { get; init; }
         public long AdditionalInfoId { get; init; }
         public long LoginInfoId { get; init; }
-        public long UserLinksId { get; init; }
-
 
         public virtual UserAdditionalInfo AdditionalInfo { get; set; }
         public virtual LoginInfo LoginInfo { get; set; }
@@ -26,18 +24,29 @@ namespace SaYMemos.Models.data.entities.users
             return new User
             {
                 Nickname = nickname,
-                ProfilePicturePath="",
-                IsAccountPrivate =false,
+                ProfilePicturePath = "",
+                IsAccountPrivate = false,
                 LastLoginDate = DateTime.UtcNow,
                 IsLastLoginDatePrivate = false,
+                AreLinksPrivate= false,
+
+                UserLinksId = userLinksId,
                 LoginInfoId = loginInfoId,
                 AdditionalInfoId = additionalInfoId,
-                UserLinksId = userLinksId
+               
             };
         }
-        public override string ToString()=>
+        public override string ToString() =>
             $"ID: {Id}, Nickname: {Nickname}";
-        public void UpdateLastLoginDate()=> LastLoginDate= DateTime.UtcNow;
+        public void UpdateLastLoginDate() => LastLoginDate = DateTime.UtcNow;
+        public string GetLastTimeOnlineString() => IsLastLoginDatePrivate
+            ? (DateTime.Now - LastLoginDate).TotalDays < 7 ? "Was online a long time ago" : "Was online recently"
+            : LastLoginDate.Date == DateTime.Today ? "Was online today at " + LastLoginDate.ToString("HH:mm")
+            : LastLoginDate.Date == DateTime.Today.AddDays(-1) ? "Was online yesterday at " + LastLoginDate.ToString("HH:mm")
+            : LastLoginDate.Year == DateTime.Now.Year ? "Was online on " + LastLoginDate.ToString("dd MMM")
+            : "Was online on " + LastLoginDate.ToString("dd MMM yyyy");
+
+        public UserLinks GetUserLinksToShow() => AreLinksPrivate ? UserLinks.Default() : this.UserLinks.Copy();
     }
 
 }

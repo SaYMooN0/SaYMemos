@@ -1,0 +1,35 @@
+﻿.not-found-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background: white;
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.not-found h1 {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+
+.people-link {
+    font-size:24px;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 30px;
+    background-color: #007bff;
+    color: #fdfbfb;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.15s ease;
+}
+
+    .home-link:hover {
+        background-color: #0056b3;
+        color: #ffffff;
+    }
