@@ -19,10 +19,10 @@ body, html {
 }
 
 .main-content {
-    padding-top: 70px;
+    padding: 80px calc(60px + 2vw) 0 calc(60px + 2vw);
 }
 
-a {
+.header a {
     text-decoration: none;
     color: #007bff;
     padding: 10px 15px;

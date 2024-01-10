@@ -6,7 +6,7 @@ namespace SaYMemos.Models.data.entities.users
         [Key]
         public long Id { get; init; }
         public string Nickname { get; private set; }
-        public string ProfilePicturePath { get; private set; } = string.Empty;
+        public string ProfilePicturePath { get; private set; } = "default_profile_picture.png";
         public bool IsAccountPrivate { get; private set; }
         public bool IsLastLoginDatePrivate { get; private set; }
         public DateTime LastLoginDate { get; private set; }
@@ -28,12 +28,12 @@ namespace SaYMemos.Models.data.entities.users
                 IsAccountPrivate = false,
                 LastLoginDate = DateTime.UtcNow,
                 IsLastLoginDatePrivate = false,
-                AreLinksPrivate= false,
+                AreLinksPrivate = false,
 
                 UserLinksId = userLinksId,
                 LoginInfoId = loginInfoId,
                 AdditionalInfoId = additionalInfoId,
-               
+
             };
         }
         public override string ToString() =>
@@ -46,7 +46,8 @@ namespace SaYMemos.Models.data.entities.users
             : LastLoginDate.Year == DateTime.Now.Year ? "Was online on " + LastLoginDate.ToString("dd MMM")
             : "Was online on " + LastLoginDate.ToString("dd MMM yyyy");
 
-        public UserLinks GetUserLinksToShow() => AreLinksPrivate ? UserLinks.Default() : this.UserLinks.Copy();
+        public Dictionary<string,string> GetUserLinksDictionary() => AreLinksPrivate ? new() : this.UserLinks.ParseToNonEmptyDictionary();
+        public void SetProfilePicture(string picturePath) => this.ProfilePicturePath = picturePath;
     }
 
 }

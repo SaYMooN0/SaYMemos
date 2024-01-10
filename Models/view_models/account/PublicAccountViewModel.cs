@@ -6,18 +6,18 @@ namespace SaYMemos.Models.view_models.account
         string nickname,
         string lastTimeOnline,
         string profilePicturePath,
-        UserLinks links,
-        string FullName,
+        Dictionary<string, string> links,
+        string fullName,
         string registrationDate,
         string additionalInfo,
-        string Hobbies
+        string hobbies
         )
     {
         public static PublicAccountViewModel FromUser(User user) =>
-            new(user.Nickname, 
-                user.GetLastTimeOnlineString(), 
+            new(user.Nickname,
+                user.GetLastTimeOnlineString(),
                 user.ProfilePicturePath,
-                user.GetUserLinksToShow(),
+                user.GetUserLinksDictionary(),
                 user.AdditionalInfo.FullName,
                 user.AdditionalInfo.RegistrationDate.ToString("D"),
                 user.AdditionalInfo.AdditionalInfo,

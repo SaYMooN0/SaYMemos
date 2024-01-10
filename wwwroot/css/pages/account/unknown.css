@@ -18,7 +18,7 @@
 }
 
 .people-link {
-    font-size:24px;
+    font-size: 24px;
     display: inline-block;
     margin-top: 20px;
     padding: 10px 30px;
@@ -29,7 +29,8 @@
     transition: all 0.15s ease;
 }
 
-    .home-link:hover {
-        background-color: #0056b3;
+    .people-link:hover {
+        background-color: #0066d3;
         color: #ffffff;
+        transform: scale(1.04);
     }

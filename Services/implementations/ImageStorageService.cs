@@ -10,6 +10,7 @@ public class ImageStorageService : IImageStorageService
         ImageFolder= "images",
         ProfilePicturesFolder = "pp";
     private string DefaultImage=> Path.Combine(ImageFolder, "default.jpg");
+    public string DefaultProfilePicture=> Path.Combine(ProfilePicturesFolder, "default.jpg");
 
     public ImageStorageService(ILogger logger)
     {
@@ -23,7 +24,7 @@ public class ImageStorageService : IImageStorageService
         EnsureProfilePicturesFolderCreated();
         return SaveImage(profilePicture, ProfilePicturesFolder);
     }
-
+    
 
     public FileStream GetImage(string filePath)
     {
