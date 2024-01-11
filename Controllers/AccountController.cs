@@ -25,7 +25,7 @@ namespace SaYMemos.Controllers
             {
                 if (this.GetUserId(_enc.DecryptId) == -1)
                     return Unauthorized();
-                return View(viewName: "MyAccount");
+                return RedirectToAction(actionName: "Index", controllerName: "MyAccount");
             }
 
             User? user = await _db.GetUserByIdAsync(userId.Value);
@@ -41,19 +41,7 @@ namespace SaYMemos.Controllers
             View(viewName: "PrivateAccount", PrivateAccountViewModel.FromUser(user));
         private IActionResult PublicAccountView(User user) =>
             View(viewName: "PublicAccount", PublicAccountViewModel.FromUser(user));
-        [HttpPost]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            long id = this.GetUserId(_enc.DecryptId);
-            if (id == -1)
-                return Unauthorized();
-            await _db.UpdateLastLoginDateForUser(id);
-            HttpContext.Response.RemoveUserIdCookies();
-            _logger.Info($"User with id {id} has logged out");
 
-            Response.Headers["HX-Redirect"] = "/authorization";
-            return Ok();
-        }
 
     }
 }

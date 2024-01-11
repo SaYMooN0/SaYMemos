@@ -17,7 +17,7 @@ namespace SaYMemos.Models.view_models.account
             new(user.Nickname,
                 user.GetLastTimeOnlineString(),
                 user.ProfilePicturePath,
-                user.GetUserLinksDictionary(),
+                user.AreLinksPrivate ? new() : user.UserLinks.ParseToNonEmptyDictionary(),
                 user.AdditionalInfo.FullName,
                 user.AdditionalInfo.RegistrationDate.ToString("D"),
                 user.AdditionalInfo.AdditionalInfo,

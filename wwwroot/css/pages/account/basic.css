@@ -1,28 +1,58 @@
-﻿.profile-header {
+﻿.profile-container {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 2px solid red;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+    padding: 20px 30px 20px 30px;
 }
 
 .profile-picture {
-    border: 3px solid red;
-    width: 100px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 10px;
+    width: 320px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: none !important;
+    outline: none !important;
 }
 
-.nickname, .last-time-on {
+.user-info {
+    padding: 10px 0 10px 20px;
     flex-grow: 1;
 }
 
-.memos {
-    background-color: #555;
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid red;
+.user-info-top-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
+.nickname {
+    margin: 0;
+    font-size: 32px;
+    color: #333;
+    font-weight: bold;
+}
+.additional-info {
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.link-type {
+    font-size: 16px;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.link {
+    color: #1a0dab;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .link:hover {
+        color: #2a5db0;
+        text-decoration: underline;
+    }

@@ -4,14 +4,14 @@
 @model PublicAccountViewModel
 
 <link rel="stylesheet" href="~/css/pages/account/public.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/pages/account/basic.css" asp-append-version="true" />
 <div class="profile-container">
     <img src="@Model.profilePicturePath" class="profile-picture" />
     <div class="user-info">
-        <div class="name-and-login">
+        <div class="user-info-top-content">
             <span class="nickname">@Model.nickname</span>
             <span class="last-login">@Model.lastTimeOnline</span>
         </div>
-
         <div class="fullname">@Model.fullName</div>
         <div class="additional-info">
             @if (Model.links.Count > 1)

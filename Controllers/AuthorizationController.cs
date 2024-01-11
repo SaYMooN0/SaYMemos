@@ -39,10 +39,9 @@ namespace SaYMemos.Controllers
                 return PartialView(viewName: "Index", form.WithError("Invalid password"));
 
             long? userId = await _db.GetUserIdByEmail(form.Email);
-            if (userId is null) 
+            if (userId is null)
                 return PartialView(viewName: "Index", form.WithError("Invalid password"));
-
-            this.SetUserId( (long)userId, _enc.DecryptId);
+            this.SetUserId( (long)userId, _enc.EncryptId);
             await _db.UpdateLastLoginDateForUser((long)userId);
             _logger.Info($"User with id {userId} has logged in");
             return RedirectToAction("Index", controllerName: "Account");

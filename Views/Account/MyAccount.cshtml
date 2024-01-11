@@ -1,8 +1,0 @@
-﻿@{
-    ViewData["Title"] = "Account - Memo";
-}
-@model MyAccountViewModel
-<h1>@Json.Serialize(Model)</h1>
-<h1>Account page</h1>
-<button hx-post="/account/logout" hx-trigger="click" hx-redirect="/authorization">Log out</button>
-

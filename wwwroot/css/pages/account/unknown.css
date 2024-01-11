@@ -22,7 +22,7 @@
     display: inline-block;
     margin-top: 20px;
     padding: 10px 30px;
-    background-color: #007bff;
+    background-color: #a78ef6;
     color: #fdfbfb;
     text-decoration: none;
     border-radius: 5px;
@@ -30,7 +30,7 @@
 }
 
     .people-link:hover {
-        background-color: #0066d3;
+        background-color: #9e7ae9;
         color: #ffffff;
         transform: scale(1.04);
     }

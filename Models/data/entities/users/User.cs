@@ -46,8 +46,8 @@ namespace SaYMemos.Models.data.entities.users
             : LastLoginDate.Year == DateTime.Now.Year ? "Was online on " + LastLoginDate.ToString("dd MMM")
             : "Was online on " + LastLoginDate.ToString("dd MMM yyyy");
 
-        public Dictionary<string,string> GetUserLinksDictionary() => AreLinksPrivate ? new() : this.UserLinks.ParseToNonEmptyDictionary();
-        public void SetProfilePicture(string picturePath) => this.ProfilePicturePath = picturePath;
+        public Dictionary<string,string> GetUserLinksDictionary() =>UserLinks.ParseToNonEmptyDictionary();
+        public void SetProfilePicture(string picturePath) => ProfilePicturePath = picturePath;
     }
 
 }
