@@ -13,19 +13,21 @@
             <span class="last-login">@Model.lastTimeOnline</span>
         </div>
         <div class="fullname">@Model.fullName</div>
+
+        @if (Model.links.Count > 1)
+        {
+            <div class="links-block">
+                @foreach (var l in Model.links)
+                {
+                    <p class="link-type">
+                        @l.Key:
+                        <a href="@l.Value" class="link">@l.Value</a>
+                    </p>
+                }
+            </div>
+        }
         <div class="additional-info">
-            @if (Model.links.Count > 1)
-            {
-                <div class="links-block">
-                    @foreach (var l in Model.links)
-                    {
-                        <p class="link-type">
-                            @l.Key:
-                            <a href="@l.Value" class="link">@l.Value</a>
-                        </p>
-                    }
-                </div>
-            }
+            <button hx-post="account/renderAdditionalInfo" trigger="click">Show Additional Info</button>
         </div>
     </div>
 </div>

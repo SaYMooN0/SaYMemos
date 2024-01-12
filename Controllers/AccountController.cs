@@ -37,6 +37,13 @@ namespace SaYMemos.Controllers
             return user.IsAccountPrivate ? PrivateAccountView(user) : PublicAccountView(user);
         }
 
+
+        [HttpPost]
+        public IActionResult RenderAdditionalInfo()
+        {
+            
+            return PartialView(viewName: "AdditionalInfo", new AdditionalInfoViewModel());
+        }
         private IActionResult PrivateAccountView(User user) =>
             View(viewName: "PrivateAccount", PrivateAccountViewModel.FromUser(user));
         private IActionResult PublicAccountView(User user) =>

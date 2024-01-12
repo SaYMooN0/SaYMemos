@@ -1,5 +1,52 @@
-﻿<div>
-    Main
-    Privacy
-    Additional info
-</div>
+﻿@model AccountSettingsForm
+
+<link rel="stylesheet" href="~/css/pages/account/settings.css" asp-append-version="true" />
+
+<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' method="post" asp-action="SaveSettings" asp-controller="MyAccount">
+    
+    <div class="settings-area">
+        <p class="settings-area-header">Main</p>
+        <div class="profile-picture-container">
+            <img src="@Model.profilePicturePath" class="profile-picture" />
+            <button type="button" class="change-profile-picture-button">Change</button>
+        </div>
+        <input type="text" name="nickname" placeholder="Nickname" value="@Model.nickname" required/>
+        <input type="text" name="fullName" placeholder="Full Name" value="@Model.fullName" />
+        @AddErrorLineIfNeeded(Model.mainFieldError)
+    </div>
+
+    <div class="settings-area">
+        <p class="settings-area-header">Privacy</p>
+        <input type="checkbox" name="isAccountPrivate" @(Model.isAccountPrivate ? "checked" : "")> Is Account Private<br>
+        <input type="checkbox" name="areLinksPrivate" @(Model.areLinksPrivate ? "checked" : "")> Are Links Private<br>
+        <input type="checkbox" name="isLastLoginDatePrivate" @(Model.isLastLoginDatePrivate ? "checked" : "")> Is Last Login Date Private<br>
+        @AddErrorLineIfNeeded(Model.privacyFieldError)
+    </div>
+
+    <div class="settings-area">
+        <p class="settings-area-header">Links</p>
+        <input type="text" name="githubLink" placeholder="GitHub Link" value="@Model.githubLink" />
+        <input type="text" name="telegramLink" placeholder="Telegram Link" value="@Model.telegramLink" />
+        <input type="text" name="youtubeLink" placeholder="YouTube Link" value="@Model.youtubeLink" />
+        <input type="text" name="discordLink" placeholder="Discord Link" value="@Model.discordLink" />
+        @AddErrorLineIfNeeded(Model.linksFieldError)
+    </div>
+
+    <div class="settings-area">
+        <p class="settings-area-header">Additional info</p>
+        <textarea name="additionalInfo" placeholder="Additional Info">@Model.additionalInfo</textarea>
+        <input type="text" name="hobbies" placeholder="Hobbies" value="@Model.hobbies" />
+        @AddErrorLineIfNeeded(Model.additionalInfoFieldError)
+    </div>
+
+    <div class="buttons-container">
+        <a class="cancel-button" asp-action="Index" asp-controller="MyAccount">Cancel and close</a>
+        <input class="save-button" type="submit" value="Save and close" hx-redirect="myaccount" />
+    </div>
+
+</form>
+
+@{
+    string AddErrorLineIfNeeded(string fieldName) =>
+                !string.IsNullOrEmpty(fieldName) ? $"<p class=\"error-line\">{fieldName}</p>" : string.Empty;
+}

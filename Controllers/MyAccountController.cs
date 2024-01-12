@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Controllers.Helpers;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models.account;
 using SaYMemos.Services.interfaces;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
@@ -29,9 +30,16 @@ namespace SaYMemos.Controllers
             return View(MyAccountViewModel.FromUser(user));
         }
         [HttpPost]
-        public IActionResult Settings()
+        public async Task<IActionResult> Settings()
         {
-            return View();
+            long? userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return Unauthorized();
+            User? user = await _db.GetUserByIdAsync((long)userId);
+            if (user is null)
+                return Unauthorized();
+
+            return View(AccountSettingsForm.FromUser(user));
         }
         [HttpPost]
         public async Task<IActionResult> LogoutAsync()
@@ -45,6 +53,18 @@ namespace SaYMemos.Controllers
 
             Response.Headers["HX-Redirect"] = "/authorization";
             return Ok();
+        }
+        [HttpPost]
+        public IActionResult SaveSettings(AccountSettingsForm form)
+        {
+            var data=form.Validate();
+            if (data.AnyErrors())
+                return View("Settings", data);
+            
+
+            //saving changes
+
+            return RedirectToAction("Index");
         }
 
     }
