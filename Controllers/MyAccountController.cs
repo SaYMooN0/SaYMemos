@@ -41,6 +41,7 @@ namespace SaYMemos.Controllers
 
             return View(AccountSettingsForm.FromUser(user));
         }
+
         [HttpPost]
         public async Task<IActionResult> LogoutAsync()
         {
@@ -54,18 +55,40 @@ namespace SaYMemos.Controllers
             Response.Headers["HX-Redirect"] = "/authorization";
             return Ok();
         }
+
+
+       
+        [HttpPost]
+        public IActionResult SaveProfilePicture(IFormFile picture)
+        {
+            //  else if (AnyProfilePicture())
+            //{
+            //    if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(GetProfilePictureExtension()))
+
+            //        mainError = "Unsupported file type";
+            //}
+            //public bool AnyProfilePicture() => newProfilePicture != null && newProfilePicture.Length > 0;
+            //public string GetProfilePictureExtension() => AnyProfilePicture() ? Path.GetExtension(newProfilePicture.FileName).ToLowerInvariant() : string.Empty;
+            return Ok();
+        }
         [HttpPost]
         public IActionResult SaveSettings(AccountSettingsForm form)
         {
-            var data=form.Validate();
+            var data = form.Validate();
             if (data.AnyErrors())
-                return View("Settings", data);
-            
+                return PartialView("Settings", data);
+
 
             //saving changes
 
-            return RedirectToAction("Index");
+            Response.Headers["HX-Redirect"] = "/myaccount";
+            return Ok();
         }
+
+        [HttpPost]
+        public IActionResult RenderProfilePictureInput() => PartialView(viewName: "ProfilePictureInput");
+        [HttpPost]
+        public IActionResult RenderSettingsProfilePicture() => PartialView(viewName: "SettingsProfilePicture");
 
     }
 }

@@ -1,0 +1,13 @@
+﻿
+
+<form class="new-profile-picture-form" hx-post="MyAccount/SaveProfilePicture" hx-swap="outerHTML" enctype="multipart/form-data">
+    <input type="file" name="picture" id="newProfilePicture" class="change-profile-picture-button" accept=".jpg, .jpeg, .png" required />
+    <label for="newProfilePicture">Choose a profile picture</label>
+
+    <p class="error-line">err</p>
+    <div class="new-prof-pic-buttons">
+        <button type="button" hx-post="/myAccount/renderSettingsProfilePicture" hx-trigger="click" hx-target=".new-profile-picture-form" hx-swap="outerHTML">Cancel</button>
+        <input type="submit" value="Save" />
+    </div>
+</form>
+

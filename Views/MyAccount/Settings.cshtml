@@ -1,41 +1,60 @@
-﻿@model AccountSettingsForm
+﻿@using Microsoft.AspNetCore.Html
+@model AccountSettingsForm
 
-<link rel="stylesheet" href="~/css/pages/account/settings.css" asp-append-version="true" />
 
-<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' method="post" asp-action="SaveSettings" asp-controller="MyAccount">
-    
+
+<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/myaccount">
+
     <div class="settings-area">
         <p class="settings-area-header">Main</p>
-        <div class="profile-picture-container">
-            <img src="@Model.profilePicturePath" class="profile-picture" />
-            <button type="button" class="change-profile-picture-button">Change</button>
-        </div>
-        <input type="text" name="nickname" placeholder="Nickname" value="@Model.nickname" required/>
+        <div hx-post="/MyAccount/RenderSettingsProfilePicture" hx-target="this" hx-trigger="load">Unable to load profile picture</div>
+
+        <input type="text" name="nickname" placeholder="Nickname" value="@Model.nickname" required />
         <input type="text" name="fullName" placeholder="Full Name" value="@Model.fullName" />
         @AddErrorLineIfNeeded(Model.mainFieldError)
     </div>
 
     <div class="settings-area">
         <p class="settings-area-header">Privacy</p>
-        <input type="checkbox" name="isAccountPrivate" @(Model.isAccountPrivate ? "checked" : "")> Is Account Private<br>
-        <input type="checkbox" name="areLinksPrivate" @(Model.areLinksPrivate ? "checked" : "")> Are Links Private<br>
-        <input type="checkbox" name="isLastLoginDatePrivate" @(Model.isLastLoginDatePrivate ? "checked" : "")> Is Last Login Date Private<br>
+        <p class="privacy-input">
+            Is Account Private
+            <input type="checkbox" class="default-checkbox" name="isAccountPrivate" @(Model.isAccountPrivate ? "checked" : "") />
+        </p>
+        <p class="privacy-input">
+            Are Links Private
+            <input type="checkbox" class="default-checkbox" name="areLinksPrivate" @(Model.areLinksPrivate ? "checked" : "") />
+        </p>
+        <p class="privacy-input">
+            Is Last Login Date Private
+            <input type="checkbox" class="default-checkbox" name="isLastLoginDatePrivate" @(Model.isLastLoginDatePrivate ? "checked" : "") />
+        </p>
         @AddErrorLineIfNeeded(Model.privacyFieldError)
     </div>
 
     <div class="settings-area">
         <p class="settings-area-header">Links</p>
-        <input type="text" name="githubLink" placeholder="GitHub Link" value="@Model.githubLink" />
-        <input type="text" name="telegramLink" placeholder="Telegram Link" value="@Model.telegramLink" />
-        <input type="text" name="youtubeLink" placeholder="YouTube Link" value="@Model.youtubeLink" />
-        <input type="text" name="discordLink" placeholder="Discord Link" value="@Model.discordLink" />
+        <p class="link-input-line">
+            GitHub:
+            <input type="text" name="githubLink" value="@Model.githubLink" />
+        </p>
+        <p class="link-input-line">
+            Telegram:
+            <input type="text" name="telegramLink" value="@Model.telegramLink" />
+        </p>
+        <p class="link-input-line">
+            YouTube:
+            <input type="text" name="youtubeLink" value="@Model.youtubeLink" />
+        </p> <p class="link-input-line">
+            Discord:
+            <input type="text" name="discordLink" value="@Model.discordLink" />
+        </p>
         @AddErrorLineIfNeeded(Model.linksFieldError)
     </div>
 
     <div class="settings-area">
         <p class="settings-area-header">Additional info</p>
-        <textarea name="additionalInfo" placeholder="Additional Info">@Model.additionalInfo</textarea>
-        <input type="text" name="hobbies" placeholder="Hobbies" value="@Model.hobbies" />
+        <textarea class="hobbies-textarea" name="hobbies" placeholder="Hobbies">@Model.hobbies</textarea>
+        <textarea class="additional-info-textarea" name="additionalInfo" placeholder="Additional Info">@Model.additionalInfo</textarea>
         @AddErrorLineIfNeeded(Model.additionalInfoFieldError)
     </div>
 
@@ -44,9 +63,13 @@
         <input class="save-button" type="submit" value="Save and close" hx-redirect="myaccount" />
     </div>
 
+    <link rel="stylesheet" href="~/css/pages/account/settings.css" asp-append-version="true" />
+    <input name="profilePicturePath" type="hidden" value="@Model.profilePicturePath" />
 </form>
 
 @{
-    string AddErrorLineIfNeeded(string fieldName) =>
-                !string.IsNullOrEmpty(fieldName) ? $"<p class=\"error-line\">{fieldName}</p>" : string.Empty;
+    HtmlString AddErrorLineIfNeeded(string fieldName) =>
+        !string.IsNullOrEmpty(fieldName)
+            ? new HtmlString($"<p class=\"error-line\">{fieldName}</p>")
+            : new HtmlString(string.Empty);
 }
