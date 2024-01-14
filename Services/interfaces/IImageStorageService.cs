@@ -2,8 +2,9 @@
 {
     public interface IImageStorageService
     {
-        string SaveProfilePicture(IFormFile file);
+        public string SaveProfilePicture(Stream stream, string fileName);
         public FileStream GetImage(string filePath);
         public string DefaultProfilePicture { get; }
+        public Task<MemoryStream> ConvertToJpgAsync(IFormFile picture);
     }
 }

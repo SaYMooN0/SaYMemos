@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 namespace SaYMemos.Models.data.entities.users
 {
     public class User
@@ -48,6 +49,7 @@ namespace SaYMemos.Models.data.entities.users
 
         public Dictionary<string,string> GetUserLinksDictionary() =>UserLinks.ParseToNonEmptyDictionary();
         public void SetProfilePicture(string picturePath) => ProfilePicturePath = picturePath;
+
     }
 
 }

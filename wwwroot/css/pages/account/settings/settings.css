@@ -19,34 +19,26 @@
     margin-bottom: 10px;
 }
 
-.profile-picture-container {
+.main-area-content {
+    margin-top: 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     gap: 20px;
-    margin-bottom: 15px;
 }
 
-.change-profile-picture-button {
-    opacity: 0;
-    position: absolute;
-    z-index: -1;
+.main-area-input-line {
+    padding: 5px;
+    font-size: 26px;
 }
 
-    .change-profile-picture-button + label {
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
+    .main-area-input-line input {
+        margin-top: 5px;
+        width: 100%;
+        padding: 6px 8px 6px 12px;
+        border: 1px solid #ddd;
         border-radius: 4px;
-        cursor: pointer;
+        font-size: 24px;
     }
-
-        .change-profile-picture-button:focus + label,
-        .change-profile-picture-button + label:hover {
-            background-color: #45a049;
-        }
 
 
 .default-checkbox {
@@ -111,7 +103,6 @@ textarea {
     color: white;
 }
 
-/* Медиа-запросы для адаптивности */
 @media (max-width: 900px) {
     .account-settings-container {
         width: 100%;

@@ -1,0 +1,49 @@
+﻿.profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.new-profile-picture-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    height: 400px;
+}
+
+
+
+
+.file-upload-label {
+    border: 0;
+    color: white;
+    background-color: #4CAF50;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+ 
+}
+    .file-upload-label::after {
+        content: 'Choose a file';
+    }
+    .file-upload-label:hover,
+    .file-upload-label:focus {
+        background-color: #05a019;
+    }
+
+.new-profile-picture-input {
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+    .new-profile-picture-input:valid + label {
+        background-color: #0da0b9;
+    }
+    .new-profile-picture-input:valid + label::after {
+        content: 'Selected';
+    }

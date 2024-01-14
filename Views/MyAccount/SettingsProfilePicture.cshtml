@@ -1,12 +1,19 @@
-﻿<p>fdkslkldfs</p>
-<p>vsdccv</p>
-<p>fdkcxvxcslkldfs</p>
-
-@* 
+﻿@model string
+@{
+    var ProfilePicture = Model;
+}
 <div class="profile-picture-container">
-    <img src="@Model.profilePicturePath" class="profile-picture" />
-
+    @if (string.IsNullOrEmpty(ProfilePicture))
+    {
+        <div class="no-picture-found">
+            No profile picture found
+        </div>
+    }
+    else
+    {
+        <img src="@ProfilePicture" class="profile-picture" />
+    }
     <button hx-post="/myAccount/renderProfilePictureInput" hx-trigger="click" hx-target=".profile-picture-container" hx-swap="outerHTML">
         Choose new profile picture
     </button>
-</div> *@
+</div>

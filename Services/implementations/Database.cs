@@ -81,7 +81,7 @@ namespace SaYMemos.Services.implementations
         public async Task<string?> GetPasswordHashForEmail(string email) =>
             await _context.LoginInfos.Where(li => li.Login == email).Select(li => li.PasswordHash).FirstOrDefaultAsync();
 
-        public async Task<long?> GetUserIdByEmail(string email)=>
+        public async Task<long?> GetUserIdByEmail(string email) =>
             await _context.Users
                 .Where(u => u.LoginInfo.Login == email)
                 .Select(u => u.Id)
@@ -98,5 +98,20 @@ namespace SaYMemos.Services.implementations
         }
         public async Task<User?> GetUserByIdAsync(long id) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        public async Task<string?> GetProfilePictureById(long id) =>
+            await _context.Users
+            .Where(u => u.Id == id)
+            .Select(u => u.ProfilePicturePath)
+            .FirstOrDefaultAsync();
+        public async Task SetProfilePictureForUser(long id, string imagePath)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user is not null)
+            {
+                user.SetProfilePicture(imagePath);
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using SaYMemos.Services.interfaces;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 public class ImageStorageService : IImageStorageService
@@ -17,14 +19,14 @@ public class ImageStorageService : IImageStorageService
         _logger = logger;
         EnsureProfilePicturesFolderCreated();
     }
-    
 
-    public string SaveProfilePicture(IFormFile profilePicture)
+
+    public string SaveProfilePicture(Stream stream, string fileName)
     {
         EnsureProfilePicturesFolderCreated();
-        return SaveImage(profilePicture, ProfilePicturesFolder);
+        return SaveImage(stream, fileName, ProfilePicturesFolder);
     }
-    
+
 
     public FileStream GetImage(string filePath)
     {
@@ -50,18 +52,30 @@ public class ImageStorageService : IImageStorageService
             throw;
         }
     }
-    private string SaveImage(IFormFile file, string? specifiedFolder = null)
+    private string SaveImage(Stream stream, string fileName, string? specifiedFolder = null)
     {
         string filePath;
         if (specifiedFolder is null)
-            filePath = Path.Combine(ImageFolder, file.FileName);
+            filePath = Path.Combine(ImageFolder, fileName);
         else
-            filePath = Path.Combine(ImageFolder, specifiedFolder, file.FileName);
+            filePath = Path.Combine(ImageFolder, specifiedFolder, fileName);
 
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
-            file.CopyTo(fileStream);
+            stream.CopyTo(fileStream);
         }
         return filePath;
     }
+
+    public async Task<MemoryStream> ConvertToJpgAsync(IFormFile picture)
+    {
+        using var inputStream = picture.OpenReadStream();
+        using var image = await Image.LoadAsync(inputStream);
+        var outputStream = new MemoryStream();
+        var encoder = new JpegEncoder { Quality = 80 };
+        await image.SaveAsJpegAsync(outputStream, encoder);
+        outputStream.Seek(0, SeekOrigin.Begin);
+        return outputStream;
+    }
+
 }

@@ -14,5 +14,7 @@ namespace SaYMemos.Services.interfaces
         public Task<long?> GetUserIdByEmail(string email);
         public Task UpdateLastLoginDateForUser(long id);
         public Task<User?> GetUserByIdAsync(long id);
+        public Task<string?> GetProfilePictureById(long id);
+        public Task SetProfilePictureForUser(long id, string imagePath);
     }
 }

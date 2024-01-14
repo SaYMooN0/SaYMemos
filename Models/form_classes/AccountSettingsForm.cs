@@ -6,7 +6,6 @@ namespace SaYMemos.Models.form_classes
     public record class AccountSettingsForm(
         //--main--
         string nickname,
-        string profilePicturePath,
         string fullName,
         //--privacy--
         bool isAccountPrivate,
@@ -59,7 +58,6 @@ namespace SaYMemos.Models.form_classes
         }
         public static AccountSettingsForm FromUser(User user) => new(
             user.Nickname,
-            user.ProfilePicturePath,
             user.AdditionalInfo.FullName,
             user.IsAccountPrivate,
             user.AreLinksPrivate,

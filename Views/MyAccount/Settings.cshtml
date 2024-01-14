@@ -5,12 +5,25 @@
 
 <form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/myaccount">
 
+    <link rel="stylesheet" href="~/css/pages/account/settings/profile_picture.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/account/settings/settings.css" asp-append-version="true" />
+
     <div class="settings-area">
         <p class="settings-area-header">Main</p>
-        <div hx-post="/MyAccount/RenderSettingsProfilePicture" hx-target="this" hx-trigger="load">Unable to load profile picture</div>
+        <div class="main-area-content">
+            <div hx-post="/MyAccount/RenderSettingsProfilePicture" hx-target="this" hx-trigger="load">Unable to load profile picture</div>
+            <div class="main-area-inputs">
+                <p class="main-area-input-line">
+                    Nickname:
+                    <input type="text" name="nickname" value="@Model.nickname" required />
+                </p>
+                <p class="main-area-input-line">
+                    Full Name:
+                    <input type="text" name="nickname" value="@Model.fullName" />
+                </p>
+            </div>
+        </div>
 
-        <input type="text" name="nickname" placeholder="Nickname" value="@Model.nickname" required />
-        <input type="text" name="fullName" placeholder="Full Name" value="@Model.fullName" />
         @AddErrorLineIfNeeded(Model.mainFieldError)
     </div>
 
@@ -62,9 +75,6 @@
         <a class="cancel-button" asp-action="Index" asp-controller="MyAccount">Cancel and close</a>
         <input class="save-button" type="submit" value="Save and close" hx-redirect="myaccount" />
     </div>
-
-    <link rel="stylesheet" href="~/css/pages/account/settings.css" asp-append-version="true" />
-    <input name="profilePicturePath" type="hidden" value="@Model.profilePicturePath" />
 </form>
 
 @{

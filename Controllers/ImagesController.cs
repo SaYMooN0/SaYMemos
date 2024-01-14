@@ -18,7 +18,7 @@ namespace SaYMemos.Controllers
 
 
         [HttpGet]
-        [Route("images/{filePath}")]
+        [Route("images/{*filePath}")]
         public IActionResult GetImage(string filePath)
         {
             try

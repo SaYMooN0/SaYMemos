@@ -4,6 +4,8 @@ using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models.account;
 using SaYMemos.Services.interfaces;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 namespace SaYMemos.Controllers
@@ -13,11 +15,13 @@ namespace SaYMemos.Controllers
         IDatabase _db { get; init; }
         ILogger _logger { get; init; }
         IEncryptor _enc { get; init; }
-        public MyAccountController(IDatabase db, ILogger logger, IEncryptor encryptor)
+        IImageStorageService _imgStorage { get; init; }
+        public MyAccountController(IDatabase db, ILogger logger, IEncryptor encryptor, IImageStorageService imgStorage)
         {
             _db = db;
             _logger = logger;
             _enc = encryptor;
+            _imgStorage = imgStorage;
         }
         public async Task<IActionResult> Index()
         {
@@ -59,18 +63,43 @@ namespace SaYMemos.Controllers
 
        
         [HttpPost]
-        public IActionResult SaveProfilePicture(IFormFile picture)
+        public async Task<IActionResult> SaveProfilePictureAsync(IFormFile picture)
         {
-            //  else if (AnyProfilePicture())
-            //{
-            //    if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(GetProfilePictureExtension()))
+            if (picture is null || picture.Length == 0)
+                return RenderProfilePictureInput("No image received");
 
-            //        mainError = "Unsupported file type";
-            //}
-            //public bool AnyProfilePicture() => newProfilePicture != null && newProfilePicture.Length > 0;
-            //public string GetProfilePictureExtension() => AnyProfilePicture() ? Path.GetExtension(newProfilePicture.FileName).ToLowerInvariant() : string.Empty;
-            return Ok();
+            string imageExtension = Path.GetExtension(picture.FileName).ToLowerInvariant();
+            if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(imageExtension))
+                return RenderProfilePictureInput($"Images with {imageExtension} extension are not supported. Please use .jpg, .jpeg or .png image");
+
+            long? userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1 || userId == null)
+                return Unauthorized();
+
+            User? user = await _db.GetUserByIdAsync((long)userId);
+            if (user is null)
+                return Unauthorized();
+
+            await _db.UpdateLastLoginDateForUser((long)userId);
+
+            string fileName = user.Id.ToString() + ".jpg";
+            string savedImagePath;
+
+            if (imageExtension == ".png")
+            {
+                using var convertedStream = await _imgStorage.ConvertToJpgAsync(picture);
+                savedImagePath = _imgStorage.SaveProfilePicture(convertedStream, fileName);
+            }
+            else
+            {
+                using var inputStream = picture.OpenReadStream();
+                savedImagePath = _imgStorage.SaveProfilePicture(inputStream, fileName);
+            }
+
+            await _db.SetProfilePictureForUser(user.Id, savedImagePath);
+            return await RenderSettingsProfilePictureAsync();
         }
+
         [HttpPost]
         public IActionResult SaveSettings(AccountSettingsForm form)
         {
@@ -86,9 +115,15 @@ namespace SaYMemos.Controllers
         }
 
         [HttpPost]
-        public IActionResult RenderProfilePictureInput() => PartialView(viewName: "ProfilePictureInput");
+        public IActionResult RenderProfilePictureInput(string error="") => PartialView(viewName: "ProfilePictureInput", error);
         [HttpPost]
-        public IActionResult RenderSettingsProfilePicture() => PartialView(viewName: "SettingsProfilePicture");
-
+        public async Task<IActionResult> RenderSettingsProfilePictureAsync()
+        {
+            long? userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return Unauthorized();
+            string? picturePath = await _db.GetProfilePictureById((long)userId);
+            return PartialView(viewName: "SettingsProfilePicture", picturePath);
+        }
     }
 }
