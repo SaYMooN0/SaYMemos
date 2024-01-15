@@ -70,6 +70,7 @@ namespace SaYMemos.Services.implementations
             await _context.SaveChangesAsync();
 
             var user = User.CreateNewUser(userToConfirm.Nickname, loginInfo.Id, userAdditionalInfo.Id, userLinks.Id);
+            
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 

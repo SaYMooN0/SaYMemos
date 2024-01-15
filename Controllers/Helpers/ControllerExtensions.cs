@@ -24,7 +24,11 @@ namespace SaYMemos.Controllers.Helpers
             controller.HttpContext.Response.SetConfirmationIdCookies(confirmationIdEncryptionFunc(confirmationId.ToString()));
 
 
-
+        public static IActionResult UnknownUser(this Controller controller)
+        {
+            controller.Response.Headers["HX-Redirect"] = "/account/unknownAccount";
+            return controller.RedirectToAction(actionName: "UnknownAccount", controllerName: "Account");
+        }
 
     }
 }

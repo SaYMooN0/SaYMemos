@@ -66,8 +66,11 @@
 
     <div class="settings-area">
         <p class="settings-area-header">Additional info</p>
-        <textarea class="hobbies-textarea" name="hobbies" placeholder="Hobbies">@Model.hobbies</textarea>
-        <textarea class="additional-info-textarea" name="additionalInfo" placeholder="Additional Info">@Model.additionalInfo</textarea>
+        <label>About me:</label>
+        <textarea class="additional-info-textarea" name="aboutMe">@Model.aboutMe</textarea>
+        <label>Hobbies:</label>
+        <textarea class="hobbies-textarea" name="hobbies">@Model.hobbies</textarea>
+    
         @AddErrorLineIfNeeded(Model.additionalInfoFieldError)
     </div>
 

@@ -30,7 +30,11 @@ namespace SaYMemos.Controllers
                 return Unauthorized();
             User? user = await _db.GetUserByIdAsync((long)userId);
             if (user is null)
+            {
+                this.Response.RemoveUserIdCookies();
                 return Unauthorized();
+            }
+                
             return View(MyAccountViewModel.FromUser(user));
         }
         [HttpPost]

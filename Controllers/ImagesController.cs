@@ -32,7 +32,7 @@ namespace SaYMemos.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [Route("default_profile_picture.png")]
+        [Route("default_profile_picture.jpg")]
         public IActionResult DefaultProfilePicture() => GetImage(_imgStorage.DefaultProfilePicture);
     }
 }

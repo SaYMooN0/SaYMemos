@@ -9,12 +9,12 @@
     <img src="@Model.profilePicturePath" class="profile-picture" />
     <div class="user-info">
         <div class="user-info-top-content">
-            <span class="nickname">@Model.nickname</span>
-            <span class="last-login">@Model.lastTimeOnline</span>
+            <label class="nickname">@Model.nickname</label>
+            <label class="last-login">@Model.lastTimeOnline</label>
         </div>
         <div class="fullname">@Model.fullName</div>
 
-        @if (Model.links.Count > 1)
+        @if (Model.links is not null && Model.links.Count > 1)
         {
             <div class="links-block">
                 @foreach (var l in Model.links)
@@ -26,8 +26,10 @@
                 }
             </div>
         }
-        <div class="additional-info">
-            <button hx-post="account/renderAdditionalInfo" trigger="click">Show Additional Info</button>
-        </div>
+        <button class="additional-info-button" hx-trigger="click" hx-target=".profile-container" hx-swap="outerHTML"
+                hx-post="account/renderAdditionalInfo" hx-vals='{"userId": "@Model.userId"}'
+                hx-redirect="/account/unknownAccount">
+            Show More Info
+        </button>
     </div>
 </div>

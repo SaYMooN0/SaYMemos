@@ -8,7 +8,7 @@ namespace SaYMemos.Models.view_models.account
        Dictionary<string, string> links,
        string fullName,
        string registrationDate,
-       string additionalInfo,
+       string aboutMe,
        string hobbies
        )
     {
@@ -16,9 +16,9 @@ namespace SaYMemos.Models.view_models.account
             new(user.Nickname,
                 user.ProfilePicturePath,
                 user.UserLinks.ParseToNonEmptyDictionary(),
-                user.AdditionalInfo.FullName,
+                user.FullName,
                 user.AdditionalInfo.RegistrationDate.ToString("D"),
-                user.AdditionalInfo.AdditionalInfo,
+                user.AdditionalInfo.AboutMe,
                 user.AdditionalInfo.Hobbies);
     }
 

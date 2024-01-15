@@ -17,7 +17,7 @@ namespace SaYMemos.Models.form_classes
         string youtubeLink,
         string discordLink,
         //--additional info--
-        string additionalInfo,
+        string aboutMe,
         string hobbies,
         //--errors
         string mainFieldError,
@@ -58,7 +58,7 @@ namespace SaYMemos.Models.form_classes
         }
         public static AccountSettingsForm FromUser(User user) => new(
             user.Nickname,
-            user.AdditionalInfo.FullName,
+            user.FullName,
             user.IsAccountPrivate,
             user.AreLinksPrivate,
             user.IsLastLoginDatePrivate,
@@ -66,7 +66,7 @@ namespace SaYMemos.Models.form_classes
             user.UserLinks.TelegramLink,
             user.UserLinks.YoutubeLink,
             user.UserLinks.DiscordLink,
-            user.AdditionalInfo.AdditionalInfo,
+            user.AdditionalInfo.AboutMe,
             user.AdditionalInfo.Hobbies,
             string.Empty, string.Empty, string.Empty, string.Empty);
 

@@ -69,9 +69,16 @@ internal class Program
             logger.CriticalError("DatabaseConnectionString is null or empty");
             return false;
         }
-
-        Database db = new(dbConnectionString, logger);
-        builder.Services.AddSingleton<IDatabase, Database>(provider => db);
+        try
+        {
+            Database db = new(dbConnectionString, logger);
+            builder.Services.AddSingleton<IDatabase, Database>(provider => db);
+        }
+        catch (Exception ex)
+        {
+            logger.CriticalError($"Error during db initialization {ex}");
+            return false;
+        }
         return true;
     }
 

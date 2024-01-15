@@ -30,25 +30,27 @@ namespace SaYMemos.Controllers
 
             User? user = await _db.GetUserByIdAsync(userId.Value);
             if (user is null)
-            {
-                return View(viewName: "UnknownAccount");
-            }
+                return this.UnknownUser();
 
             return user.IsAccountPrivate ? PrivateAccountView(user) : PublicAccountView(user);
         }
 
 
         [HttpPost]
-        public IActionResult RenderAdditionalInfo()
+        public async Task<IActionResult> RenderAdditionalInfoAsync(long? userId = null)
         {
-            
-            return PartialView(viewName: "AdditionalInfo", new AdditionalInfoViewModel());
+            if (userId is null)
+                return this.UnknownUser();
+            User? user = await _db.GetUserByIdAsync((long)userId);
+            if (user is null || user.IsAccountPrivate)
+                return this.UnknownUser();
+            return PartialView(viewName: "AllUserInfo", AllUserInfoViewModel.FromUser(user));
         }
         private IActionResult PrivateAccountView(User user) =>
             View(viewName: "PrivateAccount", PrivateAccountViewModel.FromUser(user));
         private IActionResult PublicAccountView(User user) =>
             View(viewName: "PublicAccount", PublicAccountViewModel.FromUser(user));
 
-
+        public IActionResult UnknownAccount() => View();
     }
 }

@@ -1,0 +1,10 @@
+﻿@model AllUserInfoViewModel
+
+
+<div class="additional-info">
+    <p class="additional-info-top-header">
+        <label class="top-header-nickname">@Model.nickname - info</label>
+        <a asp-controller="Account" asp-action="Index" asp-route-userId="@Model.userId">Go back</a>
+    </p>
+  
+</div>
