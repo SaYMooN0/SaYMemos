@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Security.Certificates;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.form_classes;
 using SaYMemos.Services.interfaces;
 
 namespace SaYMemos.Services.implementations
@@ -25,7 +27,7 @@ namespace SaYMemos.Services.implementations
 
         public bool IsEmailTaken(string email) =>
             _context.LoginInfos.Any(li => li.Login == email);
-        public async Task<long> AddUserToConfirmAsync(UserToConfirm user)
+        public async Task<long> AddUserToConfirm(UserToConfirm user)
         {
             var existingUser = await _context.UsersToConfirm
                 .FirstOrDefaultAsync(u => u.Email == user.Email);
@@ -42,7 +44,7 @@ namespace SaYMemos.Services.implementations
             return existingUser?.Id ?? user.Id;
         }
 
-        public async Task DeleteUserFromConfirmAsync(long id)
+        public async Task DeleteUserFromConfirm(long id)
         {
             var user = await _context.UsersToConfirm.FindAsync(id);
 
@@ -53,7 +55,7 @@ namespace SaYMemos.Services.implementations
             }
         }
 
-        public async Task<bool> IsUserToConfirmExistsAsync(long id, string confirmationCode) =>
+        public async Task<bool> IsUserToConfirmExists(long id, string confirmationCode) =>
             await _context.UsersToConfirm.AnyAsync(u => u.Id == id && u.ConfirmationCode == confirmationCode);
 
         public async Task<long> AddNewConfirmedUser(UserToConfirm userToConfirm)
@@ -61,16 +63,16 @@ namespace SaYMemos.Services.implementations
             LoginInfo loginInfo = new(0, userToConfirm.Email, userToConfirm.PasswordHash);
             _context.LoginInfos.Add(loginInfo);
 
-            var userAdditionalInfo = UserAdditionalInfo.Default();
+            UserAdditionalInfo userAdditionalInfo = UserAdditionalInfo.Default();
             _context.UserAdditionalInfos.Add(userAdditionalInfo);
 
-            var userLinks = UserLinks.Default();
+            UserLinks userLinks = UserLinks.Default();
             _context.UserLinks.Add(userLinks);
 
             await _context.SaveChangesAsync();
 
             var user = User.CreateNewUser(userToConfirm.Nickname, loginInfo.Id, userAdditionalInfo.Id, userLinks.Id);
-            
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -114,5 +116,16 @@ namespace SaYMemos.Services.implementations
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task UpdateUserSettings(AccountSettingsForm data, long id)
+        {
+            User? user=await GetUserByIdAsync(id);
+            if (user is not null)
+            {
+                user.UpdateFromAccountSettings(data);
+                await _context.SaveChangesAsync();
+            }
+            
+        }
+
     }
 }

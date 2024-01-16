@@ -3,7 +3,7 @@
 
 
 
-<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/myaccount">
+<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/myAccount/index">
 
     <link rel="stylesheet" href="~/css/pages/account/settings/profile_picture.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/account/settings/settings.css" asp-append-version="true" />
@@ -15,11 +15,11 @@
             <div class="main-area-inputs">
                 <p class="main-area-input-line">
                     Nickname:
-                    <input type="text" name="nickname" value="@Model.nickname" required />
+                    <input type="text" asp-for="@Model.nickname" required />
                 </p>
                 <p class="main-area-input-line">
                     Full Name:
-                    <input type="text" name="nickname" value="@Model.fullName" />
+                    <input type="text" asp-for="@Model.fullName" />
                 </p>
             </div>
         </div>
@@ -31,35 +31,34 @@
         <p class="settings-area-header">Privacy</p>
         <p class="privacy-input">
             Is Account Private
-            <input type="checkbox" class="default-checkbox" name="isAccountPrivate" @(Model.isAccountPrivate ? "checked" : "") />
+            <input type="checkbox" class="default-checkbox" asp-for="isAccountPrivate" />
         </p>
         <p class="privacy-input">
             Are Links Private
-            <input type="checkbox" class="default-checkbox" name="areLinksPrivate" @(Model.areLinksPrivate ? "checked" : "") />
+            <input type="checkbox" class="default-checkbox" asp-for="areLinksPrivate"  />
         </p>
         <p class="privacy-input">
             Is Last Login Date Private
-            <input type="checkbox" class="default-checkbox" name="isLastLoginDatePrivate" @(Model.isLastLoginDatePrivate ? "checked" : "") />
+            <input type="checkbox" class="default-checkbox" asp-for="isLastLoginDatePrivate"  />
         </p>
-        @AddErrorLineIfNeeded(Model.privacyFieldError)
     </div>
 
     <div class="settings-area">
         <p class="settings-area-header">Links</p>
         <p class="link-input-line">
             GitHub:
-            <input type="text" name="githubLink" value="@Model.githubLink" />
+            <input type="text" asp-for="@Model.githubLink" />
         </p>
         <p class="link-input-line">
             Telegram:
-            <input type="text" name="telegramLink" value="@Model.telegramLink" />
+            <input type="text" asp-for="@Model.telegramLink" />
         </p>
         <p class="link-input-line">
             YouTube:
-            <input type="text" name="youtubeLink" value="@Model.youtubeLink" />
+            <input type="text" asp-for="@Model.youtubeLink" />
         </p> <p class="link-input-line">
             Discord:
-            <input type="text" name="discordLink" value="@Model.discordLink" />
+            <input type="text" asp-for="@Model.discordLink" />
         </p>
         @AddErrorLineIfNeeded(Model.linksFieldError)
     </div>
@@ -67,16 +66,16 @@
     <div class="settings-area">
         <p class="settings-area-header">Additional info</p>
         <label>About me:</label>
-        <textarea class="additional-info-textarea" name="aboutMe">@Model.aboutMe</textarea>
+        <textarea class="additional-info-textarea" asp-for="@Model.aboutMe"></textarea>
         <label>Hobbies:</label>
-        <textarea class="hobbies-textarea" name="hobbies">@Model.hobbies</textarea>
-    
+        <textarea class="hobbies-textarea" asp-for="@Model.hobbies"></textarea>
+
         @AddErrorLineIfNeeded(Model.additionalInfoFieldError)
     </div>
 
     <div class="buttons-container">
         <a class="cancel-button" asp-action="Index" asp-controller="MyAccount">Cancel and close</a>
-        <input class="save-button" type="submit" value="Save and close" hx-redirect="myaccount" />
+        <input class="save-button" type="submit" value="Save and close" />
     </div>
 </form>
 

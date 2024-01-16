@@ -4,8 +4,6 @@ using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models.account;
 using SaYMemos.Services.interfaces;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 namespace SaYMemos.Controllers
@@ -34,7 +32,7 @@ namespace SaYMemos.Controllers
                 this.Response.RemoveUserIdCookies();
                 return Unauthorized();
             }
-                
+
             return View(MyAccountViewModel.FromUser(user));
         }
         [HttpPost]
@@ -65,7 +63,7 @@ namespace SaYMemos.Controllers
         }
 
 
-       
+
         [HttpPost]
         public async Task<IActionResult> SaveProfilePictureAsync(IFormFile picture)
         {
@@ -105,21 +103,28 @@ namespace SaYMemos.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveSettings(AccountSettingsForm form)
+        public async Task<IActionResult> SaveSettingsAsync(AccountSettingsForm form)
         {
+            long id = this.GetUserId(_enc.DecryptId);
+            if (id == -1)
+                return Unauthorized();
+            await _db.UpdateLastLoginDateForUser(id);
+
             var data = form.Validate();
             if (data.AnyErrors())
-                return PartialView("Settings", data);
+                return PartialView(viewName: "Settings", model: data);
 
+            User? user = await _db.GetUserByIdAsync(id);
+            if (user is null)
+                return Unauthorized();
 
-            //saving changes
-
-            Response.Headers["HX-Redirect"] = "/myaccount";
+            await _db.UpdateUserSettings(data, id);
+            Response.Headers["HX-Redirect"] = "/myAccount/index";
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult RenderProfilePictureInput(string error="") => PartialView(viewName: "ProfilePictureInput", error);
+        public IActionResult RenderProfilePictureInput(string error = "") => PartialView(viewName: "ProfilePictureInput", error);
         [HttpPost]
         public async Task<IActionResult> RenderSettingsProfilePictureAsync()
         {

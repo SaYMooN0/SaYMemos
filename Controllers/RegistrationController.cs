@@ -50,7 +50,7 @@ namespace SaYMemos.Controllers
             long confirmationId = -1;
             try
             {
-                confirmationId=await _db.AddUserToConfirmAsync(user);
+                confirmationId=await _db.AddUserToConfirm(user);
                 this.SetConfirmationId(confirmationId, _enc.EncryptConfirmationId);
 
                 if (!_emailService.TrySendConfirmationCode( data.Email,code))
@@ -79,7 +79,7 @@ namespace SaYMemos.Controllers
             if (userId == -1)
                 return PartialView(EmailConfirmationView, RegistrationError);
 
-            if (!await _db.IsUserToConfirmExistsAsync(userId, code))
+            if (!await _db.IsUserToConfirmExists(userId, code))
                 return PartialView(EmailConfirmationView, "Wrong code");
 
             var userToConfirm = await _db.GetUserToConfirmById(userId);
@@ -91,7 +91,7 @@ namespace SaYMemos.Controllers
                 long newId = await _db.AddNewConfirmedUser(userToConfirm);
                 HttpContext.Response.RemoveConfirmationIdCookies();
                 this.SetUserId(newId, _enc.EncryptId);
-                await _db.DeleteUserFromConfirmAsync(userId);
+                await _db.DeleteUserFromConfirm(userId);
                 return RedirectToAction("Index", "Account");
             }
             catch (Exception ex)

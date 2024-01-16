@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using SaYMemos.Models.data.entities.users;
 
 public class MemoDbContext : DbContext
@@ -16,11 +17,11 @@ public class MemoDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<LoginInfo>().HasKey(x => x.Id);
         modelBuilder.Entity<User>().HasKey(x => x.Id);
         modelBuilder.Entity<UserLinks>().HasKey(x => x.Id);
-        modelBuilder.Entity<UserAdditionalInfo>().HasKey(x => x.Id); 
+        modelBuilder.Entity<UserAdditionalInfo>().HasKey(x => x.Id);
         modelBuilder.Entity<UserToConfirm>().HasKey(x => x.Id);
 
         modelBuilder.Entity<User>()
