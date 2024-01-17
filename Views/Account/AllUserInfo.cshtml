@@ -1,10 +1,41 @@
 ﻿@model AllUserInfoViewModel
 
+@{
+    string CheckForEmtpy(string stringToCheck) => string.IsNullOrWhiteSpace(stringToCheck) ? "Not specified" : stringToCheck;
+    string CreateLinkHtml(string url) =>
+        !string.IsNullOrEmpty(url) ? Html.Raw($"<a href='{url}' target='_blank' class='user-link'>{url}</a>").ToString() : "Not specified";
+}
 
-<div class="additional-info">
-    <p class="additional-info-top-header">
-        <label class="top-header-nickname">@Model.nickname - info</label>
-        <a asp-controller="Account" asp-action="Index" asp-route-userId="@Model.userId">Go back</a>
-    </p>
-  
+<div class="user-info-container">
+    <link rel="stylesheet" href="~/css/pages/account/all_info.css" asp-append-version="true" />
+    <div class="additional-info">
+        <div class="additional-info-top-header">
+            <label class="top-header-nickname">@Model.nickname - info</label>
+            <a class="back-link" asp-controller="Account" asp-action="Index" asp-route-userId="@Model.userId">Go back</a>
+        </div>
+        <div class="info-section">
+            <p class="user-info">Last Time Online: @Model.lastTimeOnline</p>
+            <p class="user-info">Full Name: @CheckForEmtpy(Model.fullName)</p>
+            <p class="user-info">About Me: @CheckForEmtpy(Model.aboutMe)</p>
+            <p class="user-info">Hobbies: @CheckForEmtpy(Model.hobbies)</p>
+            <p class="user-info">Registration Date: @CheckForEmtpy(Model.registrationDate)</p>
+        </div>
+
+        @if (!Model.areLinksPrivate)
+        {
+            <div class="links-section">
+                <h2 class="links-header">Links</h2>
+                <ul class="links-list">
+                    <li class="link-item">GitHub: @CreateLinkHtml(Model.links.GitHub)</li>
+                    <li class="link-item">Telegram: @CreateLinkHtml(Model.links.Telegram)</li>
+                    <li class="link-item">YouTube: @CreateLinkHtml(Model.links.Youtube)</li>
+                    <li class="link-item">Discord: @CreateLinkHtml(Model.links.Discord)</li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            <p class="private-links-notice">This user chose to hide the links</p>
+        }
+    </div>
 </div>

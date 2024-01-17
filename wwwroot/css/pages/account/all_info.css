@@ -1,5 +1,77 @@
-﻿.additional-info-top-header{
-    width:100%;
-    display:flex;
-    justify-content:space-between;
+﻿
+.user-info-container {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.additional-info-top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.top-header-nickname {
+    font-size: 1.5em;
+    color: #333;
+}
+
+.back-link {
+    background-color: #a78ef6;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+    .back-link:hover {
+        background-color: #9274d6;
+    }
+
+.info-section .user-info {
+    background-color: white;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.links-section {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.links-header {
+    color: #a78ef6;
+    margin-bottom: 10px;
+}
+
+.links-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.link-item {
+    margin-bottom: 10px;
+}
+
+    .link-item a {
+        color: #a78ef6;
+        text-decoration: none;
+    }
+
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+
+.private-links-notice {
+    font-style: italic;
+    color: #666;
 }

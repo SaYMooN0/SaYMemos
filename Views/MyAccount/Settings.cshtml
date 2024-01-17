@@ -3,7 +3,7 @@
 
 
 
-<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/myAccount/index">
+<form class='account-settings-container @(Model.AnyErrors() ? "form-error-borders" : "")' hx-post="MyAccount/SaveSettings" hx-swap="outerHTML" hx-redirect="/MyAccount">
 
     <link rel="stylesheet" href="~/css/pages/account/settings/profile_picture.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/account/settings/settings.css" asp-append-version="true" />

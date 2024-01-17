@@ -32,8 +32,8 @@ namespace SaYMemos.Controllers
                 this.Response.RemoveUserIdCookies();
                 return Unauthorized();
             }
-
-            return View(MyAccountViewModel.FromUser(user));
+            var l = View(MyAccountViewModel.FromUser(user));
+            return l ;
         }
         [HttpPost]
         public async Task<IActionResult> Settings()
@@ -119,7 +119,7 @@ namespace SaYMemos.Controllers
                 return Unauthorized();
 
             await _db.UpdateUserSettings(data, id);
-            Response.Headers["HX-Redirect"] = "/myAccount/index";
+            Response.Headers["HX-Redirect"] = "/MyAccount";
             return Ok();
         }
 
