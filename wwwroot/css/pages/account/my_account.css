@@ -57,3 +57,20 @@
     .log-out-button:hover {
         background-color: #E9090b;
     }
+.new-memo-button {
+    background-color: #a78ef6;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+    .new-memo-button:hover {
+        background-color: #9e7ae9;
+    }

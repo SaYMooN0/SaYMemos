@@ -1,4 +1,8 @@
-﻿@{
+﻿@model NewMemoViewModel
+@{
     ViewData["Title"] = "New Memo";
 }
-New memo page
+New memo creation page
+<form hx-post="/newMemo/uploadNew">
+    <input type="submit" value="Upload"/>
+</form>

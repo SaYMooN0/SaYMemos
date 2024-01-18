@@ -30,7 +30,7 @@
 
         <div class="fullname">@Model.fullName</div>
         <div class="additional-info">
-            @if (Model.links.Count > 1)
+            @if (Model.links.Count >= 1)
             {
                 <div class="links-block">
                     @foreach (var l in Model.links)
@@ -48,5 +48,6 @@
             }
         
         </div>
+        <a asp-action="Index" asp-controller="newMemo" class="new-memo-button">Create New Memo</a>
     </div>
 </div>

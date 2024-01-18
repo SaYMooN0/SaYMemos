@@ -29,11 +29,10 @@ namespace SaYMemos.Controllers
             User? user = await _db.GetUserByIdAsync((long)userId);
             if (user is null)
             {
-                this.Response.RemoveUserIdCookies();
+               Response.RemoveUserIdCookies();
                 return Unauthorized();
             }
-            var l = View(MyAccountViewModel.FromUser(user));
-            return l ;
+            return View(MyAccountViewModel.FromUser(user));
         }
         [HttpPost]
         public async Task<IActionResult> Settings()

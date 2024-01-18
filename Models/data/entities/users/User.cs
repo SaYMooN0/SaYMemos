@@ -1,4 +1,5 @@
-﻿using SaYMemos.Models.form_classes;
+﻿using SaYMemos.Models.data.entities.memos;
+using SaYMemos.Models.form_classes;
 using System.ComponentModel.DataAnnotations;
 namespace SaYMemos.Models.data.entities.users
 {
@@ -21,6 +22,7 @@ namespace SaYMemos.Models.data.entities.users
         public virtual UserAdditionalInfo AdditionalInfo { get;private set; }
         public virtual LoginInfo LoginInfo { get;private set; }
         public virtual UserLinks UserLinks { get;private set; }
+        public virtual List<Memo> PostedMemos { get; private set; } = new();
         public static User CreateNewUser(string nickname, long loginInfoId, long additionalInfoId, long userLinksId)
         {
             return new User
@@ -45,7 +47,7 @@ namespace SaYMemos.Models.data.entities.users
             $"ID: {Id}, Nickname: {Nickname}";
         public void UpdateLastLoginDate() => LastLoginDate = DateTime.UtcNow;
         public string GetLastTimeOnlineString() => IsLastLoginDatePrivate
-            ? (DateTime.Now - LastLoginDate).TotalDays < 7 ? "Was online a long time ago" : "Was online recently"
+            ? (DateTime.Now - LastLoginDate).TotalDays > 7 ? "Was online a long time ago" : "Was online recently"
             : LastLoginDate.Date == DateTime.Today ? "Was online today at " + LastLoginDate.ToString("HH:mm")
             : LastLoginDate.Date == DateTime.Today.AddDays(-1) ? "Was online yesterday at " + LastLoginDate.ToString("HH:mm")
             : LastLoginDate.Year == DateTime.Now.Year ? "Was online on " + LastLoginDate.ToString("dd MMM")

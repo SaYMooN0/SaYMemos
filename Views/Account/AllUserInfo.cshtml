@@ -2,8 +2,7 @@
 
 @{
     string CheckForEmtpy(string stringToCheck) => string.IsNullOrWhiteSpace(stringToCheck) ? "Not specified" : stringToCheck;
-    string CreateLinkHtml(string url) =>
-        !string.IsNullOrEmpty(url) ? Html.Raw($"<a href='{url}' target='_blank' class='user-link'>{url}</a>").ToString() : "Not specified";
+    string CreateLinkHtml(string url) => !string.IsNullOrEmpty(url) ? Html.Raw($"<a href='{url}' target='_blank' class='user-link'>{url}</a>").ToString() : "Not specified";
 }
 
 <div class="user-info-container">
