@@ -1,0 +1,65 @@
+﻿.new-memo-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: auto;
+    color: #333;
+}
+
+.caption-label,
+.profile-picture-input,
+.hashtag-input,
+.hashtag-add-btn,
+.upload-memo-btn {
+    display: block;
+    margin: 10px 0;
+}
+
+.author-comment {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.profile-picture-input {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.hashtags-container {
+    margin-bottom: 20px;
+}
+
+.hashtag-add-btn,
+.upload-memo-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+    .hashtag-add-btn:hover,
+    .upload-memo-btn:hover {
+        background-color: #0056b3;
+    }
+
+.hashtag-line {
+    margin-bottom: 10px;
+}
+
+.hashtag-input {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+}

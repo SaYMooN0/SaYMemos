@@ -28,5 +28,12 @@ namespace SaYMemos.Controllers
         {
             return Ok();
         }
+        [HttpPost] 
+        public IActionResult RenderNewHashtagInput()
+        {
+            if (this.GetUserId(_enc.DecryptId) == -1)
+                return Unauthorized();
+            return PartialView(viewName: "HashTagInput");
+        }
     }
 }

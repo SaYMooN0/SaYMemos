@@ -1,13 +1,13 @@
-﻿namespace SaYMemos.Models.data.entities.memos
+﻿namespace SaYMemos.Models.data.entities.comments
 {
     public record class Comment(
-        Guid id, 
+        Guid id,
         Guid memoId,
         long authorId,
         Guid? parentComment,
         string text
 
-        
+
         )
     {
     }

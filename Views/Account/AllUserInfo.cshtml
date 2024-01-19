@@ -1,8 +1,9 @@
-﻿@model AllUserInfoViewModel
+﻿@using Microsoft.AspNetCore.Html
+@model AllUserInfoViewModel
 
 @{
     string CheckForEmtpy(string stringToCheck) => string.IsNullOrWhiteSpace(stringToCheck) ? "Not specified" : stringToCheck;
-    string CreateLinkHtml(string url) => !string.IsNullOrEmpty(url) ? Html.Raw($"<a href='{url}' target='_blank' class='user-link'>{url}</a>").ToString() : "Not specified";
+    HtmlString CreateLinkHtml(string url) => !string.IsNullOrEmpty(url) ? new HtmlString($"<a href='{url}' target='_blank' class='user-link'>{url}</a>") : new HtmlString("<label> Not specified</label>");
 }
 
 <div class="user-info-container">

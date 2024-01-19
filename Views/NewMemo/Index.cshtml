@@ -1,8 +1,18 @@
-﻿@model NewMemoViewModel
-@{
-    ViewData["Title"] = "New Memo";
-}
-New memo creation page
-<form hx-post="/newMemo/uploadNew">
-    <input type="submit" value="Upload"/>
+﻿<link rel="stylesheet" href="~/css/pages/new_memo/new_memo.css" asp-append-version="true" />
+
+<form hx-post="/newMemo/uploadNew" enctype="multipart/form-data" class="new-memo-form">
+    <label for="authorComment" class="caption-label">Add caption: </label>
+    <textarea id="authorComment" name="authorComment" class="author-comment"></textarea>
+
+    <input type="file" name="image" class="image-input" accept=".jpg, .jpeg, .png" required />
+
+    <div class="hashtags-container">
+
+
+
+    </div>
+
+    <button type="button" class="hashtag-add-btn" hx-post="/newMemo/renderNewHashtagInput" hx-target=".hashtags-container">Add Hashtag</button>
+    <input type="submit" class="upload-memo-btn" value="Upload Memo" />
 </form>
+

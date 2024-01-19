@@ -6,14 +6,14 @@ namespace SaYMemos.Models.data.entities.memos
         Guid id,
         long authorId,
         string authorComment,
-        string images,
+        string? imagePath,
         DateTime creationTime
         )
     {
-        virtual public User Author { get; set; }
-        public static Memo CreateNew(long authorId, string authorComment, params long[] imageIds)
-            => new(new(), authorId, authorComment, string.Join(',', imageIds), DateTime.Now);
-        public long[] GetImageIds => images.Split(',').Select(long.Parse).ToArray();
+        virtual public User Author { get; init; }
+        //public static Memo CreateNew(long authorId, string authorComment, string imagePath)
+        //    => new (new(), authorId, authorComment, imagePath, DateTime.Now);
+       
 
     }
 }
