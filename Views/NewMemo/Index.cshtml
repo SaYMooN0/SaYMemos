@@ -1,18 +1,20 @@
-﻿<link rel="stylesheet" href="~/css/pages/new_memo/new_memo.css" asp-append-version="true" />
+﻿@model MemoCreationForm
 
-<form hx-post="/newMemo/uploadNew" enctype="multipart/form-data" class="new-memo-form">
-    <label for="authorComment" class="caption-label">Add caption: </label>
-    <textarea id="authorComment" name="authorComment" class="author-comment"></textarea>
+<link rel="stylesheet" href="~/css/pages/new_memo/new_memo.css" asp-append-version="true" />
 
-    <input type="file" name="image" class="image-input" accept=".jpg, .jpeg, .png" required />
+<form class="new-memo-form"
+      hx-post="/newMemo/SaveNewMemo" hx-redirect="/MyAccount" enctype="multipart/form-data">
+
+    <p class="add-label">Add text: </p>
+    <textarea asp-for="authorComment" name="authorComment" class="author-comment" required></textarea>
+
+    <p class="add-label">Add image: </p>
+    <input asp-for="image" type="file" class="image-input" accept=".jpg, .jpeg, .png" />
 
     <div class="hashtags-container">
-
-
-
     </div>
 
-    <button type="button" class="hashtag-add-btn" hx-post="/newMemo/renderNewHashtagInput" hx-target=".hashtags-container">Add Hashtag</button>
+    <button type="button" class="hashtag-add-btn" hx-post="/newMemo/renderNewHashtagInput" hx-target=".hashtags-container" hx-swap="beforeend">Add Hashtag</button>
     <input type="submit" class="upload-memo-btn" value="Upload Memo" />
 </form>
 

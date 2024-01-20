@@ -1,3 +1,11 @@
-﻿<p class="hashtag-line">
+﻿@model string 
+
+
+
+<div class="hashtag-input-block" id="@Model">
+    <span>#</span>
     <input name="hashtags" class="hashtag-input" />
-</p>
+    <button hx-swap="delete" hx-trigger="click" hx-target="#@Model" hx-get="/ok">
+        &#10005;
+    </button>
+</div>

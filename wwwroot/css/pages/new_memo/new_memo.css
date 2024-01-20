@@ -3,27 +3,25 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    max-width: 800px;
     margin: auto;
     color: #333;
 }
-
-.caption-label,
-.profile-picture-input,
-.hashtag-input,
-.hashtag-add-btn,
-.upload-memo-btn {
-    display: block;
-    margin: 10px 0;
+.add-label {
+    margin-top:30px;
+    font-size: 19px;
+    color: #222;
 }
-
 .author-comment {
-    width: 100%;
+    width: 98%;
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 10px;
-    font-size: 14px;
+    font-size: 17px;
     color: #333;
+    resize: vertical;
+    min-height: 50px;
+    max-height: 200px;
 }
 
 .profile-picture-input {
@@ -37,29 +35,78 @@
 
 .hashtag-add-btn,
 .upload-memo-btn {
-    background-color: #007bff;
+    background-color: #a78ef6;
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
+    width: 120px;
 }
 
     .hashtag-add-btn:hover,
     .upload-memo-btn:hover {
-        background-color: #0056b3;
+        background-color: #9e7ae9;
     }
 
-.hashtag-line {
-    margin-bottom: 10px;
+.hashtag-input-block {
+    margin-top:6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 120px;
+    gap: 10px;
 }
 
+    .hashtag-input-block span {
+        font-size: 28px;
+        font-weight:bold;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: #a78ef6;
+    }
+
+    .hashtag-input-block button {
+        background-color: #a78ef6;
+        aspect-ratio: 1/1;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.1s ease;
+    }
+
+        .hashtag-input-block button:hover {
+            background-color: #956df6;
+        }
+
 .hashtag-input {
-    padding: 10px;
-    width: 100%;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
-    color: #333;
+    font-size: 27px;
+    color: #9e7ae9;
+    outline:none;
 }
+
+
+
+.image-input::file-selector-button {
+    border-radius: 4px;
+    padding: 0 16px;
+    height: 40px;
+    cursor: pointer;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+    margin-right: 16px;
+    transition: background-color 200ms;
+}
+
+    .image-input::file-selector-button:hover {
+        background-color: #f3f4f6;
+    }
+
+    .image-input::file-selector-button:active {
+        background-color: #e5e7eb;
+    }

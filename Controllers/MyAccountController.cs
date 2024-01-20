@@ -69,9 +69,10 @@ namespace SaYMemos.Controllers
             if (picture is null || picture.Length == 0)
                 return RenderProfilePictureInput("No image received");
 
-            string imageExtension = Path.GetExtension(picture.FileName).ToLowerInvariant();
-            if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(imageExtension))
-                return RenderProfilePictureInput($"Images with {imageExtension} extension are not supported. Please use .jpg, .jpeg or .png image");
+            (string error,Stream? imageStream) =await _imgStorage.TryConvertFormImageToStream(picture);
+            if (!string.IsNullOrEmpty(error))
+                return RenderProfilePictureInput(error);
+
 
             long? userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1 || userId == null)
@@ -83,19 +84,8 @@ namespace SaYMemos.Controllers
 
             await _db.UpdateLastLoginDateForUser((long)userId);
 
-            string fileName = user.Id.ToString() + ".jpg";
-            string savedImagePath;
+            string savedImagePath= _imgStorage.SaveProfilePicture(imageStream, user.Id);
 
-            if (imageExtension == ".png")
-            {
-                using var convertedStream = await _imgStorage.ConvertToJpgAsync(picture);
-                savedImagePath = _imgStorage.SaveProfilePicture(convertedStream, fileName);
-            }
-            else
-            {
-                using var inputStream = picture.OpenReadStream();
-                savedImagePath = _imgStorage.SaveProfilePicture(inputStream, fileName);
-            }
 
             await _db.SetProfilePictureForUser(user.Id, savedImagePath);
             return await RenderSettingsProfilePictureAsync();

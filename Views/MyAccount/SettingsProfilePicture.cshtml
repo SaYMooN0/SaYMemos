@@ -11,7 +11,8 @@
     }
     else
     {
-        <img src="@ProfilePicture" class="profile-picture" />
+        <img src="/@($"{ProfilePicture}?{DateTime.UtcNow.Ticks}")" class="profile-picture" />
+
     }
     <button hx-post="/myAccount/renderProfilePictureInput" hx-trigger="click" hx-target=".profile-picture-container" hx-swap="outerHTML">
         Choose new profile picture

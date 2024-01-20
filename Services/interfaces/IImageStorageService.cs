@@ -2,9 +2,12 @@
 {
     public interface IImageStorageService
     {
-        public string SaveProfilePicture(Stream stream, string fileName);
+        public string SaveProfilePicture(Stream stream, long userId);
+        public string SaveMemoImage(Stream stream, long authorId);
         public FileStream GetImage(string filePath);
         public string DefaultProfilePicture { get; }
-        public Task<MemoryStream> ConvertToJpgAsync(IFormFile picture);
+
+        public Task<Tuple<string, Stream?>> TryConvertFormImageToStream(IFormFile picture);
+
     }
 }
