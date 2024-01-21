@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Html
+@{
     ViewData["Title"] = "Account - Memo";
 }
 @model MyAccountViewModel
@@ -46,8 +47,23 @@
             {
                 <p class="no-links-label">You have not set any links</p>
             }
-        
+
         </div>
         <a asp-action="Index" asp-controller="newMemo" class="new-memo-button">Create New Memo</a>
     </div>
 </div>
+<div class="memos-container">
+    @foreach (var m in Model.memos)
+    {
+        @RenderMemo(m)
+    }
+</div>
+
+@{
+    HtmlString RenderMemo(OneMemoViewModel memo)
+    {
+        string content= Json.Serialize(memo).ToString();
+        return  new HtmlString($"<div class='memo-block'>{content}</div>");
+    }
+
+}

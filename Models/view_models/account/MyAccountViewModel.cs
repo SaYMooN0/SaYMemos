@@ -9,7 +9,8 @@ namespace SaYMemos.Models.view_models.account
        string fullName,
        string registrationDate,
        string aboutMe,
-       string hobbies
+       string hobbies,
+       OneMemoViewModel[] memos
        )
     {
         public static MyAccountViewModel FromUser(User user) =>
@@ -19,7 +20,8 @@ namespace SaYMemos.Models.view_models.account
                 user.FullName,
                 user.AdditionalInfo.RegistrationDate.ToString("D"),
                 user.AdditionalInfo.AboutMe,
-                user.AdditionalInfo.Hobbies);
+                user.AdditionalInfo.Hobbies, 
+                user.PostedMemos.Select(OneMemoViewModel.FromMemo).ToArray());
     }
 
 }

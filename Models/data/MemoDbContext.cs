@@ -9,6 +9,7 @@ public class MemoDbContext : DbContext
     public DbSet<UserLinks> UserLinks { get; private set; }
     public DbSet<UserAdditionalInfo> UserAdditionalInfos { get; private set; }
     public DbSet<UserToConfirm> UsersToConfirm { get; private set; }
+    public DbSet<MemoTag> MemoTags{ get; private set; }
 
     public DbSet<Memo> Memos { get; private set; }
 
@@ -27,6 +28,8 @@ public class MemoDbContext : DbContext
         modelBuilder.Entity<UserToConfirm>().HasKey(x => x.Id);
 
         modelBuilder.Entity<Memo>().HasKey(x => x.id);
+        modelBuilder.Entity<MemoTag>().HasKey(x => x.Id);
+
 
         modelBuilder.Entity<User>()
             .HasOne(u => u.AdditionalInfo)
@@ -47,6 +50,10 @@ public class MemoDbContext : DbContext
             .HasOne(m => m.Author)
             .WithMany(u => u.PostedMemos)
             .HasForeignKey(m => m.authorId);
+
+        modelBuilder.Entity<Memo>()
+            .HasMany(m => m.Tags)
+            .WithMany(t => t.Memos);
 
     }
 }

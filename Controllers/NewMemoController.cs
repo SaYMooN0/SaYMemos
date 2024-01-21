@@ -65,7 +65,7 @@ namespace SaYMemos.Controllers
 
                 savedImagePath = _imgStorage.SaveMemoImage(imageStream, user.Id);
             }
-            //Memo memo=Memo.CreateNew(userId, form.authorComment, savedImagePath, );
+            await _db.AddNewMemo(user.Id, form.authorComment, savedImagePath, form.hashtags);
 
             Response.Headers["HX-Redirect"] = "/MyAccount";
             return Ok();

@@ -14,6 +14,8 @@ namespace SaYMemos.Models.form_classes
         {
             if (string.IsNullOrWhiteSpace(authorComment))
                 return this with { error = "You cannot create memo without text" };
+            if (authorComment.Length>1023)
+                return this with { error = "The text is too long. Maximum number of characters is 1023. Characters count: "+ authorComment.Length };
             string imageExtension = Path.GetExtension(image.FileName).ToLowerInvariant();
             if (!new[] { ".jpg", ".jpeg", ".png" }.Contains(imageExtension))
                 return this with { error = $"Images with {imageExtension} extension are not supported. Please use .jpg, .jpeg or .png image" };

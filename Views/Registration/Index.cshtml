@@ -5,7 +5,7 @@
 
 
 
-<form class="registration-form" method="post" asp-action="SignUp" asp-controller="Registration" hx-swap="outerHTML">
+<form class="registration-form" method="post" asp-action="SignUp" asp-controller="Registration" hx-swap="outerHTML" hx-target="this">
     <p class="input-line">
         Email:
         <input type="text" name="Email" class="input" value="@Model.Email" />

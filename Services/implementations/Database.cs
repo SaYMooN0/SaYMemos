@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Services.interfaces;
@@ -126,5 +127,22 @@ namespace SaYMemos.Services.implementations
             
         }
 
+        public async Task AddNewMemo(long authorId, string authorComment, string? imagePath, List<string> tagValues)
+        {
+            var newMemo = Memo.CreateNew(authorId, authorComment, imagePath);
+
+            foreach (var value in tagValues)
+            {
+                var tag = await _context.MemoTags.FirstOrDefaultAsync(t => t.Value == value);
+                if (tag is null)
+                {
+                    tag = new MemoTag(0, value);
+                    _context.MemoTags.Add(tag);
+                }
+                newMemo.Tags.Add(tag);
+            }
+            _context.Memos.Add(newMemo);
+            await _context.SaveChangesAsync();
+        }
     }
 }

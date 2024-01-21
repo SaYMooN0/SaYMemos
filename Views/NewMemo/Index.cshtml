@@ -10,7 +10,7 @@
 
     <p class="add-label">Add image: </p>
     <input asp-for="image" type="file" class="image-input" accept=".jpg, .jpeg, .png" />
-
+    <p class="error-line">@Model.error</p>
     <div class="hashtags-container">
     </div>
 
