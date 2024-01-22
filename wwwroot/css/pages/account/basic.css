@@ -1,20 +1,20 @@
 ﻿.profile-container {
     display: flex;
+    justify-content: center;
+    flex-direction: column;
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(52, 12, 85, 0.2);
     overflow: hidden;
     margin-bottom: 20px;
-    padding: 20px 30px 20px 30px;
+    padding: 40px 3%;
 }
-
 .profile-picture {
     width: 320px;
     height: 400px;
     object-fit: cover;
     border-radius: 10px;
-    border: none !important;
-    outline: none !important;
+    flex-grow: 2;
 }
 
 .user-info {
@@ -26,27 +26,44 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
+
 .nickname {
     margin: 0;
     font-size: 32px;
     color: #333;
     font-weight: bold;
 }
-.additional-info {
-    padding: 15px;
-    font-size: 14px;
+
+.fullname {
+    font-size: 18px;
     color: #555;
+    font-weight: lighter;
 }
 
+.user-info-middle {
+    display: grid;
+    grid-template-columns:  1fr auto;
+    gap: 20vw;
+}
+
+.links-block {
+    margin-right:40px;
+}
+.no-links-label {
+    color: #190d32;
+    font-size: 18px;
+    font-weight:bold;
+}
 .link-type {
-    font-size: 16px;
+    font-size: 20px;
     color: #333;
     transition: color 0.3s ease;
 }
 
 .link {
+    font-size: 22px;
     color: #1a0dab;
     text-decoration: none;
     transition: color 0.3s ease;

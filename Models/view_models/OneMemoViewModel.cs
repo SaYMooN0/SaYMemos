@@ -11,7 +11,7 @@ namespace SaYMemos.Models.view_models
         string creationDate,
         string[] tags
         //string likesCount,
-        //CommentsViewModel[] comments
+        //guid commentsId
         )
     {
         public static OneMemoViewModel FromMemo(Memo memo) => new(

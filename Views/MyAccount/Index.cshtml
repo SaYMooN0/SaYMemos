@@ -1,15 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Html
+@model MyAccountViewModel
 @{
     ViewData["Title"] = "Account - Memo";
 }
-@model MyAccountViewModel
+
 <link rel="stylesheet" href="~/css/pages/account/my_account.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/pages/account/basic.css" asp-append-version="true" />
+
 <div class="profile-container">
-    <img src="@Model.profilePicturePath" class="profile-picture" />
-    <div class="user-info">
+    <div class="profile-info">
         <div class="user-info-top-content">
-            <span class="nickname">@Model.nickname</span>
+            <label class="nickname">
+                @Model.nickname
+                <br />
+                <label class="fullname">@Model.fullName</label>
+            </label>
             <div class="right-part">
                 <div class="settings-button" hx-post="/myAccount/settings" hx-trigger="click" hx-target=".profile-container" hx-swap="outerHTML">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -28,12 +33,13 @@
                 </div>
             </div>
         </div>
+        <div class="user-info-middle">
+            <img src="@Model.profilePicturePath" class="profile-picture" />
 
-        <div class="fullname">@Model.fullName</div>
-        <div class="additional-info">
-            @if (Model.links.Count >= 1)
-            {
-                <div class="links-block">
+
+            <div class="links-block">
+                @if (Model.links.Count >= 1)
+                {
                     @foreach (var l in Model.links)
                     {
                         <p class="link-type">
@@ -41,29 +47,20 @@
                             <a href="@l.Value" class="link">@l.Value</a>
                         </p>
                     }
-                </div>
-            }
-            else
-            {
-                <p class="no-links-label">You have not set any links</p>
-            }
-
+                }
+                else
+                {
+                    <label class="no-links-label">You have not set any links</label>
+                }
+        </div>
+      
         </div>
         <a asp-action="Index" asp-controller="newMemo" class="new-memo-button">Create New Memo</a>
     </div>
+    <div class="memos-container">
+        @foreach (var m in Model.memos)
+        {
+            <memotag memo-content="@m"/>
+        }
+    </div>
 </div>
-<div class="memos-container">
-    @foreach (var m in Model.memos)
-    {
-        @RenderMemo(m)
-    }
-</div>
-
-@{
-    HtmlString RenderMemo(OneMemoViewModel memo)
-    {
-        string content= Json.Serialize(memo).ToString();
-        return  new HtmlString($"<div class='memo-block'>{content}</div>");
-    }
-
-}
