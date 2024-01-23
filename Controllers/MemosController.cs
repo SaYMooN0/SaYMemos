@@ -10,6 +10,14 @@ namespace SaYMemos.Controllers
         {
             return View();
         }
+        public IActionResult WithTag(string tag)
+        {
+            return View(viewName:"Index");
+        }
+        public IActionResult WithTags(string[] tags)
+        {
+            return View(viewName: "Index");
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

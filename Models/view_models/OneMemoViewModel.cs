@@ -20,7 +20,7 @@ namespace SaYMemos.Models.view_models
             memo.Author.Nickname,
             memo.authorComment,
             memo.imagePath,
-            memo.creationTime.ToString("D"),
+            memo.creationTime.ToString("f"),
             memo.Tags.Select(i => i.Value).ToArray());
     }
 }

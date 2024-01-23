@@ -17,9 +17,8 @@
     flex-grow: 2;
 }
 
-.user-info {
-    padding: 10px 0 10px 20px;
-    flex-grow: 1;
+.profile-info {
+    display:grid;
 }
 
 .user-info-top-content {

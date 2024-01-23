@@ -5,42 +5,51 @@
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: #333; 
+    color: #333;
 }
 
-.memo-author {
+.memo-top-info {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
-    .memo-author img {
+    .memo-top-info img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         margin-right: 10px;
     }
 
-    .memo-author span {
-        color: #a78ef6; 
-        font-weight: bold;
+    .memo-top-info div {
+        display: flex;
+        align-items: center;
     }
+
+
+.memo-author {
+    color: #a78ef6;
+    font-weight: bold;
+}
 
 .memo-comment {
     margin-bottom: 10px;
-    font-size: 14px;
+    font-size: 17px;
 }
-.memo-image{
-    width:100%;
-    display:flex;
-    justify-content:center;
+
+.memo-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
-.memo-image img {
-    max-width: 60%;
-    max-height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
+
+    .memo-image img {
+        max-width: 60%;
+        max-height: auto;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
 
 .memo-date {
     font-size: 12px;
@@ -53,10 +62,16 @@
     gap: 5px;
 }
 
-    .memo-tags .tag {
-        background-color: #a78ef6; 
-        color: white; 
-        padding: 5px 10px;
-        border-radius: 15px;
-        font-size: 12px;
+.memo-tag {
+    background-color: #a78ef6;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    text-decoration:none;
+}
+    .memo-tag:hover {
+        background-color: #9e7ae9;
+        color: aliceblue;
+
     }

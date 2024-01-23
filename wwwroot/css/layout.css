@@ -19,7 +19,7 @@ body, html {
 }
 
 .main-content {
-    padding: 80px calc(60px + 2vw) 0 calc(60px + 2vw);
+    padding: 80px calc(11vw - 40px) 0 calc(11vw - 40px);
 }
 
 .header a {
