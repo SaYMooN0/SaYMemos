@@ -118,18 +118,18 @@ namespace SaYMemos.Services.implementations
         }
         public async Task UpdateUserSettings(AccountSettingsForm data, long id)
         {
-            User? user=await GetUserByIdAsync(id);
+            User? user = await GetUserByIdAsync(id);
             if (user is not null)
             {
                 user.UpdateFromAccountSettings(data);
                 await _context.SaveChangesAsync();
             }
-            
+
         }
 
-        public async Task AddNewMemo(long authorId, string authorComment, string? imagePath, List<string> tagValues)
+        public async Task AddNewMemo(long authorId, string authorComment, bool areCommentsAvailable, string? imagePath, List<string> tagValues)
         {
-            var newMemo = Memo.CreateNew(authorId, authorComment, imagePath);
+            var newMemo = Memo.CreateNew(authorId, authorComment, areCommentsAvailable, imagePath);
 
             foreach (var value in tagValues)
             {

@@ -1,9 +1,16 @@
-﻿namespace SaYMemos.Models.data.entities.comments
+﻿using SaYMemos.Models.data.entities.users;
+using System.ComponentModel.DataAnnotations;
+
+namespace SaYMemos.Models.data.entities.comments
 {
-    public class CommentRating
+    public record class CommentRating(
+        [property: Key] Guid id, 
+        Guid commentId,
+        long userId,
+        bool isUp)
     {
-        //comment
-        //user
-        //isUp
+        public virtual Comment Comment { get; set; }
+        public virtual User User { get; set; }
     }
+
 }

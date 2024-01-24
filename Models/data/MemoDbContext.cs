@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.data.entities.comments;
 
 public class MemoDbContext : DbContext
 {
@@ -9,14 +10,15 @@ public class MemoDbContext : DbContext
     public DbSet<UserLinks> UserLinks { get; private set; }
     public DbSet<UserAdditionalInfo> UserAdditionalInfos { get; private set; }
     public DbSet<UserToConfirm> UsersToConfirm { get; private set; }
-    public DbSet<MemoTag> MemoTags{ get; private set; }
+    public DbSet<MemoTag> MemoTags { get; private set; }
 
     public DbSet<Memo> Memos { get; private set; }
+    public DbSet<MemoLike> Likes { get; private set; }
+    public DbSet<Comment> Comments { get; private set; }
+    public DbSet<CommentRating> CommentRatings { get; private set; }
 
-    public MemoDbContext(DbContextOptions<MemoDbContext> options) : base(options)
-    {
-    }
-    
+    public MemoDbContext(DbContextOptions<MemoDbContext> options) : base(options) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -54,6 +56,38 @@ public class MemoDbContext : DbContext
         modelBuilder.Entity<Memo>()
             .HasMany(m => m.Tags)
             .WithMany(t => t.Memos);
+
+        modelBuilder.Entity<MemoLike>()
+               .HasOne(like => like.User)
+               .WithMany(user => user.Likes)
+               .HasForeignKey(like => like.userId);
+
+        modelBuilder.Entity<MemoLike>()
+            .HasOne(like => like.Memo)
+            .WithMany(memo => memo.Likes)
+            .HasForeignKey(like => like.memoGuid);
+
+
+
+
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Memo)
+            .WithMany(m => m.Comments)
+            .HasForeignKey(c => c.memoId);
+
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.ParentComment)
+            .WithMany(c => c.ChildComments)
+            .HasForeignKey(c => c.parentCommentId);
+        modelBuilder.Entity<CommentRating>()
+            .HasOne(cr => cr.Comment)
+            .WithMany(c => c.Ratings)
+            .HasForeignKey(cr => cr.commentId);
+
+        modelBuilder.Entity<CommentRating>()
+            .HasOne(cr => cr.User)
+            .WithMany()
+            .HasForeignKey(cr => cr.userId);
 
     }
 }

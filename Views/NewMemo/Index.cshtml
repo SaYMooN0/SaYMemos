@@ -2,14 +2,21 @@
 
 <link rel="stylesheet" href="~/css/pages/new_memo/new_memo.css" asp-append-version="true" />
 
-<form class="new-memo-form"
-      hx-post="/newMemo/SaveNewMemo" hx-redirect="/MyAccount" enctype="multipart/form-data">
+<form class="new-memo-form" enctype="multipart/form-data"
+      hx-post="/newMemo/SaveNewMemo" hx-redirect="/MyAccount" hx-target="this">
 
-    <p class="add-label">Add text: </p>
+    <p class="main-label">Add text: </p>
     <textarea asp-for="authorComment" name="authorComment" class="author-comment" required></textarea>
 
-    <p class="add-label">Add image: </p>
+    <p class="main-label">Add image: </p>
     <input asp-for="image" type="file" class="image-input" accept=".jpg, .jpeg, .png" />
+
+    <p class="main-label">
+        Are comments available:
+        <input asp-for="areCommentsAvailable" type="checkbox" class="default-input" accept=".jpg, .jpeg, .png" />
+    </p>
+    
+
     @if (Model is not null && Model.HasError())
     {
         <p class="error-line">@Model.error</p>

@@ -23,6 +23,7 @@ namespace SaYMemos.Models.data.entities.users
         public virtual LoginInfo LoginInfo { get;private set; }
         public virtual UserLinks UserLinks { get;private set; }
         public virtual List<Memo> PostedMemos { get; private set; } = new();
+        public virtual ICollection<MemoLike> Likes { get; set; } = new HashSet<MemoLike>();
         public static User CreateNewUser(string nickname, long loginInfoId, long additionalInfoId, long userLinksId)
         {
             return new User

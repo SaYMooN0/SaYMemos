@@ -4,7 +4,7 @@
 @model AuthorizationForm
 
 
-<form class="authorization-form" method="post" asp-action="LogIn" asp-controller="Authorization" hx-swap="outerHTML">
+<form class="authorization-form" hx-post="authorization/login" hx-swap="outerHTML" hx-target="this">
     <p class="input-line">
         Email:
         <input type="text" name="Email" class="input" value="@Model.Email" />

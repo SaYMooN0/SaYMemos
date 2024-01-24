@@ -5,6 +5,7 @@ namespace SaYMemos.Models.form_classes
         string authorComment,
         IFormFile? image,
         List<string> hashtags,
+        bool areCommentsAvailable,
         string error
         )
     {
