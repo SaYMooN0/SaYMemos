@@ -68,10 +68,42 @@
     padding: 5px 10px;
     border-radius: 15px;
     font-size: 14px;
-    text-decoration:none;
+    text-decoration: none;
 }
+
     .memo-tag:hover {
         background-color: #9e7ae9;
         color: aliceblue;
-
     }
+
+.memo-interactions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .memo-interactions span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 23px;
+    }
+
+    .memo-interactions svg {
+        height: 30px;
+        aspect-ratio: 1/1;
+        fill: currentColor;
+        cursor:pointer;
+    }
+
+
+.memo-icon {
+    color: #888;
+}
+    .memo-icon:hover {
+        color: #9e7ae9;
+        transform:scale(1.05)
+    }
+.memo-like-pressed {
+    color: #9e7ae9;
+}

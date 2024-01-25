@@ -1,0 +1,7 @@
+﻿@model string[]
+<div class="memo-tags">
+    @foreach (string tag in Model)
+    {
+        <memo-tag tagName="@tag" />
+    }
+</div>

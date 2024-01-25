@@ -19,5 +19,6 @@ namespace SaYMemos.Services.interfaces
         public Task SetProfilePictureForUser(long id, string imagePath);
         public Task UpdateUserSettings(AccountSettingsForm data, long id);
         public Task AddNewMemo(long authorId, string authorComment,bool areCommentsAvailable, string imagePath, List<string> tagValues);
+        public Task<bool> ChangeLikeState(long userId,Guid memoId);
     }
 }

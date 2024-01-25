@@ -101,6 +101,8 @@ namespace SaYMemos.Services.implementations
         }
         public async Task<User?> GetUserByIdAsync(long id) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        public async Task<Memo?> GetMemoByIdAsync(Guid id) =>
+            await _context.Memos.FirstOrDefaultAsync(m => m.id == id);
         public async Task<string?> GetProfilePictureById(long id) =>
             await _context.Users
             .Where(u => u.Id == id)
@@ -144,5 +146,37 @@ namespace SaYMemos.Services.implementations
             _context.Memos.Add(newMemo);
             await _context.SaveChangesAsync();
         }
+        public async Task<bool> ChangeLikeState(long userId, Guid memoId)
+        {
+            var memo = await GetMemoByIdAsync(memoId);
+            User u = await GetUserByIdAsync(userId);
+            if (memo is null)
+                return false;
+
+            var like = await _context.Likes.FirstOrDefaultAsync(l => l.userId == userId && l.memoGuid == memoId);
+
+            if (like is not null)
+            {
+                _context.Likes.Remove(like);
+
+                u.Likes.Remove(like);
+                memo.Likes.Remove(like);
+                await _context.SaveChangesAsync();
+                
+                return false;
+            }
+            else
+            {
+                var newLike = MemoLike.CreateNew(memoId, userId);
+
+                _context.Likes.Add(newLike);
+                u.Likes.Add(newLike);
+                memo.Likes.Add(newLike);
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+        }
+
     }
 }

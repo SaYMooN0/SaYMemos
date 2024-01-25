@@ -3,6 +3,7 @@
 namespace SaYMemos.Models.view_models.memos
 {
     public record OneMemoViewModel(
+        Guid id,
         long authorId,
         string authorProfilePicture,
         string authorNickName,
@@ -19,6 +20,7 @@ namespace SaYMemos.Models.view_models.memos
         )
     {
         public static OneMemoViewModel FromMemo(Memo memo, bool isLiked) => new(
+            memo.id,
             memo.Author.Id,
             memo.Author.ProfilePicturePath,
             memo.Author.Nickname,

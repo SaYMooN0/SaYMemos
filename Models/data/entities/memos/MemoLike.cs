@@ -12,5 +12,7 @@ namespace SaYMemos.Models.data.entities.memos
     {
         virtual public User User { get; init; }
         virtual public Memo Memo{ get; init; }
+        public static MemoLike CreateNew(Guid memoId, long userId) =>
+            new(Guid.NewGuid(), userId, memoId, DateTime.UtcNow);
     }
 }
