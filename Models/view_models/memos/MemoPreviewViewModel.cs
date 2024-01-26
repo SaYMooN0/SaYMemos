@@ -2,7 +2,7 @@
 
 namespace SaYMemos.Models.view_models.memos
 {
-    public record OneMemoViewModel(
+    public record MemoPreviewViewModel(
         Guid id,
         long authorId,
         string authorProfilePicture,
@@ -10,16 +10,13 @@ namespace SaYMemos.Models.view_models.memos
         string authorComment,
         string? imagePath,
         string creationDate,
-        string[] tags,
-
-
         bool isLiked,
         int likesCount,
         bool areCommentsAvaliable,
-        CommentViewModel[] comments
+        bool isViewerAuthorized
         )
     {
-        public static OneMemoViewModel FromMemo(Memo memo, bool isLiked) => new(
+        public static MemoPreviewViewModel FromMemo(Memo memo, bool isLiked, bool isAuthorized) => new(
             memo.id,
             memo.Author.Id,
             memo.Author.ProfilePicturePath,
@@ -27,10 +24,9 @@ namespace SaYMemos.Models.view_models.memos
             memo.authorComment,
             memo.imagePath,
             memo.creationTime.ToString("f"),
-            memo.Tags.Select(i => i.Value).ToArray(),
             isLiked,
             memo.Likes.Count,
             memo.areCommentsAvailable,
-            memo.Comments.Select(CommentViewModel.FromComment).ToArray() ?? Array.Empty<CommentViewModel>() );
+            isAuthorized);
     }
 }

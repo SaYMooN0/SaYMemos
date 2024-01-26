@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/pages/memos/basic.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/pages/memos/preview.css" asp-append-version="true" />
     <script src="https://unpkg.com/htmx.org"></script>
+    <script>
+        document.addEventListener('htmx:afterSwap', function (event) {
+            if (event.target.id === 'memo-dialog') {
+                document.getElementById('memo-dialog').showModal();
+            }
+        });
+        function closeMemoFullInfo() {
+            document.getElementById('memo-dialog').close();
+        }
+    </script>
 </head>
 <body>
     <header class="header">
@@ -21,6 +31,10 @@
     <div class="main-content">
         @RenderBody()
     </div>
+    <dialog id="memo-dialog">
+
+    </dialog>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

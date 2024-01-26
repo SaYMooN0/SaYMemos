@@ -82,6 +82,9 @@
     }
 
 .memos-container {
-    display: block;
+    margin-top:50px;
     width: 100%;
+    display:flex;
+    align-items:center;
+    flex-direction:column;
 }

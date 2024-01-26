@@ -43,9 +43,19 @@ namespace SaYMemos.Controllers
 
 
         [HttpPost]
-        public IActionResult LeaveComment(string memoId, string comment)
+        public IActionResult LeaveComment(string memoId, string memoComment)
         {
-            return View();
+            
+            if (!Guid.TryParse(memoId, out Guid parsedMemoId))
+                return BadRequest("Invalid Memo ID format.");
+
+            //saving comment
+            return PartialView(viewName:"CommentSection");
+        }
+        [HttpPost]
+        public IActionResult RenderAllMemoInfo(Guid memoId)
+        {
+            return PartialView(viewName: "FullMemoInfo");
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿.memo-add-comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+}
+
+    .memo-add-comment input[type='text'] {
+        flex: 1;
+        border: 1px solid #ccc;
+        border-radius: 18px;
+        padding: 8px 16px;
+        margin-right: 8px;
+        font-size: 14px;
+    }
+
+    .memo-add-comment button {
+        background-color: #a78ef6;
+        border: none;
+        border-radius: 18px;
+        color: white;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+        .memo-add-comment button:hover {
+            background-color: #9e7ae9;
+        }

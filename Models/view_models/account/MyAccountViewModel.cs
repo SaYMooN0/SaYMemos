@@ -8,7 +8,7 @@ namespace SaYMemos.Models.view_models.account
        string profilePicturePath,
        Dictionary<string, string> links,
        string fullName,
-       OneMemoViewModel[] memos
+       MemoPreviewViewModel[] memos
        )
     {
         public static MyAccountViewModel FromUser(User user)
@@ -21,7 +21,7 @@ namespace SaYMemos.Models.view_models.account
                 user.UserLinks.ParseToNonEmptyDictionary(),
                 user.FullName,
                 user.PostedMemos
-                    .Select(memo => OneMemoViewModel.FromMemo(memo, likedMemoIds.Contains(memo.id)))
+                    .Select(memo => MemoPreviewViewModel.FromMemo(memo, likedMemoIds.Contains(memo.id), true))
                     .OrderByDescending(memo => memo.creationDate)
                     .ToArray()
             );
