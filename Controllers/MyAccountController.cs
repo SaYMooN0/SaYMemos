@@ -26,7 +26,7 @@ namespace SaYMemos.Controllers
             long? userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
                 return Unauthorized();
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null)
             {
                Response.RemoveUserIdCookies();
@@ -40,7 +40,7 @@ namespace SaYMemos.Controllers
             long? userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
                 return Unauthorized();
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null)
                 return Unauthorized();
 
@@ -78,7 +78,7 @@ namespace SaYMemos.Controllers
             if (userId == -1 || userId == null)
                 return Unauthorized();
 
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null)
                 return Unauthorized();
 
@@ -103,7 +103,7 @@ namespace SaYMemos.Controllers
             if (data.AnyErrors())
                 return PartialView(viewName: "Settings", model: data);
 
-            User? user = await _db.GetUserByIdAsync(id);
+            User? user = await _db.GetUserById(id);
             if (user is null)
                 return Unauthorized();
 

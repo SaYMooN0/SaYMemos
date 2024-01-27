@@ -12,6 +12,7 @@ namespace SaYMemos.Models.view_models.memos
         string creationDate,
         bool isLiked,
         int likesCount,
+        int commentsCount,
         bool areCommentsAvaliable,
         bool isViewerAuthorized
         )
@@ -26,6 +27,7 @@ namespace SaYMemos.Models.view_models.memos
             memo.creationTime.ToString("f"),
             isLiked,
             memo.Likes.Count,
+            memo.Comments.Count,
             memo.areCommentsAvailable,
             isAuthorized);
     }

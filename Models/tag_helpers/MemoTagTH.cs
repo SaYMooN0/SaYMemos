@@ -2,7 +2,7 @@
 namespace SaYMemos.Models.tag_helpers
 {
     [HtmlTargetElement("memo-tag")]
-    public class MemoTag : TagHelper
+    public class MemoTagTH : TagHelper
     {
         public string tagName { get; set; }
         public override void Process(TagHelperContext context, TagHelperOutput output)

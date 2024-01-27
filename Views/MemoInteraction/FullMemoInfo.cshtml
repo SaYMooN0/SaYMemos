@@ -1,8 +1,10 @@
-﻿
+﻿@model MemoFullInfoViewModel
 
 
 
 <button onclick="closeMemoFullInfo()">close </button>
+
+<p>@Json.Serialize(Model)</p>
 
 @*render tags and more tags button*@
 

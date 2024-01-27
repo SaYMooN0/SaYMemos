@@ -28,7 +28,7 @@ namespace SaYMemos.Controllers
             if (userId == -1 || userId == null)
                 return Unauthorized();
 
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null)
                 return Unauthorized();
 
@@ -44,7 +44,7 @@ namespace SaYMemos.Controllers
             if (userId == -1 || userId == null)
                 return Unauthorized();
 
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null)
                 return Unauthorized();
 

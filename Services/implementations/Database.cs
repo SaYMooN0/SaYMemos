@@ -99,9 +99,9 @@ namespace SaYMemos.Services.implementations
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<User?> GetUserByIdAsync(long id) =>
+        public async Task<User?> GetUserById(long id) =>
             await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-        public async Task<Memo?> GetMemoByIdAsync(Guid id) =>
+        public async Task<Memo?> GetMemoById(Guid id) =>
             await _context.Memos.FirstOrDefaultAsync(m => m.id == id);
         public async Task<string?> GetProfilePictureById(long id) =>
             await _context.Users
@@ -120,7 +120,7 @@ namespace SaYMemos.Services.implementations
         }
         public async Task UpdateUserSettings(AccountSettingsForm data, long id)
         {
-            User? user = await GetUserByIdAsync(id);
+            User? user = await GetUserById(id);
             if (user is not null)
             {
                 user.UpdateFromAccountSettings(data);
@@ -148,8 +148,8 @@ namespace SaYMemos.Services.implementations
         }
         public async Task<bool> ChangeLikeState(long userId, Guid memoId)
         {
-            var memo = await GetMemoByIdAsync(memoId);
-            User u = await GetUserByIdAsync(userId);
+            var memo = await GetMemoById(memoId);
+            User u = await GetUserById(userId);
             if (memo is null)
                 return false;
 

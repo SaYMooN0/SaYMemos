@@ -2,14 +2,23 @@
 namespace SaYMemos.Models.view_models.memos
 {
     public record class CommentViewModel(
-        long authorId,
-        string authorProfilePicture,
+        bool isParent,
         string text,
-        int rating,
-        CommentViewModel[] childComments
+        int totalRating,
+        CommentViewModel[] childComments,
+        long authorId,
+        string authorNickname,
+        string authorProfilePicture
         )
     {
         public static CommentViewModel FromComment(Comment comment) =>
-            new(comment.authorId, comment.Author.ProfilePicturePath, comment.text,comment.CountRating(), comment.ChildComments.Select(FromComment).ToArray() );
+            new(
+                comment.parentCommentId is null,
+                comment.text,
+                comment.CountRating(),
+                comment.ChildComments.Select(FromComment).ToArray(),
+                comment.authorId,
+                comment.Author.Nickname,
+                comment.Author.ProfilePicturePath);
     }
 }

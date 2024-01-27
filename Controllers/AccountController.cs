@@ -28,7 +28,7 @@ namespace SaYMemos.Controllers
                 return RedirectToAction(actionName: "Index", controllerName: "MyAccount");
             }
 
-            User? user = await _db.GetUserByIdAsync(userId.Value);
+            User? user = await _db.GetUserById(userId.Value);
             if (user is null)
                 return this.UnknownUser();
 
@@ -41,7 +41,7 @@ namespace SaYMemos.Controllers
         {
             if (userId is null)
                 return this.UnknownUser();
-            User? user = await _db.GetUserByIdAsync((long)userId);
+            User? user = await _db.GetUserById((long)userId);
             if (user is null || user.IsAccountPrivate)
                 return this.UnknownUser();
             return PartialView(viewName: "AllUserInfo", AllUserInfoViewModel.FromUser(user));

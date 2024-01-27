@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Controllers.Helpers;
+using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.view_models.memos;
 using SaYMemos.Services.interfaces;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
@@ -25,7 +27,7 @@ namespace SaYMemos.Controllers
             if (userId == -1)
                 return Unauthorized();
 
-            User? user = await _db.GetUserByIdAsync(userId);
+            User? user = await _db.GetUserById(userId);
             if (user is null)
                 return Unauthorized();
 
@@ -53,9 +55,25 @@ namespace SaYMemos.Controllers
             return PartialView(viewName:"CommentSection");
         }
         [HttpPost]
-        public IActionResult RenderAllMemoInfo(Guid memoId)
+        public async Task<IActionResult> RenderAllMemoInfo(string memoId)
         {
-            return PartialView(viewName: "FullMemoInfo");
+            if (!Guid.TryParse(memoId, out Guid parsedMemoId))
+                return BadRequest("Invalid Memo ID format.");
+
+            Memo? memo = await _db.GetMemoById(parsedMemoId);
+            if (memo is null)
+                return BadRequest("Unknown Memo ID format.");
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return PartialView(viewName: "FullMemoInfo", model: MemoFullInfoViewModel.FromMemoForUnauthorized(memo));
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return PartialView(viewName: "FullMemoInfo", model: MemoFullInfoViewModel.FromMemoForUnauthorized(memo));
+
+            await _db.UpdateLastLoginDateForUser(userId);
+            return PartialView(viewName: "FullMemoInfo", model: MemoFullInfoViewModel.FromMemoForUser(memo, user));
         }
     }
 }
