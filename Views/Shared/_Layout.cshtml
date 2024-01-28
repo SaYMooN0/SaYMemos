@@ -7,16 +7,7 @@
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pages/memos/preview.css" asp-append-version="true" />
     <script src="https://unpkg.com/htmx.org"></script>
-    <script>
-        document.addEventListener('htmx:afterSwap', function (event) {
-            if (event.target.id === 'memo-dialog') {
-                document.getElementById('memo-dialog').showModal();
-            }
-        });
-        function closeMemoFullInfo() {
-            document.getElementById('memo-dialog').close();
-        }
-    </script>
+   
 </head>
 <body>
     <header class="header">
@@ -36,5 +27,17 @@
     </dialog>
     @await RenderSectionAsync("Scripts", required: false)
 
+
+    <script>
+        var memoDialog = document.getElementById('memo-dialog');
+        memoDialog.addEventListener('htmx:afterSwap', function (event) {
+            if (event.target.id === 'memo-dialog') {
+                memoDialog.showModal();
+            }
+        });
+        function closeMemoFullInfo() {
+            document.getElementById('memo-dialog').close();
+        }
+    </script>
 </body>
 </html>

@@ -23,21 +23,19 @@ namespace SaYMemos.Controllers
         [HttpPost]
         public async Task<IActionResult> LikePressed(string memoId)
         {
-            long userId = this.GetUserId(_enc.DecryptId);
-            if (userId == -1)
-                return Unauthorized();
-
-            User? user = await _db.GetUserById(userId);
-            if (user is null)
-                return Unauthorized();
-
-            await _db.UpdateLastLoginDateForUser(userId);
-
 
             if (!Guid.TryParse(memoId, out Guid parsedMemoId))
                 return BadRequest("Invalid Memo ID format.");
 
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
 
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            await _db.UpdateLastLoginDateForUser(userId);
 
             bool isLikedAfter = await _db.ChangeLikeState(userId, parsedMemoId);
             return PartialView(viewName: isLikedAfter ? "LikePressedIcon" : "LikeIcon", memoId);

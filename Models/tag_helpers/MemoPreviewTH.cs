@@ -4,7 +4,7 @@ using System.Text;
 namespace SaYMemos.Models.tag_helpers
 {
     [HtmlTargetElement("memo")]
-    public class MemoTH : TagHelper
+    public class MemoPreviewTH : TagHelper
     {
         public MemoPreviewViewModel MemoContent { get; set; }
         public bool IsAuthorized { get; set; }
@@ -45,9 +45,9 @@ namespace SaYMemos.Models.tag_helpers
             var interactionsBuilder = new StringBuilder("<div class='memo-interactions'>");
 
             if (MemoContent.isLiked)
-                interactionsBuilder.Append($"<span hx-trigger='click' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='memo-like-pressed' hx-vals='{{\"memoId\": \"{MemoContent.id}\"}}' >{LikeIconPressed}</span>");
+                interactionsBuilder.Append($"<span hx-trigger='click' hx-redirect='/authorization' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='memo-like-pressed' hx-vals='{{\"memoId\": \"{MemoContent.id}\"}}' >{LikeIconPressed}</span>");
             else
-                interactionsBuilder.Append($"<span hx-trigger='click' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='memo-icon' hx-vals='{{\"memoId\": \"{MemoContent.id}\"}}' >{LikeIcon}</span>");
+                interactionsBuilder.Append($"<span hx-trigger='click' hx-redirect='/authorization' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='memo-icon' hx-vals='{{\"memoId\": \"{MemoContent.id}\"}}' >{LikeIcon}</span>");
 
             if (MemoContent.areCommentsAvaliable)
                 interactionsBuilder.Append($"<span class='memo-icon' {StringExtensions.OpenMemoDialogOnClick(MemoContent.id)} >{CommentIcon}</span>");

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Controllers.Helpers;
-using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Services.interfaces;

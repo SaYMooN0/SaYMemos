@@ -5,31 +5,42 @@
 
 <link rel="stylesheet" href="~/css/pages/account/public.css" asp-append-version="true" />
 <link rel="stylesheet" href="~/css/pages/account/basic.css" asp-append-version="true" />
+
 <div class="profile-container">
-    <img src="@Model.profilePicturePath" class="profile-picture" />
-    <div class="user-info">
+    <div class="profile-info">
         <div class="user-info-top-content">
-            <label class="nickname">@Model.nickname</label>
+            <label class="nickname">
+                @Model.nickname
+                <br />
+                <label class="fullname">@Model.fullName</label>
+            </label>
             <label class="last-login">@Model.lastTimeOnline</label>
         </div>
-        <div class="fullname">@Model.fullName</div>
-
-        @if (Model.links is not null && Model.links.Count > 1)
-        {
+        <div class="user-info-middle">
+            <img src="@Model.profilePicturePath" class="profile-picture" />
             <div class="links-block">
-                @foreach (var l in Model.links)
+                @if (Model.links.Count >= 1)
                 {
-                    <p class="link-type">
-                        @l.Key:
-                        <a href="@l.Value" class="link">@l.Value</a>
-                    </p>
+                    @foreach (var l in Model.links)
+                    {
+                        <p class="link-type">
+                            @l.Key:
+                            <a href="@l.Value" class="link">@l.Value</a>
+                        </p>
+                    }
                 }
             </div>
-        }
+        </div>
         <button class="additional-info-button" hx-trigger="click" hx-target=".profile-container" hx-swap="outerHTML"
                 hx-post="account/renderAdditionalInfo" hx-vals='{"userId": "@Model.userId"}'
                 hx-redirect="/account/unknownAccount">
-            Show More Info
+                Show More Info
         </button>
+    </div>
+    <div class="memos-container">
+        @foreach (var m in Model.memos)
+        {
+            <memo memo-content="@m" is-authorized="@Model.isViewerAuthorized" />
+        }
     </div>
 </div>

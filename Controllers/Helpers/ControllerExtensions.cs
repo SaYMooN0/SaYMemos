@@ -27,7 +27,12 @@ namespace SaYMemos.Controllers.Helpers
         public static IActionResult UnknownUser(this Controller controller)
         {
             controller.Response.Headers["HX-Redirect"] = "/account/unknownAccount";
-            return controller.RedirectToAction(actionName: "UnknownAccount", controllerName: "Account");
+            return controller.Ok();
+        }
+        public static IActionResult HxUnauthorized(this Controller controller)
+        {
+            controller.Response.Headers["HX-Redirect"] = "/authorization";
+            return controller.Ok();
         }
 
     }

@@ -1,11 +1,98 @@
-﻿.memo-add-comment {
+﻿.memo-fu-container {
+    display: flex;
+    max-width: 1100px;
+    margin: auto;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.memo-fu-main {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.memo-fu-sidebar {
+    width: 30%;
+    border-left: 1px solid #dbdbdb;
+    display: flex;
+    flex-direction: column;
+}
+
+.memo-fu-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.memo-fu-image {
+    width: 100%;
+    overflow: hidden;
+}
+
+    .memo-fu-image img {
+        width: 100%;
+        display: block;
+    }
+
+.memo-fu-content {
+    padding: 16px;
+}
+
+.memo-fu-footer {
+    padding: 16px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.memo-fu-comments {
+    padding: 16px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.memo-fu-add-comment {
+    display: flex;
+    padding: 16px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.comment-input {
+    flex: 1;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    padding: 8px;
+    margin-right: 8px;
+}
+
+.comment-button {
+    border: none;
+    background-color: #3897f0;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+
+.memo-fu-add-comment {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px;
 }
 
-    .memo-add-comment input[type='text'] {
+    .memo-fu-add-comment input[type='text'] {
         flex: 1;
         border: 1px solid #ccc;
         border-radius: 18px;
@@ -14,7 +101,7 @@
         font-size: 14px;
     }
 
-    .memo-add-comment button {
+    .memo-fu-add-comment button {
         background-color: #a78ef6;
         border: none;
         border-radius: 18px;
@@ -24,6 +111,6 @@
         font-size: 17px;
     }
 
-        .memo-add-comment button:hover {
+        .memo-fu-add-comment button:hover {
             background-color: #9e7ae9;
         }

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Services.interfaces;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
-using SaYMemos.Controllers.Helpers;
-using System.Net;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.view_models.account;
+using SaYMemos.Controllers.Helpers;
 
 namespace SaYMemos.Controllers
 {
@@ -19,12 +18,15 @@ namespace SaYMemos.Controllers
             _logger = logger;
             _enc = encryptor;
         }
-        public async Task<IActionResult> IndexAsync(int? userId = null)
+        public async Task<IActionResult> Index(int? userId = null)
         {
+            long viewerId = this.GetUserId(_enc.DecryptId);
+
+
             if (userId is null)
             {
-                if (this.GetUserId(_enc.DecryptId) == -1)
-                    return Unauthorized();
+                if (viewerId == -1)
+                    return RedirectToAction(actionName: "Index", controllerName: "Authorization");
                 return RedirectToAction(actionName: "Index", controllerName: "MyAccount");
             }
 
@@ -32,12 +34,17 @@ namespace SaYMemos.Controllers
             if (user is null)
                 return this.UnknownUser();
 
-            return user.IsAccountPrivate ? PrivateAccountView(user) : PublicAccountView(user);
+            if(userId==viewerId)
+                return RedirectToAction(actionName: "Index", controllerName: "MyAccount");
+
+            User? viewer = await _db.GetUserById(viewerId);
+
+            return user.IsAccountPrivate ? PrivateAccountView(user) : PublicAccountView(user, viewer);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> RenderAdditionalInfoAsync(long? userId = null)
+        public async Task<IActionResult> RenderAdditionalInfo(long? userId = null)
         {
             if (userId is null)
                 return this.UnknownUser();
@@ -48,8 +55,8 @@ namespace SaYMemos.Controllers
         }
         private IActionResult PrivateAccountView(User user) =>
             View(viewName: "PrivateAccount", PrivateAccountViewModel.FromUser(user));
-        private IActionResult PublicAccountView(User user) =>
-            View(viewName: "PublicAccount", PublicAccountViewModel.FromUser(user));
+        private IActionResult PublicAccountView(User user, User? viewer) =>
+            View(viewName: "PublicAccount", PublicAccountViewModel.FromUser(user, viewer));
 
         public IActionResult UnknownAccount() => View();
     }

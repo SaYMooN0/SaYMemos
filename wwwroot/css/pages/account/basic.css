@@ -72,3 +72,10 @@
         color: #2a5db0;
         text-decoration: underline;
     }
+.memos-container {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
