@@ -1,16 +1,19 @@
 ﻿@model MemoFullInfoViewModel
 
 
-<link rel="stylesheet" href="~/css/pages/memos/fullinfo.css" asp-append-version="true" />
 
-<button onclick="closeMemoFullInfo()">close </button>
+<div class="memo-top-border">
+    <button class="close-button" onclick="closeMemoFullInfo()">
+        <span>&times;</span>
+    </button>
+</div>
 
 <div class="memo-fu-container">
     <div class="memo-fu-main">
-        <div class="memo-fu-header">
-            <img src="@Model.authorProfilePicture" alt="Profile Picture" class="profile-picture">
+        <a href='/account?userId=@Model.authorId' class="memo-fu-header">
+            <img src='@Model.authorProfilePicture' alt='Profile Picture' />
             <span>@Model.authorNickName</span>
-        </div>
+        </a>
 
         @if (!string.IsNullOrEmpty(Model.imagePath))
         {
@@ -24,15 +27,26 @@
         </div>
 
         <div class="memo-fu-footer">
-            <span class="likes">Like @Model.likesCount Likes</span>
+            <span class="likes">@Model.likesCount Likes</span>
+           
         </div>
 
-        @* tags*@
-    </div>
+        <div class="memo-tags">
+            @foreach (string tag in Model.tags)
+            {
+                <memo-tag tagName="@tag"></memo-tag>
+            }
+            @if (Model.tags.Length == 10)
+            {
+                <a asp-action="RenderTags" asp-controller="MemoInterection" asp-route-memoId="@Model.id" hx-swap="OuterHTML" hx-target="this" >See all tags...</a>
+            }
+        </div>
 
-    <div class="memo-fu-sidebar">
-        @if (Model.areCommentsAvaliable)
-        {
+    </div>
+    @if (Model.areCommentsAvaliable)
+    {
+        <div class="memo-fu-sidebar">
+
             <div class="memo-fu-comments">
                 <span>Comments @Model.comments.Length</span>
                 @foreach (var comment in Model.comments)
@@ -42,15 +56,14 @@
                     </div>
                 }
             </div>
-        }
-
-        @if (Model.isViewerAuthorized)
-        {
-            <form class='memo-fu-add-comment' hx-post='memo-fuInteraction/LeaveComment'>
-                <input type='hidden' value='@Model.id' name='memo-fuId' />
-                <input type='text' placeholder='Add a comment...' name='memo-fuComment' />
-                <button type='submit'>Post</button>
-            </form>
-        }
-    </div>
+            @if (Model.isViewerAuthorized)
+            {
+                <form class='memo-fu-add-comment' hx-post='memo-fuInteraction/LeaveComment'>
+                    <input type='hidden' value='@Model.id' name='memo-fuId' />
+                    <input type='text' placeholder='Add a comment...' name='memo-fuComment' />
+                    <button type='submit'>Post</button>
+                </form>
+            }
+        </div>
+    }
 </div>

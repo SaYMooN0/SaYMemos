@@ -33,7 +33,7 @@ namespace SaYMemos.Models.view_models.memos
                 memo.Likes.Count,
                 memo.areCommentsAvailable,
                 memo.areCommentsAvailable ? memo.Comments.Select(CommentViewModel.FromComment).ToArray() : Array.Empty<CommentViewModel>(),
-                memo.Tags.Select(t => t.Value).ToArray()
+                memo.Tags.Take(10).Select(t => t.Value).ToArray()
                 );
         public static MemoFullInfoViewModel FromMemoForUser(Memo memo, User user) =>
             new(
@@ -49,7 +49,7 @@ namespace SaYMemos.Models.view_models.memos
                 memo.Likes.Count,
                 memo.areCommentsAvailable,
                 memo.areCommentsAvailable ? memo.Comments.Select(CommentViewModel.FromComment).ToArray() : Array.Empty<CommentViewModel>(),
-                memo.Tags.Select(t => t.Value).ToArray()
+                memo.Tags.Take(10).Select(t => t.Value).ToArray()
                 );
     }
 

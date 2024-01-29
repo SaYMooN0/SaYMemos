@@ -1,22 +1,72 @@
-﻿.memo-fu-container {
-    display: flex;
-    max-width: 1100px;
+﻿
+#memo-dialog {
+    width: 1200px;
+    min-height: 500px;
+    position: absolute;
     margin: auto;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 0;
+    border-radius: 18px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.memo-top-border {
+    margin-bottom: 10px;
+    height: 50px;
+    width: 100%;
+    background-color: #c8aefc;
+    box-shadow: 0 2px 2px rgba(12, 12, 44, 0.1);
+    position: relative;
+}
+
+.close-button {
+    outline: none;
+    color: #f7f5f7;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    border: none;
+    background: transparent;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+    .close-button:hover {
+        color: #e9e2eb;
+    }
+
+.memo-fu-container {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
     overflow: hidden;
     margin-bottom: 20px;
+    padding: 0 40px;
 }
 
 .memo-fu-main {
-    width: 70%;
     display: flex;
     flex-direction: column;
+    min-width: 500px;
 }
 
+.memo-fu-image {
+    width: 100%;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .memo-fu-image img {
+        overflow: hidden;
+        width: 80%;
+        height: auto;
+    }
+
 .memo-fu-sidebar {
-    width: 30%;
-    border-left: 1px solid #dbdbdb;
     display: flex;
     flex-direction: column;
 }
@@ -24,24 +74,20 @@
 .memo-fu-header {
     display: flex;
     align-items: center;
-    padding: 16px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-.profile-picture {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
+    .memo-fu-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
 
-.memo-fu-image {
-    width: 100%;
-    overflow: hidden;
-}
-
-    .memo-fu-image img {
-        width: 100%;
-        display: block;
+    .memo-fu-header span {
+        color: #a78ef6;
+        font-weight: bold;
     }
 
 .memo-fu-content {
@@ -53,27 +99,25 @@
     border-top: 1px solid #dbdbdb;
 }
 
-.memo-fu-comments {
-    padding: 16px;
-    border-top: 1px solid #dbdbdb;
+.memo-tag {
+    background-color: #a78ef6;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    text-decoration: none;
 }
 
-.comment {
-    margin-bottom: 10px;
-}
+    .memo-tag:hover {
+        background-color: #9e7ae9;
+        color: aliceblue;
+    }
+
 
 .memo-fu-add-comment {
     display: flex;
     padding: 16px;
     border-top: 1px solid #dbdbdb;
-}
-
-.comment-input {
-    flex: 1;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-    padding: 8px;
-    margin-right: 8px;
 }
 
 .comment-button {
@@ -84,33 +128,25 @@
     border-radius: 4px;
 }
 
-
-.memo-fu-add-comment {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
+.memo-fu-add-comment input[type='text'] {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 18px;
+    padding: 8px 16px;
+    margin-right: 8px;
+    font-size: 14px;
 }
 
-    .memo-fu-add-comment input[type='text'] {
-        flex: 1;
-        border: 1px solid #ccc;
-        border-radius: 18px;
-        padding: 8px 16px;
-        margin-right: 8px;
-        font-size: 14px;
-    }
+.memo-fu-add-comment button {
+    background-color: #a78ef6;
+    border: none;
+    border-radius: 18px;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 17px;
+}
 
-    .memo-fu-add-comment button {
-        background-color: #a78ef6;
-        border: none;
-        border-radius: 18px;
-        color: white;
-        padding: 8px 16px;
-        cursor: pointer;
-        font-size: 17px;
+    .memo-fu-add-comment button:hover {
+        background-color: #9e7ae9;
     }
-
-        .memo-fu-add-comment button:hover {
-            background-color: #9e7ae9;
-        }

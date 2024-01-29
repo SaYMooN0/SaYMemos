@@ -60,26 +60,6 @@
     color: #888;
 }
 
-.memo-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.memo-tag {
-    background-color: #a78ef6;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-    .memo-tag:hover {
-        background-color: #9e7ae9;
-        color: aliceblue;
-    }
-
 .memo-interactions {
     display: flex;
     align-items: center;

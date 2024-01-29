@@ -38,7 +38,7 @@ namespace SaYMemos.Controllers
             await _db.UpdateLastLoginDateForUser(userId);
 
             bool isLikedAfter = await _db.ChangeLikeState(userId, parsedMemoId);
-            return PartialView(viewName: isLikedAfter ? "LikePressedIcon" : "LikeIcon", memoId);
+            return PartialView(viewName:"LikeIcon", new MemoLikeViewModel(isLikedAfter, memoId));
         }
 
 
