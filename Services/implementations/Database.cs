@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SaYMemos.Models.data.entities.comments;
 using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
@@ -178,5 +179,9 @@ namespace SaYMemos.Services.implementations
             }
         }
 
+        public Task<Comment> AddCommentToMemo(Guid memoId, string memoComment, User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

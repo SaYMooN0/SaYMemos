@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Controllers.Helpers;
+using SaYMemos.Models.data.entities.comments;
 using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.view_models.memos;
@@ -43,14 +44,27 @@ namespace SaYMemos.Controllers
 
 
         [HttpPost]
-        public IActionResult LeaveComment(string memoId, string memoComment)
+        public async Task<IActionResult> LeaveComment(string memoId, string memoComment)
         {
             
             if (!Guid.TryParse(memoId, out Guid parsedMemoId))
-                return BadRequest("Invalid Memo ID format.");
+                return BadRequest("Invalid Memo ID format");
+            if(string.IsNullOrEmpty(memoComment))
+                return BadRequest("Invalid comment");
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            await _db.UpdateLastLoginDateForUser(userId);
+
+            Comment addedComment= await _db.AddCommentToMemo(parsedMemoId, memoComment, user);
 
             //saving comment
-            return PartialView(viewName:"CommentSection");
+            return PartialView(viewName:"AddedComment");
         }
         [HttpPost]
         public async Task<IActionResult> RenderAllMemoInfo(string memoId)

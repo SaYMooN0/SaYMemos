@@ -1,4 +1,5 @@
-﻿using SaYMemos.Models.data.entities.memos;
+﻿using SaYMemos.Models.data.entities.comments;
+using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 
@@ -22,5 +23,6 @@ namespace SaYMemos.Services.interfaces
         public Task UpdateUserSettings(AccountSettingsForm data, long id);
         public Task AddNewMemo(long authorId, string authorComment,bool areCommentsAvailable, string imagePath, List<string> tagValues);
         public Task<bool> ChangeLikeState(long userId,Guid memoId);
+        public Task<Comment> AddCommentToMemo(Guid memoId, string memoComment, User user);
     }
 }

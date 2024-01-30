@@ -8,7 +8,8 @@ namespace SaYMemos.Models.data.entities.comments
     Guid memoId,
     long authorId,
     Guid? parentCommentId,
-    string text)
+    string text,
+    DateTime leavingDate)
     {
         public virtual Memo Memo { get; init; }
         public virtual User Author { get; init; }

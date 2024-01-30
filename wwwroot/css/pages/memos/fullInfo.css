@@ -1,7 +1,6 @@
 ﻿
 #memo-dialog {
     width: 1200px;
-    min-height: 500px;
     position: absolute;
     margin: auto;
     border: 1px solid #ddd;
@@ -37,6 +36,7 @@
     }
 
 .memo-fu-container {
+    min-height: 500px;
     width: 90%;
     display: flex;
     flex-direction: row;
@@ -49,7 +49,7 @@
 .memo-fu-main {
     display: flex;
     flex-direction: column;
-    min-width: 500px;
+    min-width: calc(400px + 10vw);
 }
 
 .memo-fu-image {
@@ -66,26 +66,21 @@
         height: auto;
     }
 
-.memo-fu-sidebar {
-    display: flex;
-    flex-direction: column;
-}
-
-.memo-fu-header {
+.memo-fu-author {
     display: flex;
     align-items: center;
     text-decoration: none;
     cursor: pointer;
 }
 
-    .memo-fu-header img {
+    .memo-fu-author img {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         margin-right: 10px;
     }
 
-    .memo-fu-header span {
+    .memo-fu-author span {
         color: #a78ef6;
         font-weight: bold;
     }
@@ -113,40 +108,51 @@
         color: aliceblue;
     }
 
+.memo-fu-sidebar {
+    display: grid;
+    grid-template-rows: 84% auto;
+    flex-direction: column;
+}
 
+.memo-comments-count {
+    font-size: 18px;
+}
 .memo-fu-add-comment {
     display: flex;
-    padding: 16px;
+    align-items: center;
+    padding: 8px;
     border-top: 1px solid #dbdbdb;
+    height: 46px;
 }
 
-.comment-button {
-    border: none;
-    background-color: #3897f0;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-}
+    .memo-fu-add-comment input[type='text'] {
+        flex-grow: 1;
+        border: 1px solid #dbdbdb;
+        border-radius: 22px;
+        padding: 10px 15px;
+        margin-right: 10px;
+        font-size: 16px;
+    }
 
-.memo-fu-add-comment input[type='text'] {
-    flex: 1;
-    border: 1px solid #ccc;
-    border-radius: 18px;
-    padding: 8px 16px;
-    margin-right: 8px;
-    font-size: 14px;
-}
-
-.memo-fu-add-comment button {
+.post-comment-button {
     background-color: #a78ef6;
     border: none;
-    border-radius: 18px;
-    color: white;
-    padding: 8px 16px;
     cursor: pointer;
-    font-size: 17px;
+    border-radius: 50%;
+    padding:8px 4px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
 }
 
-    .memo-fu-add-comment button:hover {
+    .post-comment-button svg {
+        fill: #fafafa; 
+        height: 22px;
+        width: 30px;
+      
+    }
+
+    .post-comment-button:hover {
         background-color: #9e7ae9;
     }
+
