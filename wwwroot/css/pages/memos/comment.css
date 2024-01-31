@@ -1,0 +1,31 @@
+﻿.comment-parent {
+    width:100%;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 16px;
+}
+
+.comment-child {
+    border-left: 3px solid #e1e1e1;
+    margin-left: 16px;
+    padding: 8px;
+    background-color: #f8f8f8;
+}
+
+.comment-author-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    float: left;
+}
+
+.comment-author-nickname {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.comment-rating {
+    font-size: 0.8em;
+    color: #666;
+    display: block;
+    margin-top: 5px;
+}

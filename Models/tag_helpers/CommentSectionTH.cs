@@ -37,7 +37,7 @@ namespace SaYMemos.Models.tag_helpers
                 "<span class='comment-rating'>Rating: {4}</span>",
                 commentClass, encodedProfilePicture, encodedNickname, encodedText, comment.totalRating
             );
-
+            //rate and answer buttons
             if (comment.childComments.Any())
             {
                 foreach (var childComment in comment.childComments)
@@ -47,7 +47,7 @@ namespace SaYMemos.Models.tag_helpers
             }
 
             commentHtml.Append("</div>");
-
+          
             return commentHtml.ToString();
         }
     }

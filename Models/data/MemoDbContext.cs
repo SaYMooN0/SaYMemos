@@ -70,20 +70,26 @@ public class MemoDbContext : DbContext
 
 
 
+
+
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Memo)
             .WithMany(m => m.Comments)
             .HasForeignKey(c => c.memoId);
-
+        modelBuilder.Entity<Comment>()
+            .HasOne(c => c.Author)
+            .WithMany(user => user.Comments)
+            .HasForeignKey(c => c.authorId);
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.ParentComment)
             .WithMany(c => c.ChildComments)
             .HasForeignKey(c => c.parentCommentId);
+
+
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.Comment)
             .WithMany(c => c.Ratings)
             .HasForeignKey(cr => cr.commentId);
-
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.User)
             .WithMany()

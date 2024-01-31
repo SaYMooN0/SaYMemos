@@ -22,7 +22,7 @@
             </div>
         }
 
-        <div class="memo-fu-content">
+        <div class="memo-fu-author-comment">
             <p>@Model.authorComment</p>
         </div>
 
@@ -38,7 +38,7 @@
             }
             @if (Model.tags.Length == 10)
             {
-                <a asp-action="RenderTags" asp-controller="MemoInterection" asp-route-memoId="@Model.id" hx-swap="OuterHTML" hx-target="this">See all tags...</a>
+                <button class="see-all-tags" hx-trigger="click" hx-post="/MemoInteraction/RenderTags?memoId=@Model.id" hx-swap="OuterHTML" hx-target=".memo-tags">See all tags...</button>
             }
         </div>
 
@@ -49,6 +49,7 @@
 
             <div class="memo-fu-comments">
                 <label class="memo-comments-count">Comments: @Model.comments.Length</label>
+                <div class="new-added-comments"></div>
                 @foreach (var comment in Model.comments)
                 {
                     <comment-section comment="comment"></comment-section>
@@ -56,9 +57,9 @@
             </div>
             @if (Model.isViewerAuthorized)
             {
-                <form class='memo-fu-add-comment' hx-post='memo-fuInteraction/LeaveComment'>
-                    <input type='hidden' value='@Model.id' name='memo-fuId' />
-                    <input type='text' placeholder='Add a comment...' name='memo-fuComment' />
+                <form class='memo-fu-add-comment' hx-post='MemoInteraction/LeaveComment' hx-target='this' hx-swap="outerHTML">
+                    <input type='hidden' value='@Model.id' name='memoId' />
+                    <input type='text' placeholder='Add a comment...' name='commentText' />
                     <button type='submit' class="post-comment-button">
                         <svg viewBox="0 0 512 512">
                             <path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z" />

@@ -37,6 +37,7 @@
 
 .memo-fu-container {
     min-height: 500px;
+    max-height: 800px;
     width: 90%;
     display: flex;
     flex-direction: row;
@@ -50,6 +51,7 @@
     display: flex;
     flex-direction: column;
     min-width: calc(400px + 10vw);
+    overflow-y: auto;
 }
 
 .memo-fu-image {
@@ -63,6 +65,7 @@
     .memo-fu-image img {
         overflow: hidden;
         width: 80%;
+        max-width: 600px;
         height: auto;
     }
 
@@ -85,8 +88,9 @@
         font-weight: bold;
     }
 
-.memo-fu-content {
-    padding: 16px;
+.memo-fu-author-comment {
+    padding: 14px;
+    font-size: 16px;
 }
 
 .memo-fu-footer {
@@ -94,6 +98,17 @@
     border-top: 1px solid #dbdbdb;
 }
 
+.memo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.see-all-tags {
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 18px;
+    color: #5e5a5a;
+}
 .memo-tag {
     background-color: #a78ef6;
     color: white;
@@ -110,19 +125,20 @@
 
 .memo-fu-sidebar {
     display: grid;
-    grid-template-rows: 84% auto;
+    grid-template-rows: 88% auto;
     flex-direction: column;
 }
 
 .memo-comments-count {
     font-size: 18px;
 }
+
 .memo-fu-add-comment {
     display: flex;
     align-items: center;
     padding: 8px;
-    border-top: 1px solid #dbdbdb;
     height: 46px;
+    width:100%;
 }
 
     .memo-fu-add-comment input[type='text'] {
@@ -139,20 +155,18 @@
     border: none;
     cursor: pointer;
     border-radius: 50%;
-    padding:8px 4px;
+    padding: 8px 4px;
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
 }
 
     .post-comment-button svg {
-        fill: #fafafa; 
+        fill: #fafafa;
         height: 22px;
         width: 30px;
-      
     }
 
     .post-comment-button:hover {
         background-color: #9e7ae9;
     }
-

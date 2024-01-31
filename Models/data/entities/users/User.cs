@@ -1,4 +1,5 @@
-﻿using SaYMemos.Models.data.entities.memos;
+﻿using SaYMemos.Models.data.entities.comments;
+using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.form_classes;
 using System.ComponentModel.DataAnnotations;
 namespace SaYMemos.Models.data.entities.users
@@ -24,6 +25,7 @@ namespace SaYMemos.Models.data.entities.users
         public virtual UserLinks UserLinks { get;private set; }
         public virtual List<Memo> PostedMemos { get; private set; } = new();
         public virtual ICollection<MemoLike> Likes { get; set; } = new HashSet<MemoLike>();
+        public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         public static User CreateNewUser(string nickname, long loginInfoId, long additionalInfoId, long userLinksId)
         {
             return new User

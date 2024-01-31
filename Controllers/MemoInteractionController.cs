@@ -5,6 +5,8 @@ using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.view_models.memos;
 using SaYMemos.Services.interfaces;
+using System;
+using System.ComponentModel.Design;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 namespace SaYMemos.Controllers
@@ -39,17 +41,17 @@ namespace SaYMemos.Controllers
             await _db.UpdateLastLoginDateForUser(userId);
 
             bool isLikedAfter = await _db.ChangeLikeState(userId, parsedMemoId);
-            return PartialView(viewName:"LikeIcon", new MemoLikeViewModel(isLikedAfter, memoId));
+            return PartialView(viewName: "LikeIcon", new MemoLikeViewModel(isLikedAfter, memoId));
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> LeaveComment(string memoId, string memoComment)
+        public async Task<IActionResult> LeaveComment(string memoId, string commentText)
         {
-            
+
             if (!Guid.TryParse(memoId, out Guid parsedMemoId))
                 return BadRequest("Invalid Memo ID format");
-            if(string.IsNullOrEmpty(memoComment))
+            if (string.IsNullOrEmpty(commentText))
                 return BadRequest("Invalid comment");
 
             long userId = this.GetUserId(_enc.DecryptId);
@@ -61,11 +63,33 @@ namespace SaYMemos.Controllers
 
             await _db.UpdateLastLoginDateForUser(userId);
 
-            Comment addedComment= await _db.AddCommentToMemo(parsedMemoId, memoComment, user);
+            try
+            {
+                Comment addedComment = await _db.AddCommentToMemo(parsedMemoId, commentText, user);
+                if (addedComment is null)
+                    return PartialView(viewName: "CommentForm", CommentFormViewModel.Error(parsedMemoId));
 
-            //saving comment
-            return PartialView(viewName:"AddedComment");
+                return PartialView(viewName: "CommentForm", CommentFormViewModel.Success(addedComment.id, parsedMemoId));
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Error while comment adding", ex);
+            }
+
+            return BadRequest();
         }
+        [HttpPost]
+        public async Task<IActionResult> RenderAddedComment(string commentId)
+        {
+
+            if (!Guid.TryParse(commentId, out Guid commentGuid))
+                return BadRequest("Invalid ID");
+            Comment? comment =await  _db.GetCommentById(commentGuid);
+            if (comment is null) 
+                return BadRequest("Unknown comment");
+            return PartialView(viewName: "AddedComment", CommentViewModel.FromComment(comment));
+        }
+
         [HttpPost]
         public async Task<IActionResult> RenderAllMemoInfo(string memoId)
         {
@@ -74,7 +98,7 @@ namespace SaYMemos.Controllers
 
             Memo? memo = await _db.GetMemoById(parsedMemoId);
             if (memo is null)
-                return BadRequest("Unknown Memo ID format.");
+                return BadRequest("Unknown Memo");
 
             long userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
@@ -86,6 +110,18 @@ namespace SaYMemos.Controllers
 
             await _db.UpdateLastLoginDateForUser(userId);
             return PartialView(viewName: "FullMemoInfo", model: MemoFullInfoViewModel.FromMemoForUser(memo, user));
+        }
+        [HttpPost]
+        public async Task<IActionResult> RenderTags(string memoId)
+        {
+            if (!Guid.TryParse(memoId, out Guid parsedMemoId))
+                return BadRequest("Invalid Memo ID format.");
+
+            Memo? memo = await _db.GetMemoById(parsedMemoId);
+            if (memo is null)
+                return BadRequest("Unknown Memo");
+
+            return PartialView(viewName: "TagsZone", model: memo.Tags.Select(t => t.Value));
         }
     }
 }

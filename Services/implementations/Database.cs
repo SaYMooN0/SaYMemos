@@ -12,7 +12,6 @@ namespace SaYMemos.Services.implementations
         private readonly string _connectionString;
         private readonly interfaces.ILogger _logger;
         private readonly MemoDbContext _context;
-
         public Database(string connectionString, interfaces.ILogger logger)
         {
             _connectionString = connectionString;
@@ -163,7 +162,7 @@ namespace SaYMemos.Services.implementations
                 u.Likes.Remove(like);
                 memo.Likes.Remove(like);
                 await _context.SaveChangesAsync();
-                
+
                 return false;
             }
             else
@@ -178,10 +177,29 @@ namespace SaYMemos.Services.implementations
                 return true;
             }
         }
-
-        public Task<Comment> AddCommentToMemo(Guid memoId, string memoComment, User user)
+        public async Task<Comment?> GetCommentById(Guid id) =>
+                   await _context.Comments.FirstOrDefaultAsync(c => c.id == id);
+        public async Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, User user, Guid? parentCommentId = null)
         {
-            throw new NotImplementedException();
+            Memo? memo = await GetMemoById(memoId);
+
+            if (memo is null || !memo.areCommentsAvailable)
+                return null;
+
+            Comment comment = new(new(), memoId, user.Id, parentCommentId, memoComment, DateTime.UtcNow);
+
+            if (parentCommentId is not null)
+            {
+                Comment parentComment = await GetCommentById((Guid)parentCommentId);
+                if (parentComment is null || parentComment.memoId != memoId)
+                    return null;
+                parentComment.ChildComments.Add(comment);
+            }
+            user.Comments.Add(comment);
+            memo.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+            return comment;
+
         }
     }
 }
