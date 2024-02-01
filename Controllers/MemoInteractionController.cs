@@ -87,7 +87,18 @@ namespace SaYMemos.Controllers
             Comment? comment =await  _db.GetCommentById(commentGuid);
             if (comment is null) 
                 return BadRequest("Unknown comment");
-            return PartialView(viewName: "AddedComment", CommentViewModel.FromComment(comment));
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return PartialView(viewName: "AddedComment", CommentViewModel.FromCommentForUnauthorized(comment));
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return PartialView(viewName: "AddedComment", CommentViewModel.FromCommentForUnauthorized(comment));
+
+            await _db.UpdateLastLoginDateForUser(userId);
+
+            return PartialView(viewName: "AddedComment", CommentViewModel.FromCommentForUser(comment, user));
         }
 
         [HttpPost]

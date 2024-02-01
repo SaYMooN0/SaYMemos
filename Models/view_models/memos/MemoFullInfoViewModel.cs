@@ -32,13 +32,13 @@ namespace SaYMemos.Models.view_models.memos
                 false,
                 memo.Likes.Count,
                 memo.areCommentsAvailable,
-                memo.areCommentsAvailable ? memo.Comments.Select(CommentViewModel.FromComment).ToArray() : Array.Empty<CommentViewModel>(),
+                memo.areCommentsAvailable ? memo.Comments.Select(CommentViewModel.FromCommentForUnauthorized).ToArray() : Array.Empty<CommentViewModel>(),
                 memo.Tags.Take(10).Select(t => t.Value).ToArray()
                 );
         public static MemoFullInfoViewModel FromMemoForUser(Memo memo, User user) =>
             new(
                 true,
-                 memo.id,
+                memo.id,
                 memo.authorId,
                 memo.Author.ProfilePicturePath,
                 memo.Author.Nickname,
@@ -48,7 +48,7 @@ namespace SaYMemos.Models.view_models.memos
                 user.Likes.Select(l=>l.memoGuid).ToHashSet().Contains(memo.id),
                 memo.Likes.Count,
                 memo.areCommentsAvailable,
-                memo.areCommentsAvailable ? memo.Comments.Select(CommentViewModel.FromComment).ToArray() : Array.Empty<CommentViewModel>(),
+                memo.areCommentsAvailable ? memo.Comments.Select(c=>CommentViewModel.FromCommentForUser(c, user)).ToArray() : Array.Empty<CommentViewModel>(),
                 memo.Tags.Take(10).Select(t => t.Value).ToArray()
                 );
     }

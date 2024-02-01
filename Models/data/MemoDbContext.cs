@@ -92,7 +92,7 @@ public class MemoDbContext : DbContext
             .HasForeignKey(cr => cr.commentId);
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.User)
-            .WithMany()
+            .WithMany(u=>u.CommentRatings)
             .HasForeignKey(cr => cr.userId);
 
     }

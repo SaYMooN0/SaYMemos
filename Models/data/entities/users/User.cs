@@ -26,6 +26,7 @@ namespace SaYMemos.Models.data.entities.users
         public virtual List<Memo> PostedMemos { get; private set; } = new();
         public virtual ICollection<MemoLike> Likes { get; set; } = new HashSet<MemoLike>();
         public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+        public virtual ICollection<CommentRating> CommentRatings { get; set; } = new HashSet<CommentRating>();
         public static User CreateNewUser(string nickname, long loginInfoId, long additionalInfoId, long userLinksId)
         {
             return new User
