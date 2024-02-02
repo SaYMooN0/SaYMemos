@@ -6,7 +6,7 @@
 
 
 
-<span hx-trigger='click' hx-redirect='/authorization' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='memo-icon' hx-vals='{"memoId": "@Model.memoId"}'>
+<span hx-trigger='click' hx-redirect='/authorization' hx-post='MemoInteraction/LikePressed' hx-target='this' hx-swap='outerHTML' class='@(Model.isPressed? "memo-like-pressed" : "memo-icon")' hx-vals='{"memoId": "@Model.memoId"}'>
     @if (Model.isPressed)
     {
         <svg viewBox="0 0 514 514">

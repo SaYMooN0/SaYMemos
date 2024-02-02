@@ -45,7 +45,7 @@ namespace SaYMemos.Models.tag_helpers
                 "</div>" +
                 "</div>" +
                 "<p class='comment-text'>{6}</p>" +
-                "<button class='answer-button'>Answer</button>",
+                "<button class='answer-button'>Reply</button>",
                 commentClass,
                 comment.authorProfilePicture.EncodeHtml(),
                 comment.authorNickname.EncodeHtml(),
@@ -74,12 +74,12 @@ namespace SaYMemos.Models.tag_helpers
             if (!comment.isRated || comment.isUp is null)
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconPath}
                         </svg>
@@ -89,12 +89,12 @@ namespace SaYMemos.Models.tag_helpers
             else if (comment.isUp == true)
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconFilledPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconPath}
                         </svg>
@@ -104,12 +104,12 @@ namespace SaYMemos.Models.tag_helpers
             else
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true,comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true,comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false,comment)}>
+                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false,comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconFilledPath}
                         </svg>
@@ -121,20 +121,16 @@ namespace SaYMemos.Models.tag_helpers
 
             return voteButtonsHtml;
         }
-        private HtmlString hxVals(bool isUp, CommentViewModel comment)
+        private string hxVals(bool isUp, CommentViewModel comment)
         {
-            var vals = new Dictionary<object, object>
-            {
-                ["memoId"] = comment.memoId,
-                ["commentId"] = comment.id,
-                ["isUp"] = isUp
-            };
-            return new HtmlString($"hx-vals='{JsonSerializer.Serialize(vals)}'");
+            string jsonParams = $"{{\"commentId\": \"{comment.id}\", \"isUp\": {isUp.ToString().ToLower()}}}";
+            return $"hx-vals='js:{jsonParams}'" ;
         }
-        private HtmlString hxAtrributes() =>
-            new HtmlString("hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHtml' hx-post='/MemoInteraction/commentVote' hx-target='comment-rating-buttons'");
 
-        private HtmlString iconFilledPath = new HtmlString(@"<path d=""M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"" />");
-        private HtmlString iconPath = new HtmlString(@"<path d=""M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"" />");
+        private string hxAtrributes() =>
+            new ("hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHtml' hx-post='/MemoInteraction/RateComment' hx-target='.comment-meta-right' ");
+
+        private HtmlString iconFilledPath = new(@"<path d=""M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"" />");
+        private HtmlString iconPath = new(@"<path d=""M12.781 2.375c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10zM15 12h-1v8h-4v-8H6.081L12 4.601 17.919 12H15z""/>");
     }
 }

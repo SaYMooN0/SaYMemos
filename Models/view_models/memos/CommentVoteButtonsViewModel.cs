@@ -1,9 +1,8 @@
 ﻿namespace SaYMemos.Models.view_models.memos
 {
     public record class CommentVoteButtonsViewModel(
-        bool isRated,
-        bool isUp,
+        bool? isUp,
         string commentId,
-        string memoId
+        int rating
         );
 }

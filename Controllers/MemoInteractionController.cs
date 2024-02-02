@@ -134,5 +134,48 @@ namespace SaYMemos.Controllers
 
             return PartialView(viewName: "TagsZone", model: memo.Tags.Select(t => t.Value));
         }
+        [HttpPost]
+        public async Task<IActionResult> RateComment(string commentId, bool isUp)
+        {
+            if (!Guid.TryParse(commentId, out Guid commentGuid))
+                return BadRequest("Invalid comment ID format.");
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            await _db.UpdateLastLoginDateForUser(userId);
+
+            Comment? comment = await _db.GetCommentById(commentGuid);
+            if (comment is null)
+                return BadRequest("Unknown comment");
+
+            bool? isUpAfter= await _db.ChangeCommentRatingByUser(commentGuid, user, isUp);
+            
+            return PartialView(viewName: "CommentVoteButtons", model: new CommentVoteButtonsViewModel(isUpAfter ,commentId,  comment.CountRating()));
+
+            
+        }
+     
+        [HttpPost]
+        public async Task<IActionResult> RenderCommentReplyForm(string commentId)
+        {
+            if (!Guid.TryParse(commentId, out Guid commentGuid))
+                return BadRequest("Invalid comment ID format.");
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            throw new NotImplementedException();
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace SaYMemos.Models.view_models.memos
         long authorId,
         string authorNickname,
         string authorProfilePicture,
-        Guid memoId,
         bool isViewerAuthorized,
         bool isRated,
         bool? isUp
@@ -29,7 +28,6 @@ namespace SaYMemos.Models.view_models.memos
                 comment.authorId,
                 comment.Author.Nickname,
                 comment.Author.ProfilePicturePath,
-                comment.memoId,
                 false, false, null);
         public static CommentViewModel FromCommentForUser(Comment comment, User user)
         {
@@ -51,7 +49,6 @@ namespace SaYMemos.Models.view_models.memos
                 comment.authorId,
                 comment.Author.Nickname,
                 comment.Author.ProfilePicturePath,
-                comment.memoId,
                 true, isUp is not null, isUp);
         }
     }

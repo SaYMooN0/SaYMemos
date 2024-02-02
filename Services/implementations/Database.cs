@@ -201,5 +201,10 @@ namespace SaYMemos.Services.implementations
             return comment;
 
         }
+
+        Task<bool?> IDatabase.ChangeCommentRatingByUser(Guid commentId, User user, bool isUp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

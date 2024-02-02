@@ -26,5 +26,6 @@ namespace SaYMemos.Services.interfaces
         public Task<bool> ChangeLikeState(long userId,Guid memoId);
         public Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, User user, Guid? parentCommentId = null);
         public Task<Comment?> GetCommentById(Guid id);
+        public Task<bool?> ChangeCommentRatingByUser(Guid commentId, User user, bool isUp);
     }
 }
