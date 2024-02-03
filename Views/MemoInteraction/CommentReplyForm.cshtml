@@ -1,0 +1,8 @@
+﻿@model CommentReplyFormViewModel
+
+<form>
+    <p class="error-line">@(string.IsNullOrWhiteSpace(Model.errorLine) ? string.Empty : Model.errorLine) </p>
+    <input type="hidden" asp-for="parentCommentId" />
+    <input type="text" placeholder="Type a comment..." asp-for="text" value="@Model.userToReply" />
+    <input type="submit" value="Post" />
+</form>

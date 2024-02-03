@@ -38,7 +38,7 @@ namespace SaYMemos.Controllers
             if (user is null)
                 return this.HxUnauthorized();
 
-            await _db.UpdateLastLoginDateForUser(userId);
+            await _db.UpdateLastLoginDateForUser(user);
 
             bool isLikedAfter = await _db.ChangeLikeState(userId, parsedMemoId);
             return PartialView(viewName: "LikeIcon", new MemoLikeViewModel(isLikedAfter, memoId));
@@ -63,20 +63,12 @@ namespace SaYMemos.Controllers
 
             await _db.UpdateLastLoginDateForUser(userId);
 
-            try
-            {
-                Comment addedComment = await _db.AddCommentToMemo(parsedMemoId, commentText, user);
-                if (addedComment is null)
-                    return PartialView(viewName: "CommentForm", CommentFormViewModel.Error(parsedMemoId));
 
-                return PartialView(viewName: "CommentForm", CommentFormViewModel.Success(addedComment.id, parsedMemoId));
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Error while comment adding", ex);
-            }
+            Comment? addedComment = await _db.AddCommentToMemo(parsedMemoId, commentText, user.Id);
+            if (addedComment is null)
+                return PartialView(viewName: "CommentForm", CommentFormViewModel.Error(parsedMemoId));
 
-            return BadRequest();
+            return PartialView(viewName: "CommentForm", CommentFormViewModel.Success(addedComment.id, parsedMemoId));
         }
         [HttpPost]
         public async Task<IActionResult> RenderAddedComment(string commentId)
@@ -84,8 +76,8 @@ namespace SaYMemos.Controllers
 
             if (!Guid.TryParse(commentId, out Guid commentGuid))
                 return BadRequest("Invalid ID");
-            Comment? comment =await  _db.GetCommentById(commentGuid);
-            if (comment is null) 
+            Comment? comment = await _db.GetCommentById(commentGuid);
+            if (comment is null)
                 return BadRequest("Unknown comment");
 
             long userId = this.GetUserId(_enc.DecryptId);
@@ -140,6 +132,10 @@ namespace SaYMemos.Controllers
             if (!Guid.TryParse(commentId, out Guid commentGuid))
                 return BadRequest("Invalid comment ID format.");
 
+            Comment? comment = await _db.GetCommentById(commentGuid);
+            if (comment is null)
+                return BadRequest("Unknown comment");
+
             long userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
                 return this.HxUnauthorized();
@@ -148,19 +144,13 @@ namespace SaYMemos.Controllers
             if (user is null)
                 return this.HxUnauthorized();
 
-            await _db.UpdateLastLoginDateForUser(userId);
+            await _db.UpdateLastLoginDateForUser(user);
 
-            Comment? comment = await _db.GetCommentById(commentGuid);
-            if (comment is null)
-                return BadRequest("Unknown comment");
+            (bool isRatedAfter, bool? isUpAfter) = await _db.ChangeCommentRatingByUser(comment, user, isUp);
 
-            bool? isUpAfter= await _db.ChangeCommentRatingByUser(commentGuid, user, isUp);
-            
-            return PartialView(viewName: "CommentVoteButtons", model: new CommentVoteButtonsViewModel(isUpAfter ,commentId,  comment.CountRating()));
-
-            
+            return PartialView(viewName: "CommentRatingZone", model: new CommentRatingZoneViewModel(isRatedAfter, isUpAfter, commentId, comment.CountRating()));
         }
-     
+
         [HttpPost]
         public async Task<IActionResult> RenderCommentReplyForm(string commentId)
         {

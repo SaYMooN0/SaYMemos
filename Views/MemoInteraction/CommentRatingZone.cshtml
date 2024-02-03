@@ -1,33 +1,30 @@
-﻿@model CommentVoteButtonsViewModel
+﻿@model CommentRatingZoneViewModel
 
 
 
 @{
-    string hxVals(bool isUp)
+    HtmlString hxAtrributes(bool isUp)
     {
         string jsonParams = $"{{\"commentId\": \"{Model.commentId}\", \"isUp\": {isUp.ToString().ToLower()}}}";
-        return $"hx-vals='js:{jsonParams}'";
+        return new($"hx-vals='js:{jsonParams}' hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHTML' hx-post='/MemoInteraction/RateComment' hx-target='#mr-{Model.commentId}' ");
     }
-
-    string hxAtrributes() =>
-        new("hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHtml' hx-post='/MemoInteraction/RateComment' hx-target='.comment-meta-right' ");
 
     HtmlString iconFilledPath = new(@"<path d=""M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"" />");
     HtmlString iconPath = new(@"<path d=""M12.781 2.375c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10zM15 12h-1v8h-4v-8H6.081L12 4.601 17.919 12H15z""/>");
 }
 
-<div class='comment-meta-right'>
+<div class='comment-meta-right' id='mr-@Model.commentId' >
     <span class='comment-rating'>@Model.rating</span>
     <div class="comment-rating-buttons">
-        @if (Model.isUp is null)
+        @if (!Model.isRated)
         {
-            <span class="comment-rating-button" @hxAtrributes() @hxVals(true)>
+            <span class="comment-rating-button" @hxAtrributes(true)>
                 <svg viewBox="0 0 24 24">
                     @iconPath
                 </svg>
             </span>
 
-            <span class="comment-rating-button" @hxAtrributes() @hxVals(false)>
+            <span class="comment-rating-button" @hxAtrributes(false)>
                 <svg viewBox="0 0 24 24" style='transform: scaleY(-1);'>
                     @iconPath
                 </svg>
@@ -38,13 +35,13 @@
         {
             @if ((bool)Model.isUp)
             {
-                <span class="comment-rating-button" @hxAtrributes() @hxVals(true)>
+                <span class="comment-rating-button" @hxAtrributes(true)>
                     <svg viewBox="0 0 24 24">
                         @iconFilledPath
                     </svg>
                 </span>
 
-                <span class="comment-rating-button" @hxAtrributes() @hxVals(false)>
+                <span class="comment-rating-button" @hxAtrributes(false)>
                     <svg viewBox="0 0 24 24" style='transform: scaleY(-1);'>
                         @iconPath
                     </svg>
@@ -52,13 +49,13 @@
             }
             else
             {
-                <span class="comment-rating-button" @hxAtrributes() @hxVals(true)>
+                <span class="comment-rating-button" @hxAtrributes(true)>
                     <svg viewBox="0 0 24 24">
                         @iconPath
                     </svg>
                 </span>
 
-                <span class="comment-rating-button" @hxAtrributes() @hxVals(false)>
+                <span class="comment-rating-button" @hxAtrributes(false)>
                     <svg viewBox="0 0 24 24" style='transform: scaleY(-1);'>
                         @iconFilledPath
                     </svg>
@@ -68,5 +65,3 @@
     </div>
 
 </div>
-
-<

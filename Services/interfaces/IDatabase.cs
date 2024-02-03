@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SaYMemos.Models.data.entities.comments;
+﻿using SaYMemos.Models.data.entities.comments;
 using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
@@ -17,6 +16,7 @@ namespace SaYMemos.Services.interfaces
         public Task<string?> GetPasswordHashForEmail(string email);
         public Task<long?> GetUserIdByEmail(string email);
         public Task UpdateLastLoginDateForUser(long id);
+        public Task UpdateLastLoginDateForUser(User user);
         public Task<User?> GetUserById(long id);
         public Task<Memo?> GetMemoById(Guid id);
         public Task<string?> GetProfilePictureById(long id);
@@ -24,8 +24,8 @@ namespace SaYMemos.Services.interfaces
         public Task UpdateUserSettings(AccountSettingsForm data, long id);
         public Task AddNewMemo(long authorId, string authorComment,bool areCommentsAvailable, string imagePath, List<string> tagValues);
         public Task<bool> ChangeLikeState(long userId,Guid memoId);
-        public Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, User user, Guid? parentCommentId = null);
+        public Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, long userId, Guid? parentCommentId = null);
         public Task<Comment?> GetCommentById(Guid id);
-        public Task<bool?> ChangeCommentRatingByUser(Guid commentId, User user, bool isUp);
+        public Task<(bool isRatedAfter, bool? isUp)> ChangeCommentRatingByUser(Comment comment, User user, bool isUp);
     }
 }

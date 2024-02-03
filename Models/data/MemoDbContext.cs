@@ -5,17 +5,17 @@ using SaYMemos.Models.data.entities.comments;
 
 public class MemoDbContext : DbContext
 {
-    public DbSet<LoginInfo> LoginInfos { get; private set; }
-    public DbSet<User> Users { get; private set; }
-    public DbSet<UserLinks> UserLinks { get; private set; }
-    public DbSet<UserAdditionalInfo> UserAdditionalInfos { get; private set; }
-    public DbSet<UserToConfirm> UsersToConfirm { get; private set; }
-    public DbSet<MemoTag> MemoTags { get; private set; }
+    public DbSet<LoginInfo> LoginInfos { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserLinks> UserLinks { get; set; }
+    public DbSet<UserAdditionalInfo> UserAdditionalInfos { get; set; }
+    public DbSet<UserToConfirm> UsersToConfirm { get; set; }
+    public DbSet<MemoTag> MemoTags { get; set; }
 
     public DbSet<Memo> Memos { get; private set; }
-    public DbSet<MemoLike> Likes { get; private set; }
-    public DbSet<Comment> Comments { get; private set; }
-    public DbSet<CommentRating> CommentRatings { get; private set; }
+    public DbSet<MemoLike> Likes { get; set; }
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<CommentRating> CommentRatings { get; set; }
 
     public MemoDbContext(DbContextOptions<MemoDbContext> options) : base(options) { }
 
@@ -75,15 +75,20 @@ public class MemoDbContext : DbContext
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Memo)
             .WithMany(m => m.Comments)
-            .HasForeignKey(c => c.memoId);
+            .HasForeignKey(c => c.memoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Author)
             .WithMany(user => user.Comments)
-            .HasForeignKey(c => c.authorId);
+            .HasForeignKey(c => c.authorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.ParentComment)
             .WithMany(c => c.ChildComments)
-            .HasForeignKey(c => c.parentCommentId);
+            .HasForeignKey(c => c.parentCommentId)
+            .OnDelete(DeleteBehavior.Restrict);
 
 
         modelBuilder.Entity<CommentRating>()
@@ -92,8 +97,9 @@ public class MemoDbContext : DbContext
             .HasForeignKey(cr => cr.commentId);
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.User)
-            .WithMany(u=>u.CommentRatings)
-            .HasForeignKey(cr => cr.userId);
+            .WithMany(u => u.CommentRatings)
+            .HasForeignKey(cr => cr.userId)
+            .OnDelete(DeleteBehavior.Restrict);
 
     }
 }

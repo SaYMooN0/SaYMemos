@@ -39,17 +39,18 @@ namespace SaYMemos.Models.tag_helpers
                         "<span class='comment-date'>{3}</span>" +
                     "</div>" +
                 "</div>" +
-                "<div class='comment-meta-right'>" +
-                    "<span class='comment-rating'>{4}</span>" +
-                    "<div class='comment-rating-buttons'>{5}</div>" +
+                "<div class='comment-meta-right' id='mr-{4}'>" +
+                    "<span class='comment-rating'>{5}</span>" +
+                    "{6}"+
                 "</div>" +
                 "</div>" +
-                "<p class='comment-text'>{6}</p>" +
+                "<p class='comment-text'>{7}</p>" +
                 "<button class='answer-button'>Reply</button>",
                 commentClass,
                 comment.authorProfilePicture.EncodeHtml(),
                 comment.authorNickname.EncodeHtml(),
                 comment.leavingDate.EncodeHtml(),
+                comment.id.ToString().EncodeHtml(),
                 comment.totalRating,
                 RenderVoteButtons(comment),
                 encodedText
@@ -74,12 +75,12 @@ namespace SaYMemos.Models.tag_helpers
             if (!comment.isRated || comment.isUp is null)
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)} >
+                    <span class=""comment-rating-button"" {hxAtrributes(true, comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)} >
+                    <span class=""comment-rating-button""  {hxAtrributes(false, comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconPath}
                         </svg>
@@ -89,12 +90,12 @@ namespace SaYMemos.Models.tag_helpers
             else if (comment.isUp == true)
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true, comment)} >
+                    <span class=""comment-rating-button"" {hxAtrributes(true, comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconFilledPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false, comment)} >
+                    <span class=""comment-rating-button"" {hxAtrributes(false, comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconPath}
                         </svg>
@@ -104,12 +105,12 @@ namespace SaYMemos.Models.tag_helpers
             else
             {
                 voteButtonsHtml += $@"
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(true,comment)} >
+                    <span class=""comment-rating-button""  {hxAtrributes(true, comment)} >
                         <svg viewBox=""0 0 24 24"">
                             {iconPath}
                         </svg>
                     </span>
-                    <span class=""comment-rating-button"" {hxAtrributes()} {hxVals(false,comment)} >
+                    <span class=""comment-rating-button""  {hxAtrributes(false, comment)} >
                         <svg viewBox=""0 0 24 24"" style='transform: scaleY(-1);'>
                             {iconFilledPath}
                         </svg>
@@ -117,18 +118,15 @@ namespace SaYMemos.Models.tag_helpers
                 ";
             }
 
-            voteButtonsHtml +="</div>";
+            voteButtonsHtml += "</div>";
 
             return voteButtonsHtml;
         }
-        private string hxVals(bool isUp, CommentViewModel comment)
+        private string hxAtrributes(bool isUp, CommentViewModel comment)
         {
             string jsonParams = $"{{\"commentId\": \"{comment.id}\", \"isUp\": {isUp.ToString().ToLower()}}}";
-            return $"hx-vals='js:{jsonParams}'" ;
+            return $"hx-vals='js:{jsonParams}' hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHTML' hx-post='/MemoInteraction/RateComment' hx-target='#mr-{comment.id}' ";
         }
-
-        private string hxAtrributes() =>
-            new ("hx-redirect='/authorization' hx-trigger='click' hx-swap='outerHtml' hx-post='/MemoInteraction/RateComment' hx-target='.comment-meta-right' ");
 
         private HtmlString iconFilledPath = new(@"<path d=""M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"" />");
         private HtmlString iconPath = new(@"<path d=""M12.781 2.375c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10zM15 12h-1v8h-4v-8H6.081L12 4.601 17.919 12H15z""/>");

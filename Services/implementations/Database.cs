@@ -22,6 +22,7 @@ namespace SaYMemos.Services.implementations
             optionsBuilder.UseLazyLoadingProxies();
 
             _context = new MemoDbContext(optionsBuilder.Options);
+
             _context.Database.EnsureCreated();
         }
 
@@ -94,6 +95,11 @@ namespace SaYMemos.Services.implementations
             var user = await _context.Users.FindAsync(id);
 
             if (user is not null)
+                await UpdateLastLoginDateForUser(user);
+        }
+        public async Task UpdateLastLoginDateForUser(User user)
+        {
+            if (user is not null)
             {
                 user.UpdateLastLoginDate();
                 await _context.SaveChangesAsync();
@@ -158,9 +164,6 @@ namespace SaYMemos.Services.implementations
             if (like is not null)
             {
                 _context.Likes.Remove(like);
-
-                u.Likes.Remove(like);
-                memo.Likes.Remove(like);
                 await _context.SaveChangesAsync();
 
                 return false;
@@ -170,23 +173,20 @@ namespace SaYMemos.Services.implementations
                 var newLike = MemoLike.CreateNew(memoId, userId);
 
                 _context.Likes.Add(newLike);
-                u.Likes.Add(newLike);
-                memo.Likes.Add(newLike);
-
                 await _context.SaveChangesAsync();
                 return true;
             }
         }
         public async Task<Comment?> GetCommentById(Guid id) =>
                    await _context.Comments.FirstOrDefaultAsync(c => c.id == id);
-        public async Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, User user, Guid? parentCommentId = null)
+        public async Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, long userId, Guid? parentCommentId = null)
         {
             Memo? memo = await GetMemoById(memoId);
 
             if (memo is null || !memo.areCommentsAvailable)
                 return null;
 
-            Comment comment = new(new(), memoId, user.Id, parentCommentId, memoComment, DateTime.UtcNow);
+            Comment comment = new(new(), memoId, userId, parentCommentId, memoComment, DateTime.UtcNow);
 
             if (parentCommentId is not null)
             {
@@ -195,16 +195,41 @@ namespace SaYMemos.Services.implementations
                     return null;
                 parentComment.ChildComments.Add(comment);
             }
-            user.Comments.Add(comment);
-            memo.Comments.Add(comment);
-            await _context.SaveChangesAsync();
+            _context.Comments.Add(comment);
+            _context.SaveChanges();
             return comment;
 
         }
 
-        Task<bool?> IDatabase.ChangeCommentRatingByUser(Guid commentId, User user, bool isUp)
+        public async Task<(bool isRatedAfter, bool? isUp)> ChangeCommentRatingByUser(Comment comment, User user, bool isUp)
         {
-            throw new NotImplementedException();
+            var currentRating = user.CommentRatings.FirstOrDefault(cr => cr.commentId == comment.id);
+
+            if (currentRating is null)
+            {
+                _context.CommentRatings.Add(new(new(), comment.id, user.Id, isUp));
+                await _context.SaveChangesAsync();
+                return (true, isUp);
+            }
+
+            if (currentRating.isUp == isUp)
+            {
+                _context.CommentRatings.Remove(currentRating);
+                await _context.SaveChangesAsync();
+                return (false, null);
+            }
+
+            await UpdateRating(user, comment, currentRating, isUp);
+            return (true, isUp);
         }
+        private async Task UpdateRating(User user, Comment comment, CommentRating currentRating, bool isUp)
+        {
+            _context.CommentRatings.Remove(currentRating);
+            CommentRating updatedRating = new(new(), comment.id, user.Id, isUp);
+            _context.CommentRatings.Add(updatedRating);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }
