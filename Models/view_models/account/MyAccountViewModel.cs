@@ -13,7 +13,7 @@ namespace SaYMemos.Models.view_models.account
     {
         public static MyAccountViewModel FromUser(User user)
         {
-            var likedMemoIds = user.Likes.Select(l => l.memoGuid).ToHashSet();
+            var likedMemoIds = user.Likes.Select(l => l.MemoId).ToHashSet();
 
             return new MyAccountViewModel(
                 user.Nickname,

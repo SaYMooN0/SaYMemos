@@ -22,7 +22,6 @@ namespace SaYMemos.Services.implementations
             optionsBuilder.UseLazyLoadingProxies();
 
             _context = new MemoDbContext(optionsBuilder.Options);
-
             _context.Database.EnsureCreated();
         }
 
@@ -152,14 +151,13 @@ namespace SaYMemos.Services.implementations
             _context.Memos.Add(newMemo);
             await _context.SaveChangesAsync();
         }
-        public async Task<bool> ChangeLikeState(long userId, Guid memoId)
+        public async Task<bool> ChangeLikeState(User user, Guid memoId)
         {
             var memo = await GetMemoById(memoId);
-            User u = await GetUserById(userId);
             if (memo is null)
                 return false;
 
-            var like = await _context.Likes.FirstOrDefaultAsync(l => l.userId == userId && l.memoGuid == memoId);
+            var like = await _context.Likes.FirstOrDefaultAsync(l => l.UserId == user.Id && l.MemoId == memoId);
 
             if (like is not null)
             {
@@ -170,7 +168,7 @@ namespace SaYMemos.Services.implementations
             }
             else
             {
-                var newLike = MemoLike.CreateNew(memoId, userId);
+                var newLike = MemoLike.CreateNew(memoId, user.Id);
 
                 _context.Likes.Add(newLike);
                 await _context.SaveChangesAsync();
@@ -178,7 +176,7 @@ namespace SaYMemos.Services.implementations
             }
         }
         public async Task<Comment?> GetCommentById(Guid id) =>
-                   await _context.Comments.FirstOrDefaultAsync(c => c.id == id);
+                   await _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
         public async Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, long userId, Guid? parentCommentId = null)
         {
             Memo? memo = await GetMemoById(memoId);
@@ -186,48 +184,41 @@ namespace SaYMemos.Services.implementations
             if (memo is null || !memo.areCommentsAvailable)
                 return null;
 
-            Comment comment = new(new(), memoId, userId, parentCommentId, memoComment, DateTime.UtcNow);
+            var comment = Comment.CreateNew(memoId, userId, parentCommentId, memoComment);
 
             if (parentCommentId is not null)
             {
                 Comment parentComment = await GetCommentById((Guid)parentCommentId);
-                if (parentComment is null || parentComment.memoId != memoId)
+                if (parentComment is null || parentComment.MemoId != memoId)
                     return null;
                 parentComment.ChildComments.Add(comment);
             }
             _context.Comments.Add(comment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return comment;
 
         }
 
         public async Task<(bool isRatedAfter, bool? isUp)> ChangeCommentRatingByUser(Comment comment, User user, bool isUp)
         {
-            var currentRating = user.CommentRatings.FirstOrDefault(cr => cr.commentId == comment.id);
+            var currentRating = _context.CommentRatings.FirstOrDefault(cr => cr.CommentId == comment.Id);
 
             if (currentRating is null)
             {
-                _context.CommentRatings.Add(new(new(), comment.id, user.Id, isUp));
+                _context.CommentRatings.Add(CommentRating.CreateNew(comment.Id, user.Id, isUp));
                 await _context.SaveChangesAsync();
                 return (true, isUp);
             }
 
-            if (currentRating.isUp == isUp)
+            if (currentRating.IsUp == isUp)
             {
                 _context.CommentRatings.Remove(currentRating);
                 await _context.SaveChangesAsync();
                 return (false, null);
             }
 
-            await UpdateRating(user, comment, currentRating, isUp);
+            currentRating.ChangeIsUp();
             return (true, isUp);
-        }
-        private async Task UpdateRating(User user, Comment comment, CommentRating currentRating, bool isUp)
-        {
-            _context.CommentRatings.Remove(currentRating);
-            CommentRating updatedRating = new(new(), comment.id, user.Id, isUp);
-            _context.CommentRatings.Add(updatedRating);
-            await _context.SaveChangesAsync();
         }
 
 

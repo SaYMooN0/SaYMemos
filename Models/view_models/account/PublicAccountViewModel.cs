@@ -20,7 +20,7 @@ namespace SaYMemos.Models.view_models.account
             Guid[] likedMemoIds=Array.Empty<Guid>();
             bool viewerAuthorized = viewer is not null;
             if (viewerAuthorized)
-                likedMemoIds = viewer.Likes.Select(l=>l.memoGuid).ToArray();
+                likedMemoIds = viewer.Likes.Select(l=>l.MemoId).ToArray();
 
             return new(user.Id,
                 user.Nickname,

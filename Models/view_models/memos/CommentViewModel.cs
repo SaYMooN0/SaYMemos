@@ -19,13 +19,13 @@ namespace SaYMemos.Models.view_models.memos
     {
         public static CommentViewModel FromCommentForUnauthorized(Comment comment) =>
             new(
-                comment.id,
-                comment.parentCommentId is null,
-                comment.text,
+                comment.Id,
+                comment.ParentCommentId is null,
+                comment.Text,
                 comment.CountRating(),
-                comment.leavingDate.ToString("D"),
+                comment.LeavingDate.ToString("D"),
                 comment.ChildComments.Select(FromCommentForUnauthorized).ToArray(),
-                comment.authorId,
+                comment.AuthorId,
                 comment.Author.Nickname,
                 comment.Author.ProfilePicturePath,
                 false, false, null);
@@ -35,18 +35,18 @@ namespace SaYMemos.Models.view_models.memos
                 return FromCommentForUnauthorized(comment);
 
             bool? isUp = user.CommentRatings
-                .Where(r => r.commentId == comment.id)
-                .Select(r => (bool?)r.isUp)
+                .Where(r => r.CommentId == comment.Id)
+                .Select(r => (bool?)r.IsUp)
                 .FirstOrDefault();
 
             return new(
-                comment.id,
-                comment.parentCommentId is null,
-                comment.text,
+                comment.Id,
+                comment.ParentComment is null,
+                comment.Text,
                 comment.CountRating(),
-                comment.leavingDate.ToString("D"),
+                comment.LeavingDate.ToString("D"),
                 comment.ChildComments.Select(c => FromCommentForUser(c, user)).ToArray(),
-                comment.authorId,
+                comment.AuthorId,
                 comment.Author.Nickname,
                 comment.Author.ProfilePicturePath,
                 true, isUp is not null, isUp);

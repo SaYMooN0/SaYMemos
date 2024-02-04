@@ -60,46 +60,40 @@ public class MemoDbContext : DbContext
         modelBuilder.Entity<MemoLike>()
                .HasOne(like => like.User)
                .WithMany(user => user.Likes)
-               .HasForeignKey(like => like.userId);
+               .HasForeignKey(like => like.UserId);
 
         modelBuilder.Entity<MemoLike>()
             .HasOne(like => like.Memo)
             .WithMany(memo => memo.Likes)
-            .HasForeignKey(like => like.memoGuid);
-
-
-
+            .HasForeignKey(like => like.MemoId);
 
 
 
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Memo)
             .WithMany(m => m.Comments)
-            .HasForeignKey(c => c.memoId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(c => c.MemoId);
 
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.Author)
             .WithMany(user => user.Comments)
-            .HasForeignKey(c => c.authorId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(c => c.AuthorId);
 
         modelBuilder.Entity<Comment>()
             .HasOne(c => c.ParentComment)
             .WithMany(c => c.ChildComments)
-            .HasForeignKey(c => c.parentCommentId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(c => c.ParentCommentId);
 
 
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.Comment)
-            .WithMany(c => c.Ratings)
-            .HasForeignKey(cr => cr.commentId);
+            .WithMany(c => c.CommentRatings)
+            .HasForeignKey(cr => cr.CommentId);
+
         modelBuilder.Entity<CommentRating>()
             .HasOne(cr => cr.User)
             .WithMany(u => u.CommentRatings)
-            .HasForeignKey(cr => cr.userId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .HasForeignKey(cr => cr.UserId);
 
     }
 }

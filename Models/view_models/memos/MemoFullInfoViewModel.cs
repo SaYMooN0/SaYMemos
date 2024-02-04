@@ -45,7 +45,7 @@ namespace SaYMemos.Models.view_models.memos
                 memo.authorComment,
                 memo.imagePath,
                 memo.creationTime.ToString("D"),
-                user.Likes.Select(l=>l.memoGuid).ToHashSet().Contains(memo.id),
+                user.Likes.Select(l=>l.MemoId).ToHashSet().Contains(memo.id),
                 memo.Likes.Count,
                 memo.areCommentsAvailable,
                 memo.areCommentsAvailable ? memo.Comments.Select(c=>CommentViewModel.FromCommentForUser(c, user)).ToArray() : Array.Empty<CommentViewModel>(),

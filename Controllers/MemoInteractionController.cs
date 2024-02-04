@@ -40,7 +40,7 @@ namespace SaYMemos.Controllers
 
             await _db.UpdateLastLoginDateForUser(user);
 
-            bool isLikedAfter = await _db.ChangeLikeState(userId, parsedMemoId);
+            bool isLikedAfter = await _db.ChangeLikeState(user, parsedMemoId);
             return PartialView(viewName: "LikeIcon", new MemoLikeViewModel(isLikedAfter, memoId));
         }
 
@@ -68,7 +68,7 @@ namespace SaYMemos.Controllers
             if (addedComment is null)
                 return PartialView(viewName: "CommentForm", CommentFormViewModel.Error(parsedMemoId));
 
-            return PartialView(viewName: "CommentForm", CommentFormViewModel.Success(addedComment.id, parsedMemoId));
+            return PartialView(viewName: "CommentForm", CommentFormViewModel.Success(addedComment.Id, parsedMemoId));
         }
         [HttpPost]
         public async Task<IActionResult> RenderAddedComment(string commentId)
