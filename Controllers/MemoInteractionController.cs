@@ -3,6 +3,7 @@ using SaYMemos.Controllers.Helpers;
 using SaYMemos.Models.data.entities.comments;
 using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
+using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models.memos;
 using SaYMemos.Services.interfaces;
 using System;
@@ -150,12 +151,15 @@ namespace SaYMemos.Controllers
 
             return PartialView(viewName: "CommentRatingZone", model: new CommentRatingZoneViewModel(isRatedAfter, isUpAfter, commentId, comment.CountRating()));
         }
-
         [HttpPost]
         public async Task<IActionResult> RenderCommentReplyForm(string commentId)
         {
             if (!Guid.TryParse(commentId, out Guid commentGuid))
-                return BadRequest("Invalid comment ID format.");
+                return BadRequest("Invalid comment ID format");
+
+            var Comment = await _db.GetCommentById(commentGuid);
+            if (Comment is null)
+                return BadRequest("Unknown comment");
 
             long userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
@@ -165,7 +169,35 @@ namespace SaYMemos.Controllers
             if (user is null)
                 return this.HxUnauthorized();
 
-            throw new NotImplementedException();
+            return PartialView(
+                viewName: "CommentReplyForm",
+                model: CommentReplyForm.CreateNew(user.ProfilePicturePath, Comment));
+        }
+        [HttpPost]
+        public async Task<IActionResult> SaveReplyComment(CommentReplyForm form)
+        {
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            await _db.UpdateLastLoginDateForUser(userId);
+
+            form = form.Validate();
+            if (form.AnyError())
+                return PartialView(viewName: "CommentReplyForm", form);
+
+            var parentComment = await _db.GetCommentById((Guid)form.ParentCommentGuid());
+            if (parentComment is null)
+                return PartialView(viewName: "CommentReplyForm", form with {errorLine= "Unknown comment" });
+            Comment? newComment= await _db.AddCommentToMemo(parentComment.MemoId, form.text, user.Id, parentComment.Id);
+            if (newComment is null)
+                return PartialView(viewName: "CommentReplyForm", form with { errorLine = "Error during comment saving. Please try again later" });
+
+            return PartialView(viewName: "ReplyCommentAdded");
         }
     }
 }

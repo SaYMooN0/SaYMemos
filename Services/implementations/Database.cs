@@ -177,14 +177,14 @@ namespace SaYMemos.Services.implementations
         }
         public async Task<Comment?> GetCommentById(Guid id) =>
                    await _context.Comments.FirstOrDefaultAsync(c => c.Id == id);
-        public async Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, long userId, Guid? parentCommentId = null)
+        public async Task<Comment?> AddCommentToMemo(Guid memoId, string commentText, long userId, Guid? parentCommentId = null)
         {
             Memo? memo = await GetMemoById(memoId);
 
             if (memo is null || !memo.areCommentsAvailable)
                 return null;
 
-            var comment = Comment.CreateNew(memoId, userId, parentCommentId, memoComment);
+            var comment = Comment.CreateNew(memoId, userId, parentCommentId, commentText);
 
             if (parentCommentId is not null)
             {

@@ -41,11 +41,11 @@ namespace SaYMemos.Models.tag_helpers
                 "</div>" +
                 "<div class='comment-meta-right' id='mr-{4}'>" +
                     "<span class='comment-rating'>{5}</span>" +
-                    "{6}"+
+                    "{6}" +
                 "</div>" +
                 "</div>" +
                 "<p class='comment-text'>{7}</p>" +
-                "<button class='answer-button'>Reply</button>",
+                "<button class='answer-button' hx-trigger='click' hx-swap='outerHTML' hx-target='this' hx-redirect='/authorization' hx-post='/MemoInteraction/RenderCommentReplyForm' hx-vals='{8}'>Reply</button>",
                 commentClass,
                 comment.authorProfilePicture.EncodeHtml(),
                 comment.authorNickname.EncodeHtml(),
@@ -53,8 +53,9 @@ namespace SaYMemos.Models.tag_helpers
                 comment.id.ToString().EncodeHtml(),
                 comment.totalRating,
                 RenderVoteButtons(comment),
-                encodedText
-            );
+                encodedText,
+                $"{{\"commentId\": \"{comment.id}\"}}"
+            ) ;
             if (comment.childComments.Any())
             {
                 foreach (var childComment in comment.childComments)

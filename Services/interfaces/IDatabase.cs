@@ -24,7 +24,7 @@ namespace SaYMemos.Services.interfaces
         public Task UpdateUserSettings(AccountSettingsForm data, long id);
         public Task AddNewMemo(long authorId, string authorComment,bool areCommentsAvailable, string imagePath, List<string> tagValues);
         public Task<bool> ChangeLikeState(User user,Guid memoId);
-        public Task<Comment?> AddCommentToMemo(Guid memoId, string memoComment, long userId, Guid? parentCommentId = null);
+        public Task<Comment?> AddCommentToMemo(Guid memoId, string commentText, long userId, Guid? parentCommentId = null);
         public Task<Comment?> GetCommentById(Guid id);
         public Task<(bool isRatedAfter, bool? isUp)> ChangeCommentRatingByUser(Comment comment, User user, bool isUp);
     }

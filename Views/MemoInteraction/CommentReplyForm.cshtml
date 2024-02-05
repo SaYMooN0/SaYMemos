@@ -1,8 +1,12 @@
-﻿@model CommentReplyFormViewModel
+﻿@model CommentReplyForm
 
-<form>
-    <p class="error-line">@(string.IsNullOrWhiteSpace(Model.errorLine) ? string.Empty : Model.errorLine) </p>
-    <input type="hidden" asp-for="parentCommentId" />
-    <input type="text" placeholder="Type a comment..." asp-for="text" value="@Model.userToReply" />
-    <input type="submit" value="Post" />
+<form hx-post='/MemoInteraction/SaveReplyComment' hx-swap='outerHTML' hx-targer="this" >
+    <img src="@Model.userProfilePicture" alt="profile picture"/>
+    <div class="main-form-content">
+        <p class="error-line">@(string.IsNullOrWhiteSpace(Model.errorLine) ? string.Empty : Model.errorLine) </p>
+        <input type="hidden" asp-for="parentCommentId" />
+        <input type="text" placeholder="Write a reply" asp-for="text" value="@($"@{Model.userToReply}"), " />
+        <input type="submit" value="Post" />
+    </div>
+
 </form>
