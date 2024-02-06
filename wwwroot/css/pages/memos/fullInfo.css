@@ -41,6 +41,7 @@
     width: 98%;
     padding-left: 20px;
     display: flex;
+    justify-content:space-between;
     flex-direction: row;
     overflow: hidden;
     margin: auto;
@@ -50,8 +51,7 @@
 .memo-fu-main {
     display: flex;
     flex-direction: column;
-    min-width: calc(380px + 2vw);
-    max-width:70%;
+    min-width: calc(580px + 10vw);
     overflow-y: auto;
 }
 
@@ -126,6 +126,7 @@
     }
 
 .memo-fu-sidebar {
+    min-width:440px;
     display: grid;
     grid-template-rows: 88% auto;
     flex-direction: column;
@@ -136,8 +137,9 @@
     color:#777;
 }
 .memo-fu-comments {
-    width:100%;
+    width: 100%;
     overflow: hidden;
+    overflow-y: auto;
 }
 .memo-fu-add-comment {
     display: flex;

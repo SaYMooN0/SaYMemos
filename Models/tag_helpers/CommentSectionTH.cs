@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using SaYMemos.Models.view_models.memos;
 using System.Text;
-using System.Text.Json;
 
 namespace SaYMemos.Models.tag_helpers
 {
@@ -26,48 +25,47 @@ namespace SaYMemos.Models.tag_helpers
         private string RenderComment(CommentViewModel comment, bool isParent)
         {
             var commentClass = isParent ? "comment-parent" : "comment-child";
-            var encodedText = comment.text.EncodeHtml();
-
             var commentHtml = new StringBuilder();
-            commentHtml.AppendFormat(
-                "<div class='{0}'>" +
-                "<div class='comment-meta-info'>" +
-                    "<div class='comment-meta-left'>" +
-                    "<img src='{1}' alt='Author Picture' class='comment-author-picture'>" +
-                    "<div>" +
-                        "<span class='comment-author-nickname'>{2}</span>" +
-                        "<span class='comment-date'>{3}</span>" +
-                    "</div>" +
-                "</div>" +
-                "<div class='comment-meta-right' id='mr-{4}'>" +
-                    "<span class='comment-rating'>{5}</span>" +
-                    "{6}" +
-                "</div>" +
-                "</div>" +
-                "<p class='comment-text'>{7}</p>" +
-                "<button class='answer-button' hx-trigger='click' hx-swap='outerHTML' hx-target='this' hx-redirect='/authorization' hx-post='/MemoInteraction/RenderCommentReplyForm' hx-vals='{8}'>Reply</button>",
-                commentClass,
-                comment.authorProfilePicture.EncodeHtml(),
-                comment.authorNickname.EncodeHtml(),
-                comment.leavingDate.EncodeHtml(),
-                comment.id.ToString().EncodeHtml(),
-                comment.totalRating,
-                RenderVoteButtons(comment),
-                encodedText,
-                $"{{\"commentId\": \"{comment.id}\"}}"
-            ) ;
-            if (comment.childComments.Any())
-            {
-                foreach (var childComment in comment.childComments)
-                {
-                    commentHtml.Append(RenderComment(childComment, false));
-                }
-            }
 
-            commentHtml.Append("</div>");
+            commentHtml.Append($"<div class='{commentClass}'>")
+                       .Append(RenderMetaInfo(comment))
+                       .Append($"<p class='comment-text'>{comment.text.EncodeHtml()}</p>")
+                       .Append(RenderBottomInfo(comment))
+                       .Append(RenderReplyButton(comment.id.ToString()))
+                       .Append("</div>");
+
+            foreach (var childComment in comment.childComments)
+            {
+                commentHtml.Append(RenderComment(childComment, false));
+            }
 
             return commentHtml.ToString();
         }
+
+        private string RenderMetaInfo(CommentViewModel comment)=>
+            $"<div class='comment-meta-info'>" +
+                   $"<div class='comment-meta-left'>" +
+                   $"<img src='{comment.authorProfilePicture.EncodeHtml()}' alt='Author Picture' class='comment-author-picture'>" +
+                   "<div>" +
+                   $"<span class='comment-author-nickname'>{comment.authorNickname.EncodeHtml()}</span>" +
+                   $"<span class='comment-date'>{comment.leavingDate.EncodeHtml()}</span>" +
+                   "</div>" +
+                   "</div>" +
+                   $"<div class='comment-meta-right' id='mr-{comment.id}'>" +
+                   $"<span class='comment-rating'>{comment.totalRating}</span>" +
+                   RenderVoteButtons(comment) +
+                   "</div>" +
+                   "</div>";
+
+        private string RenderBottomInfo(CommentViewModel comment)=>
+            $"<div class='comment-bottom-info' id='bi-{comment.id}'>" +
+            $"<label class='comment-bottom-label'>Replies: {comment.childComments.Length}</label>" +
+            $"<label class='comment-bottom-label'>Ratings: {comment.ratingsCount}</label>" +
+            "</div>";
+
+        private string RenderReplyButton(string commentId)=>
+            $"<button class='answer-button' hx-trigger='click' hx-swap='outerHTML' hx-target='this' hx-redirect='/authorization' hx-post='/MemoInteraction/RenderCommentReplyForm' hx-vals='{{\"commentId\": \"{commentId}\"}}'>Reply</button>";
+       
         private string RenderVoteButtons(CommentViewModel comment)
         {
 

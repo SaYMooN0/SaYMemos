@@ -1,1 +1,7 @@
-﻿Addded
+﻿@model string 
+@{
+    var parrentComment = Model;
+}
+<div hx-trigger="load" hx-post="/MemoInteraction/refreshBottomInfo?commentId=@parrentComment" hx-target="#bi-@parrentComment" hx-swap="outerHTML">
+    added
+</div>

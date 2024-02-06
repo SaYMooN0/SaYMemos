@@ -1,18 +1,14 @@
 ﻿.comment-parent,
 .comment-child {
-    width: 100%;
-}
-
-.comment-parent {
-    border-bottom: 1px solid #e1e1e1;
-    padding: 4px;
+    width: 90%;
+    padding:2px;
+ 
 }
 
 .comment-child {
     border-left: 3px solid #e1e1e1;
-    margin-left: 16px;
-    padding: 8px;
-    background-color: #f8f8f8;
+    margin-left: 10px;
+    padding-left: 10px;
 }
 
 .comment-meta-info {
@@ -22,7 +18,8 @@
 }
 
 .comment-meta-left,
-.comment-meta-right {
+.comment-meta-right,
+.comment-bottom-info {
     display: flex;
     align-items: center;
 }
@@ -35,7 +32,7 @@
 }
 
 .comment-author-nickname {
-    display: block; 
+    display: block;
     font-weight: bold;
     margin-bottom: 4px;
 }
@@ -60,7 +57,14 @@
     margin-top: 6px;
     margin-bottom: 6px;
 }
-
+.comment-bottom-info{
+    justify-content:end;
+}
+    .comment-bottom-info label {
+        font-size: 0.8em;
+        color: #666;
+        padding-right:10px;
+    }
 .answer-button {
     background-color: #a78ef6;
     border: none;
@@ -69,7 +73,7 @@
     border-radius: 18px;
     cursor: pointer;
     font-size: 0.8em;
-    margin-top: 8px;
+    margin-top: -10px;
 }
 
     .answer-button:hover {
@@ -79,7 +83,7 @@
 .comment-rating-buttons {
     display: flex;
     align-items: center;
-    flex-direction:column;
+    flex-direction: column;
     gap: 5px;
 }
 
@@ -88,18 +92,60 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent; 
-    border: none; 
-    padding: 4px; 
+    background-color: transparent;
+    border: none;
+    padding: 4px;
 }
 
     .comment-rating-button svg {
-        fill: #a78ef6; 
+        fill: #a78ef6;
         width: 24px;
-        aspect-ratio:1/1;
+        aspect-ratio: 1/1;
     }
 
     .comment-rating-button:hover svg {
         fill: #9e7ae9;
     }
 
+
+
+.comment-reply-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-top: 1px solid #dbdbdb;
+}
+
+.comment-reply-user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.comment-reply-main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-reply-input {
+    flex-grow: 1;
+    border: 1px solid #dbdbdb;
+    border-radius: 18px;
+    padding: 10px;
+    margin-bottom: 4px;
+}
+
+.comment-reply-submit {
+    border: none;
+    background-color: #a78ef6;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 18px;
+    cursor: pointer;
+}
+
+    .comment-reply-submit:hover {
+        background-color: #9e7ae9;
+    }

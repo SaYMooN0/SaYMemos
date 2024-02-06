@@ -149,7 +149,7 @@ namespace SaYMemos.Controllers
 
             (bool isRatedAfter, bool? isUpAfter) = await _db.ChangeCommentRatingByUser(comment, user, isUp);
 
-            return PartialView(viewName: "CommentRatingZone", model: new CommentRatingZoneViewModel(isRatedAfter, isUpAfter, commentId, comment.CountRating()));
+            return PartialView(viewName: "CommentRatingZone", model: new CommentRatingZoneViewModel(isRatedAfter, isUpAfter, commentId, comment.CalculateTotalRating()));
         }
         [HttpPost]
         public async Task<IActionResult> RenderCommentReplyForm(string commentId)
@@ -192,12 +192,23 @@ namespace SaYMemos.Controllers
 
             var parentComment = await _db.GetCommentById((Guid)form.ParentCommentGuid());
             if (parentComment is null)
-                return PartialView(viewName: "CommentReplyForm", form with {errorLine= "Unknown comment" });
-            Comment? newComment= await _db.AddCommentToMemo(parentComment.MemoId, form.text, user.Id, parentComment.Id);
+                return PartialView(viewName: "CommentReplyForm", form with { errorLine = "Unknown comment" });
+            Comment? newComment = await _db.AddCommentToMemo(parentComment.MemoId, form.text, user.Id, parentComment.Id);
             if (newComment is null)
                 return PartialView(viewName: "CommentReplyForm", form with { errorLine = "Error during comment saving. Please try again later" });
 
-            return PartialView(viewName: "ReplyCommentAdded");
+            return PartialView(viewName: "ReplyCommentAdded", model:parentComment.Id.ToString());
+        }
+        [HttpPost]
+        public async Task<IActionResult> RefreshBottomInfo(string commentId)
+        {
+            if (!Guid.TryParse(commentId, out Guid commentGuid))
+                return BadRequest("Invalid comment ID format");
+
+            var Comment = await _db.GetCommentById(commentGuid);
+            if (Comment is null)
+                return BadRequest("Unknown comment");
+            return PartialView(viewName: "CommentBottomInfo", model: (commentId, Comment.ChildComments.Count(), Comment.Ratings.Count));
         }
     }
 }

@@ -1,0 +1,5 @@
+﻿@model (string commentId, int repliesCount, int ratingsCount)
+<div class='comment-bottom-info' id='bi-@Model.commentId'>
+    <label class='comment-bottom-label'>Replies: @Model.repliesCount</label>
+    <label class='comment-bottom-label'>Ratings: @Model.ratingsCount</label>
+</div>

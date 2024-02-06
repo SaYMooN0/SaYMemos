@@ -8,8 +8,8 @@ namespace SaYMemos.Models.data.entities.comments
 
 
         [Key]
-        public Guid Id { get;private set; }
-        public Guid MemoId { get; private  set; }
+        public Guid Id { get; private set; }
+        public Guid MemoId { get; private set; }
         public long AuthorId { get; private set; }
         public Guid? ParentCommentId { get; private set; }
         public string Text { get; private set; }
@@ -29,11 +29,10 @@ namespace SaYMemos.Models.data.entities.comments
         public virtual User Author { get; set; }
         public virtual Comment ParentComment { get; set; }
         public virtual ICollection<Comment> ChildComments { get; set; } = new HashSet<Comment>();
-        public virtual ICollection<CommentRating> CommentRatings { get; set; } = new HashSet<CommentRating>();
+        public virtual ICollection<CommentRating> Ratings { get; set; } = new HashSet<CommentRating>();
 
-        public int CountRating()
-        {
-            return CommentRatings.Count(r => r.IsUp) - CommentRatings.Count(r => !r.IsUp);
-        }
+        public int CalculateTotalRating() =>
+            Ratings.Count(r => r.IsUp) - Ratings.Count(r => !r.IsUp);
+
     }
 }
