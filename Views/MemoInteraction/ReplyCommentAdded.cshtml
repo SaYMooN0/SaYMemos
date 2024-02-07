@@ -1,7 +1,4 @@
-﻿@model string 
-@{
-    var parrentComment = Model;
-}
-<div hx-trigger="load" hx-post="/MemoInteraction/refreshBottomInfo?commentId=@parrentComment" hx-target="#bi-@parrentComment" hx-swap="outerHTML">
-    added
-</div>
+﻿@model (string parrentCommentId, CommentViewModel newComment)
+<div hx-trigger="load" hx-post="/MemoInteraction/refreshBottomInfo?commentId=@Model.parrentCommentId" hx-target="#bi-@Model.parrentCommentId" hx-swap="outerHTML"></div>
+<button class='answer-button' hx-trigger='click' hx-swap='outerHTML' hx-target='this' hx-redirect='/authorization' hx-post='/MemoInteraction/RenderCommentReplyForm' hx-vals='{"commentId": "@Model.parrentCommentId"}'>Reply</button>
+<comment-section comment="@Model.newComment"></comment-section>

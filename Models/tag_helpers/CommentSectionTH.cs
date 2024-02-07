@@ -17,7 +17,7 @@ namespace SaYMemos.Models.tag_helpers
             output.TagMode = TagMode.StartTagAndEndTag;
 
             var content = new StringBuilder();
-            content.Append(RenderComment(Comment, true));
+            content.Append(RenderComment(Comment, Comment.isParent));
 
             output.Content.SetHtmlContent(content.ToString());
         }
@@ -31,14 +31,13 @@ namespace SaYMemos.Models.tag_helpers
                        .Append(RenderMetaInfo(comment))
                        .Append($"<p class='comment-text'>{comment.text.EncodeHtml()}</p>")
                        .Append(RenderBottomInfo(comment))
-                       .Append(RenderReplyButton(comment.id.ToString()))
-                       .Append("</div>");
+                       .Append(RenderReplyButton(comment.id.ToString()));
 
             foreach (var childComment in comment.childComments)
             {
                 commentHtml.Append(RenderComment(childComment, false));
             }
-
+            commentHtml.Append("</div>");
             return commentHtml.ToString();
         }
 

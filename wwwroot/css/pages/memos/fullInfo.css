@@ -41,7 +41,7 @@
     width: 98%;
     padding-left: 20px;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     flex-direction: row;
     overflow: hidden;
     margin: auto;
@@ -94,23 +94,35 @@
     font-size: 16px;
 }
 
-.memo-fu-footer {
-    padding: 16px;
+.memo-fu-likes-footer {
     border-top: 1px solid #dbdbdb;
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    align-items:center;
 }
 
+    .memo-fu-likes-footer svg {
+        height: 30px;
+        aspect-ratio: 1/1;
+        fill: currentColor;
+        cursor: pointer;
+    }
+
 .memo-tags {
-    width:100%;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
+
 .see-all-tags {
     text-decoration: none;
     white-space: nowrap;
     font-size: 18px;
     color: #5e5a5a;
 }
+
 .memo-tag {
     background-color: #a78ef6;
     color: white;
@@ -126,27 +138,29 @@
     }
 
 .memo-fu-sidebar {
-    min-width:440px;
+    min-width: 440px;
     display: grid;
-    grid-template-rows: 88% auto;
+    grid-template-rows: 90% auto;
     flex-direction: column;
 }
 
 .memo-comments-count {
     font-size: 18px;
-    color:#777;
+    color: #777;
 }
+
 .memo-fu-comments {
     width: 100%;
     overflow: hidden;
     overflow-y: auto;
 }
+
 .memo-fu-add-comment {
     display: flex;
     align-items: center;
-    padding: 8px;
+    padding: 2px;
     height: 46px;
-    width:100%;
+    width: 98%;
 }
 
     .memo-fu-add-comment input[type='text'] {
@@ -185,5 +199,5 @@
     font-style: italic;
     font-size: 16px;
     width: 100%;
-    padding-left:10px;
+    padding-left: 10px;
 }

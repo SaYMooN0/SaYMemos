@@ -171,7 +171,7 @@ namespace SaYMemos.Controllers
 
             return PartialView(
                 viewName: "CommentReplyForm",
-                model: CommentReplyForm.CreateNew(user.ProfilePicturePath, Comment));
+                model: CommentReplyForm.CreateNew(user, Comment));
         }
         [HttpPost]
         public async Task<IActionResult> SaveReplyComment(CommentReplyForm form)
@@ -197,7 +197,7 @@ namespace SaYMemos.Controllers
             if (newComment is null)
                 return PartialView(viewName: "CommentReplyForm", form with { errorLine = "Error during comment saving. Please try again later" });
 
-            return PartialView(viewName: "ReplyCommentAdded", model:parentComment.Id.ToString());
+            return PartialView(viewName: "ReplyCommentAdded", model: (parentComment.Id.ToString(), CommentViewModel.FromCommentForUser(newComment, user)));
         }
         [HttpPost]
         public async Task<IActionResult> RefreshBottomInfo(string commentId)
@@ -209,6 +209,11 @@ namespace SaYMemos.Controllers
             if (Comment is null)
                 return BadRequest("Unknown comment");
             return PartialView(viewName: "CommentBottomInfo", model: (commentId, Comment.ChildComments.Count(), Comment.Ratings.Count));
+        }
+        [HttpPost]
+        public async Task<IActionResult> FullInfoLikePressed(string memoId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
