@@ -213,7 +213,25 @@ namespace SaYMemos.Controllers
         [HttpPost]
         public async Task<IActionResult> FullInfoLikePressed(string memoId)
         {
-            throw new NotImplementedException();
+            if (!Guid.TryParse(memoId, out Guid parsedMemoId))
+                return BadRequest("Invalid Memo ID format.");
+            var memo = await _db.GetMemoById(parsedMemoId);
+            if (memo is null)
+                return  BadRequest("Unknown memo");
+
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return this.HxUnauthorized();
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return this.HxUnauthorized();
+
+            await _db.UpdateLastLoginDateForUser(user);
+
+            bool isLikedAfter = await _db.ChangeLikeState(user, parsedMemoId);
+         
+            return PartialView(viewName: "FullInfoLikeArea", new FullInfoLikeAreaViewModel( memoId, isLikedAfter,memo.Likes.Count ));
         }
     }
 }

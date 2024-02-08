@@ -14,7 +14,8 @@ namespace SaYMemos.Models.view_models.memos
         int likesCount,
         int commentsCount,
         bool areCommentsAvaliable,
-        bool isViewerAuthorized
+        bool isViewerAuthorized,
+        bool anyTags
         )
     {
         public static MemoPreviewViewModel FromMemo(Memo memo, bool isLiked, bool isAuthorized) => new(
@@ -29,6 +30,7 @@ namespace SaYMemos.Models.view_models.memos
             memo.Likes.Count,
             memo.Comments.Count,
             memo.areCommentsAvailable,
-            isAuthorized);
+            isAuthorized,
+            memo.Tags.Count>0);
     }
 }

@@ -53,7 +53,11 @@ namespace SaYMemos.Models.tag_helpers
                 interactionsBuilder.Append($"<span class='memo-icon' {StringExtensions.OpenMemoDialogOnClick(MemoContent.id)} >{CommentIcon}</span>");
 
             interactionsBuilder.Append($"<span class='memo-icon'>{ShareIcon}</span>");
+            if (MemoContent.anyTags)
+                interactionsBuilder.Append($"<label hx-trigger='click' hx-post='MemoInteraction/RenderTags' hx-target='#pе-{MemoContent.id}' class='render-tags' hx-vals='{{\"memoId\": \"{MemoContent.id}\"}}'>Show tags</label>");
+            
             interactionsBuilder.Append("</div>");
+            interactionsBuilder.Append($"<div id='pе-{MemoContent.id}'></div>");
 
 
             return interactionsBuilder.ToString();
