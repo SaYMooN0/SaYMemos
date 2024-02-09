@@ -220,6 +220,13 @@ namespace SaYMemos.Services.implementations
             currentRating.ChangeIsUp();
             return (true, isUp);
         }
+        public IEnumerable<string> GetMatchingTags(string inputTag)
+        {
+            return _context.MemoTags
+                .Where(tag => tag.Value.StartsWith(inputTag))
+                .Take(20)
+                .Select(t=>t.Value);
+        }
 
 
     }

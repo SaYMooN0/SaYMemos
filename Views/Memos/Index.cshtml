@@ -1,14 +1,47 @@
 ﻿@{
     ViewData["Title"] = "Memos";
 }
+@model MemoPageViewModel
+@{
+    string[] MostPopularTags =
+               ["fashion", "love", "memooftheday", "beautiful", "art", "photography", "happy", "nature", "fitness", "technology", "travel", "music", "food"];
 
+}
 <link rel="stylesheet" href="~/css/pages/memos/memos_page.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/pages/memos/memos_page_filter.css" asp-append-version="true" />
 <div class="frame">
     <div class="memos-container">
         <div class="sort-options">Sort Options</div>
-        <div class="content-area">Content</div>
+        <div class="content-area">
+            <div class="memos-package">
+            </div>
+        </div>
     </div>
-    <div class="memos-filter">
-        Filter Options
-    </div>
+    <form class="memos-filter">
+        <div class="filter-tags">
+            <label class="filter-tags-label">Chosen tags:</label>
+            <div class="filter-chosen-tags">
+                @foreach (string tag in Model.filer.tags)
+                {
+                    <input asp-for="filer.tags" value="@tag" contenteditable="false" />
+                }
+            </div>
+            <label class="filter-tags-label">Use search bar to find other tags:</label>
+            <input type="text" hx-trigger="keyup delay:200ms" hx-post="memos/RenderFoundTags" name="searchTag" hx-target="#found-tags">
+            <div id="found-tags">
+
+            </div>
+            <label class="filter-tags-label">Or choose from popular:</label>
+            @foreach (string tag in MostPopularTags)
+            {
+                <add-filter-tag tagname="@tag"></add-filter-tag>
+            }
+
+        </div>
+
+        <div class="filter-buttons">
+            <button type="button">Clear Filters</button>
+            <button type="submit">Apply Filters</button>
+        </div>
+    </form>
 </div>

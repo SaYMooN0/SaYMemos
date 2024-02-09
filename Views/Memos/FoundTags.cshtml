@@ -1,0 +1,6 @@
+﻿@model IEnumerable<string>
+@foreach(string tag in Model)
+{
+        <add-filter-tag tagname="@tag"></add-filter-tag>
+}
+<label>If you didn't find the tag you were looking for, try deleting or adding a few characters</label>

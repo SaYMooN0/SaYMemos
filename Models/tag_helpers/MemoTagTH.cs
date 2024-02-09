@@ -10,7 +10,7 @@ namespace SaYMemos.Models.tag_helpers
         {
             output.TagName = "a";
             output.Attributes.SetAttribute("class", "memo-tag");
-            output.Attributes.SetAttribute("href", "memos?tag="+tagName);
+            output.Attributes.SetAttribute("href", "/memos?tags="+tagName);
             output.TagMode = TagMode.StartTagAndEndTag;
             output.Content.SetHtmlContent( StringExtensions.EncodeHtml('#' + tagName) );
         }
