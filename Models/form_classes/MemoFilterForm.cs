@@ -10,9 +10,11 @@
         int? commentsFrom,
         int? commentsTo)
     {
-        public static MemoFilterForm Default() =>
-            new(
+        public static MemoFilterForm Default() => new(
                 false, Array.Empty<string>(),
                 null, null, null, null, null, null);
+        public static MemoFilterForm DefaultWithTag(string tag) => new(
+               false, [tag],
+               null, null, null, null, null, null);
     }
 }

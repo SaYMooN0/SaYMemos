@@ -1,8 +1,106 @@
-﻿.filter-add-tag {
+﻿.memos-filter {
+    border: 2px solid #ccc;
+    padding: 20px;
+    height: 83vh;
+    overflow-y: auto;
+}
+
+.search-tag-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto; 
+    border-radius: 4px;
+    background-color: #fff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-tag-input {
+    width: 98%;
+    padding: 8px 10px 8px 40px; 
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    font-size: 16px; 
+}
+
+.search-tag-icon {
+    position: absolute;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    color: #a78ef6; 
+}
+
+    .search-tag-icon svg {
+        fill: currentColor;
+        width: 20px; 
+        aspect-ratio:1/1;
+    }
+.search-tag-input:focus {
+    box-shadow: 0 0 0 2px rgba(167, 142, 246, 0.5);
+}
+
+.filter-add-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px;
+    margin: 5px 0;
+    box-shadow: 0 2px 4px rgba(66, 12, 89, 0.12);
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
     .filter-add-tag label {
+        color: #a78ef6;
+        font-weight: bold;
     }
 
     .filter-add-tag button {
+        padding: 5px 9px;
+        background-color: #fff;
+        color: #a78ef6;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s, color 0.3s;
     }
+
+        .filter-add-tag button:hover {
+            background-color: #a78ef6;
+            color: #fff;
+        }
+
+.filter-added-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f2f2f2;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 3px 7px;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(66, 12, 89, 0.12);
+}
+
+    .filter-added-tag label {
+        margin-right: 10px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .filter-added-tag button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #999;
+        font-size: 1.2em;
+    }
+
+        .filter-added-tag button:hover {
+            color: #666;
+        }

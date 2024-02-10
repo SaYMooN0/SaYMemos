@@ -22,35 +22,37 @@ namespace SaYMemos.Controllers
             _enc = enc;
         }
 
-        public IActionResult Index(MemoFilterForm? filter)
+        public IActionResult Index()
         {
-            MemoPreviewViewModel[] memos = Array.Empty<MemoPreviewViewModel>(); //just for now
-            if (filter is not null)
-            {
-                //memos from db with fileter
-            }
-            else
-            {
-                //first 10 memos
-            }
+            MemoPreviewViewModel[] memos = Array.Empty<MemoPreviewViewModel>();//from db
             return View(model: MemoPageViewModel.Default(memos));
         }
+        public IActionResult WithTagFilter(string tag)
+        {
+            MemoPreviewViewModel[] memos = Array.Empty<MemoPreviewViewModel>();//from db
+            return View(viewName:"Index", model: new MemoPageViewModel(memos, MemoFilterForm.DefaultWithTag(tag), MemoSortOptionsForm.Default()));
+        }
+
         [HttpPost]
         public IActionResult RenderFoundTags(string? searchTag) =>
             string.IsNullOrWhiteSpace(searchTag) ?
             Content(string.Empty) :
             PartialView("FoundTags", _db.GetMatchingTags(searchTag));
 
+
         [HttpPost]
-        public IActionResult ApplyFilter(MemoFilterForm filer)
-        {
-            throw new NotImplementedException();
-        }
+        public IActionResult AddFilterTag(string tag) =>
+            PartialView("FilterTag", tag);
         [HttpPost]
         public IActionResult ClearFilter()
         {
             //new filter view 
             //new memo package
+            throw new NotImplementedException();
+        }
+        [HttpPost]
+        public IActionResult ApplyFilter(MemoFilterForm filer)
+        {
             throw new NotImplementedException();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
