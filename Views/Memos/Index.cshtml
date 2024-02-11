@@ -12,12 +12,32 @@
 <div class="frame">
     <div class="memos-container">
         <div class="sort-options">Sort Options</div>
-        <div class="content-area">
-            <div class="memos-package">
-            </div>
+        <div class="content-area" hx-trigger="intersect once" hx-swap="innerHTML" hx-target='this' hx-post="/Memos/RenderNewPackage">
+       
         </div>
     </div>
     <form class="memos-filter" hx-post="/memos/ApplyFilter">
+        <label class="filter-label">Post Date</label>
+        <div class="from-to-inputs-block">
+            <label class="from-to-label">from:</label>
+            <input type="date" asp-for="filer.dateFrom"/>
+            <label class="from-to-label">to:</label>
+            <input type="date" asp-for="filer.dateTo"/>
+        </div>
+        <label class="filter-label">Likes Count</label>
+        <div class="from-to-inputs-block">
+            <label class="from-to-label">from:</label>
+            <input type="number" min="0" max="999999" asp-for="filer.likesFrom" />
+            <label class="from-to-label">to:</label>
+            <input type="number" min="0" max="999999"  asp-for="filer.likesTo" />
+        </div>
+        <label class="filter-label">Comments Count</label>
+        <div class="from-to-inputs-block">
+            <label class="from-to-label">from:</label>
+            <input type="number" min="0" max="999999" asp-for="filer.commentsFrom" />
+            <label class="from-to-label">to:</label>
+            <input type="number" min="0" max="999999" asp-for="filer.commentsTo" />
+        </div>
         <div class="filter-tags">
             <label class="filter-tags-label">Chosen tags:</label>
             <div id="filter-chosen-tags">

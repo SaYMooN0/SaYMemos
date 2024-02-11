@@ -22,7 +22,7 @@
             response.RemoveCookie("ConfirmationId");
 
 
-        private static void SetCookie(this HttpResponse response, string key, string value, int? expireTime = null)
+        public static void SetCookie(this HttpResponse response, string key, string value, int? expireTime = null)
         {
             var option = new CookieOptions
             {
@@ -38,10 +38,10 @@
             response.Cookies.Append(key, value, option);
         }
 
-        private static string GetCookie(this HttpRequest request, string key) =>
+        public static string GetCookie(this HttpRequest request, string key) =>
             request.Cookies.TryGetValue(key, out string value) ? value : string.Empty;
 
-        private static void RemoveCookie(this HttpResponse response, string key) =>
+        public static void RemoveCookie(this HttpResponse response, string key) =>
             response.Cookies.Delete(key);
 
 

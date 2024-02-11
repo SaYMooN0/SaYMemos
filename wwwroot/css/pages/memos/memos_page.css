@@ -1,7 +1,7 @@
 ﻿.frame {
     width:100%;
     display:grid;
-    grid-template-columns:auto calc(180px + 8vw);
+    grid-template-columns:auto calc(200px + 9vw);
 }
 
 .memos-container {
