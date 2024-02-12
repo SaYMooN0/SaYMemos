@@ -6,6 +6,17 @@ namespace SaYMemos.Controllers.Helpers
 {
     public static class ControllerExtensions
     {
+
+        public static void SetRenderedMemoCount(this Controller controller, int count)
+        {
+            controller.HttpContext.Response.RemoveCookie("MemosRendered");
+            controller.HttpContext.Response.SetCookie("MemoFilter", count.ToString(), 10000);
+        }
+        public static int GetRenderedMemoCount(this Controller controller)
+        {
+            string memoCount=controller.Request.GetCookie("MemosRendered");
+            return string.IsNullOrEmpty(memoCount) ? 0 : Int32.TryParse(memoCount, out int res) ? res : 0;
+        }
         public static void SetMemoFilter(this Controller controller, MemoFilterForm form)
         {
             controller.HttpContext.Response.RemoveCookie("MemoFilter");

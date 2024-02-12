@@ -33,9 +33,19 @@ namespace SaYMemos.Controllers
             var form = MemoFilterForm.DefaultWithTag(tag);
             this.SetMemoFilter(form);
             this.SetMemoSortOptions(MemoSortOptionsForm.Default());
+            this.SetRenderedMemoCount(0);
             return View(viewName: "Index", new MemoPageViewModel(form, MemoSortOptionsForm.Default()));
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> SortingChanged(SortTypes sortType, bool isDescending)
+        {
+            MemoSortOptionsForm sorting=new(sortType, isDescending);
+            this.SetMemoSortOptions(sorting);
+            this.SetRenderedMemoCount(0);
+            return await RenderNewPackage();
+        }
 
         [HttpPost]
         public IActionResult RenderFoundTags(string? searchTag) =>
@@ -44,10 +54,11 @@ namespace SaYMemos.Controllers
             PartialView("FoundTags", _db.GetMatchingTags(searchTag));
 
         [HttpPost]
-        public IActionResult RenderNewPackage()
+        public async Task<IActionResult> RenderNewPackage()
         {
             var sortOptions = this.GetMemoSortOptions();
             var filter = this.GetMemoFilter();
+            int alreadyRendered=this.GetRenderedMemoCount();
             throw new NotImplementedException();
         }
         [HttpPost]
@@ -56,13 +67,17 @@ namespace SaYMemos.Controllers
         [HttpPost]
         public IActionResult ClearFilter()
         {
+            this.SetMemoFilter(MemoFilterForm.Default());
+            this.SetRenderedMemoCount(0);
             //new filter view 
             //new memo package
             throw new NotImplementedException();
         }
         [HttpPost]
-        public IActionResult ApplyFilter(MemoFilterForm filer)
+        public IActionResult ApplyFilter(MemoFilterForm filter)
         {
+            this.SetMemoFilter(filter);
+            this.SetRenderedMemoCount(0);
             throw new NotImplementedException();
             //set new memofiltercoockie
         }

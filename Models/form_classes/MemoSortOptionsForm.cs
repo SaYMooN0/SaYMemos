@@ -2,15 +2,15 @@
 
 namespace SaYMemos.Models.form_classes
 {
-    public record class MemoSortOptionsForm(SortOptions sortType, bool isDescending)
+    public record class MemoSortOptionsForm(SortTypes sortType, bool isDescending)
     {
         public static MemoSortOptionsForm Default() =>
-            new(SortOptions.Date, true);
+            new(SortTypes.Date, true);
     }
-    public enum SortOptions
+    public enum SortTypes
     {
-        Date,
-        Likes,
-        Comments
+        Date = 0,
+        Likes = 1,
+        Comments = 2
     }
 }

@@ -1,2 +1,6 @@
 ﻿@model string
-<filter-tag tagname="@Model"></filter-tag>
+<div class="filter-added-tag">
+    <label>@("#" + Html.Encode(Model))</label>
+    <input type='hidden' name='filter.tags' value='@Model' />
+    <button type="button" hx-trigger='click' datahx-swap='delete' hx-get='/ok' hx-target='closest .filter-added-tag'>×</button>
+</div>

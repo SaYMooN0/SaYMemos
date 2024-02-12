@@ -11,37 +11,51 @@
 <link rel="stylesheet" href="~/css/pages/memos/memos_page_filter.css" asp-append-version="true" />
 <div class="frame">
     <div class="memos-container">
-        <div class="sort-options">Sort Options</div>
+        <div class="sort-options-container">
+            <form hx-target=".content-area" hx-swap="innerHTML">
+                <select asp-for="@Model.sorting.sortType" asp-items="Html.GetEnumSelectList<SortTypes>()" class="sort-select" name='sortType'
+                        hx-post="/memos/sortingChanged" hx-trigger="change delay:200ms" hx-include="[name='sortType'],[name='isDescending']">
+                </select>
+                <div class="sort-direction-toggle">
+                    <label for="sortDescending" class="sort-direction-label">
+                        <input asp-for="@Model.sorting.isDescending" type="checkbox" id="sortDescending" class="sort-direction-checkbox" name='isDescending'
+                               hx-post="/memos/sortingChanged" hx-trigger="change delay:200ms" hx-include="[name='sortType'],[name='isDescending']" />
+                        <svg class="sort-arrow" viewBox="0 0 448 512">
+                            <path d="M201.4 342.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 274.7 86.6 137.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z" />
+                        </svg>
+                    </label>
+                </div>
+            </form>
+        </div>
         <div class="content-area" hx-trigger="intersect once" hx-swap="innerHTML" hx-target='this' hx-post="/Memos/RenderNewPackage">
-       
         </div>
     </div>
     <form class="memos-filter" hx-post="/memos/ApplyFilter">
         <label class="filter-label">Post Date</label>
         <div class="from-to-inputs-block">
             <label class="from-to-label">from:</label>
-            <input type="date" asp-for="filer.dateFrom"/>
+            <input type="date" asp-for="filter.dateFrom" />
             <label class="from-to-label">to:</label>
-            <input type="date" asp-for="filer.dateTo"/>
+            <input type="date" asp-for="filter.dateTo" />
         </div>
         <label class="filter-label">Likes Count</label>
         <div class="from-to-inputs-block">
             <label class="from-to-label">from:</label>
-            <input type="number" min="0" max="999999" asp-for="filer.likesFrom" />
+            <input type="number" min="0" max="999999" asp-for="filter.likesFrom" />
             <label class="from-to-label">to:</label>
-            <input type="number" min="0" max="999999"  asp-for="filer.likesTo" />
+            <input type="number" min="0" max="999999" asp-for="filter.likesTo" />
         </div>
         <label class="filter-label">Comments Count</label>
         <div class="from-to-inputs-block">
             <label class="from-to-label">from:</label>
-            <input type="number" min="0" max="999999" asp-for="filer.commentsFrom" />
+            <input type="number" min="0" max="999999" asp-for="filter.commentsFrom" />
             <label class="from-to-label">to:</label>
-            <input type="number" min="0" max="999999" asp-for="filer.commentsTo" />
+            <input type="number" min="0" max="999999" asp-for="filter.commentsTo" />
         </div>
         <div class="filter-tags">
             <label class="filter-tags-label">Chosen tags:</label>
             <div id="filter-chosen-tags">
-                @foreach (string tag in Model.filer.tags)
+                @foreach (string tag in Model.filter.tags)
                 {
                     <filter-tag tagname="@tag" />
                 }

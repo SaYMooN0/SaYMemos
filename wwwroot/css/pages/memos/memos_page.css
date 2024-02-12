@@ -1,7 +1,7 @@
 ﻿.frame {
-    width:100%;
-    display:grid;
-    grid-template-columns:auto calc(200px + 9vw);
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto calc(200px + 9vw);
 }
 
 .memos-container {
@@ -13,4 +13,63 @@
 }
 
 .content-area {
+}
+.sort-options-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.sort-options-container > form {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px 4px 4px;
+    border: 2px solid #eaeaea;
+    border-radius: 6px;
+
+}
+
+.sort-select {
+    padding-right: 6px;
+    appearance: none;
+    text-align: center;
+    border: none;
+    background-color: #fff;
+    font-size: 1.1rem;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease-in-out;
+}
+
+    .sort-select:focus {
+        outline: none;
+        border-color: #a78ef6;
+    }
+
+.sort-direction-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.sort-direction-checkbox {
+    display: none;
+}
+
+.sort-direction-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.sort-arrow {
+    fill: #a78ef6;
+    width: 30px;
+    aspect-ratio: 1/1;
+    transition: transform 0.2s ease-in-out;
+    transform: rotate(180deg);
+}
+
+.sort-direction-checkbox:checked ~ .sort-arrow {
+    transform:none;
+    transition: transform 0.3s ease;
 }
