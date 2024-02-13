@@ -225,7 +225,38 @@ namespace SaYMemos.Services.implementations
             return _context.MemoTags
                 .Where(tag => tag.Value.StartsWith(inputTag))
                 .Take(20)
-                .Select(t=>t.Value);
+                .Select(t => t.Value);
+        }
+        public async Task<List<Memo>> GetMemoPackage(List<MemoFilterFunc> filters, MemoSortOptionsForm sortOptions, int skipPackets = 0)
+        {
+            IQueryable<Memo> query = _context.Memos
+                .Include(m => m.Author)
+                .Include(m => m.Tags)
+                .Include(m => m.Likes)
+                .Include(m => m.Comments);
+
+            foreach (var filter in filters)
+            {
+                query = filter(query);
+            }
+
+            switch (sortOptions.sortType)
+            {
+                case SortTypes.Likes:
+                    query = sortOptions.isDescending ? query.OrderByDescending(m => m.Likes.Count) : query.OrderBy(m => m.Likes.Count);
+                    break;
+                case SortTypes.Comments:
+                    query = sortOptions.isDescending ? query.OrderByDescending(m => m.Comments.Count) : query.OrderBy(m => m.Comments.Count);
+                    break;
+                default:
+                    query = sortOptions.isDescending ? query.OrderByDescending(m => m.creationTime) : query.OrderBy(m => m.creationTime);
+                    break;
+            }
+
+            int skipAmount = skipPackets * Memo.PackageCount;
+            query = query.Skip(skipAmount).Take(Memo.PackageCount);
+
+            return await query.ToListAsync();
         }
 
 

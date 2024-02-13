@@ -6,8 +6,6 @@ using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models.memos;
 using SaYMemos.Services.interfaces;
-using System;
-using System.ComponentModel.Design;
 using ILogger = SaYMemos.Services.interfaces.ILogger;
 
 namespace SaYMemos.Controllers

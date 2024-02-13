@@ -10,7 +10,7 @@ namespace SaYMemos.Controllers.Helpers
         public static void SetRenderedMemoCount(this Controller controller, int count)
         {
             controller.HttpContext.Response.RemoveCookie("MemosRendered");
-            controller.HttpContext.Response.SetCookie("MemoFilter", count.ToString(), 10000);
+            controller.HttpContext.Response.SetCookie("MemosRendered", count.ToString(), 10000);
         }
         public static int GetRenderedMemoCount(this Controller controller)
         {

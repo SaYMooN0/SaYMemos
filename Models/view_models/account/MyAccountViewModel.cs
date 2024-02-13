@@ -21,7 +21,7 @@ namespace SaYMemos.Models.view_models.account
                 user.UserLinks.ParseToNonEmptyDictionary(),
                 user.FullName,
                 user.PostedMemos
-                    .Select(memo => MemoPreviewViewModel.FromMemo(memo, likedMemoIds.Contains(memo.id), true))
+                    .Select(memo => MemoPreviewViewModel.FromMemo(memo, user))
                     .OrderByDescending(memo => memo.creationDate)
                     .ToArray()
             );

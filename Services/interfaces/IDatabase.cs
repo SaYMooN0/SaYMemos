@@ -28,5 +28,6 @@ namespace SaYMemos.Services.interfaces
         public Task<Comment?> GetCommentById(Guid id);
         public Task<(bool isRatedAfter, bool? isUp)> ChangeCommentRatingByUser(Comment comment, User user, bool isUp);
         public IEnumerable<string> GetMatchingTags(string inputTag);
+        public Task<List<Memo>> GetMemoPackage(List<MemoFilterFunc> filters, MemoSortOptionsForm sortOptions, int skipPackets = 0);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SaYMemos.Controllers.Helpers;
+using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.form_classes;
 using SaYMemos.Models.view_models;
+using SaYMemos.Models.view_models.memos;
 using SaYMemos.Models.view_models.memos_page;
 using SaYMemos.Services.interfaces;
 using System.Diagnostics;
@@ -25,6 +27,7 @@ namespace SaYMemos.Controllers
         {
             this.SetMemoFilter(MemoFilterForm.Default());
             this.SetMemoSortOptions(MemoSortOptionsForm.Default());
+            this.SetRenderedMemoCount(0);
             return View(MemoPageViewModel.Default());
         }
 
@@ -41,7 +44,7 @@ namespace SaYMemos.Controllers
         [HttpPost]
         public async Task<IActionResult> SortingChanged(SortTypes sortType, bool isDescending)
         {
-            MemoSortOptionsForm sorting=new(sortType, isDescending);
+            MemoSortOptionsForm sorting = new(sortType, isDescending);
             this.SetMemoSortOptions(sorting);
             this.SetRenderedMemoCount(0);
             return await RenderNewPackage();
@@ -58,9 +61,25 @@ namespace SaYMemos.Controllers
         {
             var sortOptions = this.GetMemoSortOptions();
             var filter = this.GetMemoFilter();
-            int alreadyRendered=this.GetRenderedMemoCount();
-            throw new NotImplementedException();
+            int alreadyRendered = this.GetRenderedMemoCount();
+            var memos = await _db.GetMemoPackage(filter.GetFilterFunctions(), sortOptions, alreadyRendered);
+
+            if (memos is null || memos.Count < 1)
+                return MemosPackageView(new MemoPackageViewModel([], 0));
+
+            this.SetRenderedMemoCount(alreadyRendered + 1);
+            long userId = this.GetUserId(_enc.DecryptId);
+            if (userId == -1)
+                return MemosPackageView(MemoPackageViewModel.FromMemosForUnauthorized(memos, alreadyRendered + 1));
+
+            User? user = await _db.GetUserById(userId);
+            if (user is null)
+                return MemosPackageView(MemoPackageViewModel.FromMemosForUnauthorized(memos, alreadyRendered + 1));
+
+            return View("MemosPackage", new MemoPackageViewModel(memos.Select(m => MemoPreviewViewModel.FromMemo(m, user)), alreadyRendered += 1));
         }
+        public IActionResult MemosPackageView(MemoPackageViewModel model)
+            => View(viewName: "MemosPackage", model);
         [HttpPost]
         public IActionResult AddFilterTag(string tag) =>
             PartialView("FilterTag", tag);

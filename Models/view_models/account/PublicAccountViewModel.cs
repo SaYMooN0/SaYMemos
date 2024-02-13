@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using SaYMemos.Models.data.entities.users;
+﻿using SaYMemos.Models.data.entities.users;
 using SaYMemos.Models.view_models.memos;
 
 namespace SaYMemos.Models.view_models.account
@@ -17,11 +16,6 @@ namespace SaYMemos.Models.view_models.account
     {
         public static PublicAccountViewModel FromUser(User user,User? viewer)
         {
-            Guid[] likedMemoIds=Array.Empty<Guid>();
-            bool viewerAuthorized = viewer is not null;
-            if (viewerAuthorized)
-                likedMemoIds = viewer.Likes.Select(l=>l.MemoId).ToArray();
-
             return new(user.Id,
                 user.Nickname,
                 user.FullName,
@@ -29,10 +23,10 @@ namespace SaYMemos.Models.view_models.account
                 user.ProfilePicturePath,
                 user.AreLinksPrivate ? new() : user.UserLinks.ParseToNonEmptyDictionary(),
                 user.PostedMemos
-                .Select(memo => MemoPreviewViewModel.FromMemo(memo, likedMemoIds.Contains(memo.id), viewerAuthorized))
+                .Select(memo => MemoPreviewViewModel.FromMemo(memo, viewer))
                 .OrderByDescending(memo => memo.creationDate)
                     .ToArray(),
-                  viewerAuthorized
+                  viewer is not null
                );
         }
             
