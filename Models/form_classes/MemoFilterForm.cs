@@ -4,6 +4,7 @@ namespace SaYMemos.Models.form_classes
 {
     public record class MemoFilterForm(
         bool onlyWithImages,
+        bool onlyWithCommentsAvaliable,
         string[] tags,
         DateOnly? dateFrom,
         DateOnly? dateTo,
@@ -13,10 +14,10 @@ namespace SaYMemos.Models.form_classes
         int? commentsTo)
     {
         public static MemoFilterForm Default() => new(
-                false, Array.Empty<string>(),
+                false,false, Array.Empty<string>(),
                 null, null, null, null, null, null);
         public static MemoFilterForm DefaultWithTag(string tag) => new(
-               false, [tag],
+               false, false, [tag],
                null, null, null, null, null, null);
         public List<MemoFilterFunc> GetFilterFunctions()
         {
@@ -24,6 +25,9 @@ namespace SaYMemos.Models.form_classes
 
             if (onlyWithImages)
                 filters.Add(query => query.Where(m => !string.IsNullOrEmpty(m.imagePath)));
+
+            if (onlyWithCommentsAvaliable)
+                filters.Add(query => query.Where(m => m.areCommentsAvailable));
 
             if (tags?.Length > 0)
                 filters.Add(query => query.Where(m => m.Tags.Any(tag => tags.Contains(tag.Value))));

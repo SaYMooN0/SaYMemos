@@ -27,10 +27,18 @@
                 </div>
             </form>
         </div>
-        <div class="content-area" hx-trigger="intersect once" hx-swap="innerHTML" hx-target='this' hx-post="/Memos/RenderNewPackage">
+        <div class="content-area" hx-trigger="intersect once" hx-swap="innerHTML" hx-target='this' hx-post="/Memos/RenderNewPackage" hx-vals='{"alreadyRendered": "0"}'>
         </div>
     </div>
-    <form class="memos-filter" hx-post="/memos/ApplyFilter">
+    <form class="memos-filter" hx-post="/memos/ApplyFilter" hx-target=".content-area">
+        <div class="filter-checkbox-line">
+            Only with images 
+            <input asp-for="filter.onlyWithImages"/>
+        </div>
+        <div class="filter-checkbox-line">
+            Only with comments available 
+            <input asp-for="filter.onlyWithCommentsAvaliable" />
+        </div>
         <label class="filter-label">Post Date</label>
         <div class="from-to-inputs-block">
             <label class="from-to-label">from:</label>

@@ -27,17 +27,17 @@ namespace SaYMemos.Models.tag_helpers
         private string RenderTopInfo() =>
             $"<div class='memo-top-info'>" +
             $"<a href='/account?userId={MemoContent.authorId}'>" +
-            $"<img src='{MemoContent.authorProfilePicture.EncodeHtml()}' alt='Profile Picture' />" +
+            $"<img src='{MemoContent.authorProfilePicture}' alt='ProfilePicture' />" +
             $"<label class='memo-author'>{MemoContent.authorNickName.EncodeHtml()}</label>" +
             $"</a>" +
-            $"<label class='memo-date'>{MemoContent.creationDate.EncodeHtml()}</label></div>";
+            $"<label class='memo-date'>{MemoContent.creationDate.ToString("f").EncodeHtml()}</label></div>";
 
         private string RenderAuhtorComment() =>
             $"<div class='memo-comment'>{MemoContent.authorComment.EncodeHtml()}</div>";
 
         private string RenderImage() =>
             !string.IsNullOrEmpty(MemoContent.imagePath) ?
-            $"<div class='memo-image'><img src='{MemoContent.imagePath.EncodeHtml()}' alt='Memo Image' {StringExtensions.OpenMemoDialogOnClick(MemoContent.id)}/></div>" :
+            $"<div class='memo-image'><img src='{MemoContent.imagePath}' alt='MemoImage' {StringExtensions.OpenMemoDialogOnClick(MemoContent.id)}/></div>" :
             string.Empty;
 
         private string RenderInteractions()

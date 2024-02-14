@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using SaYMemos.Models.data.entities.memos;
+﻿using SaYMemos.Models.data.entities.memos;
 using SaYMemos.Models.data.entities.users;
 
 namespace SaYMemos.Models.view_models.memos
@@ -11,7 +10,7 @@ namespace SaYMemos.Models.view_models.memos
         string authorNickName,
         string authorComment,
         string? imagePath,
-        string creationDate,
+        DateTime creationDate,
         bool isLiked,
         int likesCount,
         int commentsCount,
@@ -33,7 +32,7 @@ namespace SaYMemos.Models.view_models.memos
                     memo.Author.Nickname,
                     memo.authorComment,
                     memo.imagePath,
-                    memo.creationTime.ToString("f"),
+                    memo.creationTime,
                     likedMemoIds.Contains(memo.id),
                     memo.Likes.Count,
                     memo.Comments.Count,

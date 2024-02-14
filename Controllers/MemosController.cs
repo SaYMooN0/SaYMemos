@@ -27,7 +27,6 @@ namespace SaYMemos.Controllers
         {
             this.SetMemoFilter(MemoFilterForm.Default());
             this.SetMemoSortOptions(MemoSortOptionsForm.Default());
-            this.SetRenderedMemoCount(0);
             return View(MemoPageViewModel.Default());
         }
 
@@ -36,7 +35,6 @@ namespace SaYMemos.Controllers
             var form = MemoFilterForm.DefaultWithTag(tag);
             this.SetMemoFilter(form);
             this.SetMemoSortOptions(MemoSortOptionsForm.Default());
-            this.SetRenderedMemoCount(0);
             return View(viewName: "Index", new MemoPageViewModel(form, MemoSortOptionsForm.Default()));
         }
 
@@ -46,8 +44,8 @@ namespace SaYMemos.Controllers
         {
             MemoSortOptionsForm sorting = new(sortType, isDescending);
             this.SetMemoSortOptions(sorting);
-            this.SetRenderedMemoCount(0);
-            return await RenderNewPackage();
+            var filter = this.GetMemoFilter();
+            return await RenderNewPackage(0, sorting, filter);
         }
 
         [HttpPost]
@@ -57,17 +55,18 @@ namespace SaYMemos.Controllers
             PartialView("FoundTags", _db.GetMatchingTags(searchTag));
 
         [HttpPost]
-        public async Task<IActionResult> RenderNewPackage()
+        public async Task<IActionResult> RenderNewPackage(int alreadyRendered)
         {
             var sortOptions = this.GetMemoSortOptions();
             var filter = this.GetMemoFilter();
-            int alreadyRendered = this.GetRenderedMemoCount();
+            return await RenderNewPackage(alreadyRendered, sortOptions, filter);
+        }
+        private async Task<IActionResult> RenderNewPackage(int alreadyRendered, MemoSortOptionsForm sortOptions, MemoFilterForm filter)
+        {
             var memos = await _db.GetMemoPackage(filter.GetFilterFunctions(), sortOptions, alreadyRendered);
 
             if (memos is null || memos.Count < 1)
                 return MemosPackageView(new MemoPackageViewModel([], 0));
-
-            this.SetRenderedMemoCount(alreadyRendered + 1);
             long userId = this.GetUserId(_enc.DecryptId);
             if (userId == -1)
                 return MemosPackageView(MemoPackageViewModel.FromMemosForUnauthorized(memos, alreadyRendered + 1));
@@ -75,8 +74,7 @@ namespace SaYMemos.Controllers
             User? user = await _db.GetUserById(userId);
             if (user is null)
                 return MemosPackageView(MemoPackageViewModel.FromMemosForUnauthorized(memos, alreadyRendered + 1));
-
-            return View("MemosPackage", new MemoPackageViewModel(memos.Select(m => MemoPreviewViewModel.FromMemo(m, user)), alreadyRendered += 1));
+            return View("MemosPackage", new MemoPackageViewModel(memos.Select(m => MemoPreviewViewModel.FromMemo(m, user)), alreadyRendered + 1));
         }
         public IActionResult MemosPackageView(MemoPackageViewModel model)
             => View(viewName: "MemosPackage", model);
@@ -84,21 +82,20 @@ namespace SaYMemos.Controllers
         public IActionResult AddFilterTag(string tag) =>
             PartialView("FilterTag", tag);
         [HttpPost]
-        public IActionResult ClearFilter()
+        public async Task<IActionResult> ClearFilter()
         {
             this.SetMemoFilter(MemoFilterForm.Default());
-            this.SetRenderedMemoCount(0);
-            //new filter view 
+            return View("EmptyFilter");
             //new memo package
             throw new NotImplementedException();
         }
         [HttpPost]
-        public IActionResult ApplyFilter(MemoFilterForm filter)
+        public async Task<IActionResult> ApplyFilter(MemoFilterForm filter)
         {
+            filter=filter is null? MemoFilterForm.Default(): filter;
             this.SetMemoFilter(filter);
-            this.SetRenderedMemoCount(0);
-            throw new NotImplementedException();
-            //set new memofiltercoockie
+            var sortOptions = this.GetMemoSortOptions();
+            return await RenderNewPackage(0, sortOptions, filter);
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
