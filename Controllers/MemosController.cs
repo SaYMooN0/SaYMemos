@@ -32,10 +32,10 @@ namespace SaYMemos.Controllers
 
         public IActionResult WithTagFilter(string tag)
         {
-            var form = MemoFilterForm.DefaultWithTag(tag);
-            this.SetMemoFilter(form);
+            var filter = MemoFilterForm.DefaultWithTag(tag);
+            this.SetMemoFilter(filter);
             this.SetMemoSortOptions(MemoSortOptionsForm.Default());
-            return View(viewName: "Index", new MemoPageViewModel(form, MemoSortOptionsForm.Default()));
+            return View(viewName: "Index", new MemoPageViewModel(filter, MemoSortOptionsForm.Default()));
         }
 
 
@@ -82,17 +82,20 @@ namespace SaYMemos.Controllers
         public IActionResult AddFilterTag(string tag) =>
             PartialView("FilterTag", tag);
         [HttpPost]
-        public async Task<IActionResult> ClearFilter()
+        public IActionResult ClearFilter()
         {
             this.SetMemoFilter(MemoFilterForm.Default());
-            return View("EmptyFilter");
-            //new memo package
-            throw new NotImplementedException();
+            return RenderFilter(MemoFilterForm.Default());
         }
+        [HttpPost]
+        public IActionResult RenderFilter() =>
+            RenderFilter(this.GetMemoFilter());
+        private IActionResult RenderFilter(MemoFilterForm filter) =>
+            PartialView("Filter", filter);
         [HttpPost]
         public async Task<IActionResult> ApplyFilter(MemoFilterForm filter)
         {
-            filter=filter is null? MemoFilterForm.Default(): filter;
+            filter = filter is null ? MemoFilterForm.Default() : filter;
             this.SetMemoFilter(filter);
             var sortOptions = this.GetMemoSortOptions();
             return await RenderNewPackage(0, sortOptions, filter);

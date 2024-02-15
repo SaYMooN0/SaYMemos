@@ -1,0 +1,74 @@
+﻿@model MemoFilterForm
+@{
+    string[] PopularTags =
+    ["fashion", "love", "memooftheday", "beautiful", "art", "photography", "happy", "nature", "fitness", "technology", "travel", "music", "food"];
+
+}
+<form class="memos-filter" >
+    <div class="filter-checkbox-line">
+        Only with images
+        <input asp-for="@Model.onlyWithImages" />
+    </div>
+    <div class="filter-checkbox-line">
+        Only with comments available
+        <input asp-for="@Model.onlyWithCommentsAvaliable" />
+    </div>
+    <label class="filter-label">Post Date</label>
+    <div class="from-to-inputs-block">
+        <label class="from-to-label">from:</label>
+        <input type="date" asp-for="@Model.dateFrom" />
+        <label class="from-to-label">to:</label>
+        <input type="date" asp-for="@Model.dateTo" />
+    </div>
+    <label class="filter-label">Likes Count</label>
+    <div class="from-to-inputs-block">
+        <label class="from-to-label">from:</label>
+        <input type="number" min="0" max="999999" asp-for="@Model.likesFrom" />
+        <label class="from-to-label">to:</label>
+        <input type="number" min="0" max="999999" asp-for="@Model.likesTo" />
+    </div>
+    <label class="filter-label">Comments Count</label>
+    <div class="from-to-inputs-block">
+        <label class="from-to-label">from:</label>
+        <input type="number" min="0" max="999999" asp-for="@Model.commentsFrom" />
+        <label class="from-to-label">to:</label>
+        <input type="number" min="0" max="999999" asp-for="@Model.commentsTo" />
+    </div>
+    <div class="filter-tags">
+        <label class="filter-tags-label">Chosen tags:</label>
+        <div id="filter-chosen-tags">
+            @if (Model.tags is not null && Model.tags.Count() > 0)
+            {
+                foreach (string tag in Model.tags)
+                {
+                    <div hx-target="this" hx-swap="outerHTML" hx-post='memos/AddFilterTag' hx-vals='{"tag": "{@tag}"}' hx-trigger="load">
+                    </div>
+                }
+            }
+        </div>
+        <label class="filter-tags-label">Use search bar to find other tags:</label>
+        <div class="search-tag-container">
+            <input type="text" class="search-tag-input" hx-trigger="keyup delay:200ms" hx-post="memos/RenderFoundTags" name="searchTag" hx-target="#found-tags">
+            <span class="search-tag-icon">
+                <svg viewBox="0 0 512 512">
+                    <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                </svg>
+
+            </span>
+        </div>
+
+        <div id="found-tags">
+        </div>
+        <label class="filter-tags-label">Or choose from popular:</label>
+        @foreach (string tag in PopularTags)
+        {
+            <add-filter-tag tagname="@tag"></add-filter-tag>
+        }
+
+    </div>
+
+    <div class="filter-buttons">
+        <button type="button" class="clear-filters-btn" hx-trigger="click" hx-swap="outerHTML" hx-post="/memos/ClearFilter" hx-target=".memos-filter">Clear Filters</button>
+        <button type="submit" class="apply-filters-btn" hx-post="/memos/ApplyFilter" hx-target=".content-area">Apply Filters</button>
+    </div>
+</form>
